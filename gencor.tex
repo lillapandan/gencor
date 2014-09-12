@@ -199,11 +199,35 @@ Naive LD Score regression is subject to similar biases as REML; however,
 it is possible to remove these biases by allowing for MAF- or LD-dependent genetic architectures by using partitioned LD 
 Score regression (see \cite{finucane2014partitioning} and Methods)
 
-As a result, we expect simpler models tend to perform better as measured by mean square error (MSE).
-To test this hypothesis, we simulated a variety of realistic genetic architectures with MAF- and LD-dependence (WHICH MODELS?), and estimated genetic correlation using both naive LD Score regression and a more sophisticated inference procedure (MAF x LD-binned LD Score regression) that accounts for MAF and LD dependence. 
-As expected, naive LD Score regression shows no discernible directional bias and gives better MSE for genetic correlation estimation.
-Results from these simulations are summarized in supplementary table NNN.
-We note that this result holds only for genetic correlation, not for heritability or genetic covariance.
+To explore the behavior of LD Score regression under various nonstandard models of genetic architecture, 
+we simulated three genetic architectures with MAF- and LD-dependence.
+For the first genetic architecture,
+the MAF- and LD- dependence was the same for both phenotypes and genetic correlation did not vary with MAF or LD. 
+Effect sizes were drawn from a normal distribution so that the magnitude of per-allele effect sizes were uncorrelated with MAF and variants with LD Score below 100 were $4\times$ enriched for heritability.
+
+For the second genetic architecture, 
+we drew per-allele effect sizes for the first phenotype from a normal distribution 
+such that the variance of per-allele effect sizes were uncorrelated with MAF, 
+and variants with LD Score below 100 were $4\times$ enriched for heritability.
+Per-allele effect sizes for the second phenotype were drawn from a normal distribution 
+such that the variance of per-allele effect size followed $\sqrt{p(1-p)}$, 
+where $p$ is MAF, and variants with LD Score above 100 were $4\times$ enriched for heritability. 
+
+For the third genetic architecture, we allowed not only heritability and genetic covariance to depend on MAF and LD,
+but also genetic correlation. 
+The parameters of these simulations were the same as the second genetic architecture, 
+except that genetic correlation was 0.2 for variants with LD Score less than 100 and 0.8 for variants with LD Score greater than 100. 
+
+We  estimated heritability, genetic covariance and genetic correlation using both naive LD Score regression 
+and two partitioned LD Score regression models (one with 30 bins, one with 60 bins) 
+that allow for both MAF- and LD-dependence.
+Results from these simulations are presented in supplementary tables \textbf[NNN-NNN].
+The heritability and genetic covariance estimates from naive LD Score regression are badly biased in all cases
+(which is similar to the results obtained by Speed, \emph{et. al.}), 
+but the bias in the genetic correlation estimates was much less severe, except in the third set of simulations.
+As expected, partitioned LD Score regression was able to remove almost all bias introduced by LD- and MAF-dependence,
+and the increase in standard error was only mild.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -221,7 +245,7 @@ but with the sum of $r^2$'s taken only over SNPs in HapMap 3 \cite{international
 (hereafter referred to as HapMap3 LD Score)
 because this is most similar to the model of genetic architecture fit by GCTA-REML,
 where only the effects of genotyped SNPs are modeled
-(see the section ``LD Score regression is Haseman-Elston Regression'' in the Supplementary Note). 
+(see the section ``LD Score Regression is Haseman-Elston Regression'' in the Supplementary Note). 
 The results from the PGC Cross-Disorder Group paper replicated closely, 
 and the standard errors were similar to those obtained from GCTA-REML.
 
@@ -257,8 +281,9 @@ However, the simpler model gives much lower standard error when applied to real 
 and performed better in simulations as measured by MSE,
 we report results from the naive model hereafter (results from the more sophisticated model are displayed in Supplementary Figure NNN).
 
-Note that LD Score regression heritability estimates are biased downwards by genomic control correction,
-so we cannot report heritability estimates for the phenotypes in our dataset. 
+Note that LD Score regression heritability estimates are biased downwards by genomic control correction \cite{buliksullivan2014}, so we cannot report heritability estimates for the majority of the phenotypes in our dataset. 
+The only GWAS that did not use GC correction were the psychiatric GWAS and the bowel disease GWAS. 
+We report estimates of heritability for these phenotypes in table \textbf{NNN}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{Discussion}
@@ -280,40 +305,28 @@ the ethical issues around sharing genotypes IF people are willing to share INFO
 \subsection{Statistical Framework}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-See the supplementary note for a thorough exposition of the models behind LD Score regression.
+See the supplementary note for a thorough derivation of the models behind LD Score regression.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Estimation of LD Scores}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 We estimated LD Scores from the European samples in the 1000 Genomes Project \cite{10002012integrated}
-reference panel using the {-}{-}l2 flag in the ldsc software package by the authors (URLs) as in \cite{buliksullivan2014}.
-We estimated per-allele LD Scores using the {-}{-}per-allele flag in ldsc, and
+reference panel using the {-}{-}l2 flag in the\texttt{ldsc}software package by the authors (URLs) as in \cite{buliksullivan2014}.
+We estimated per-allele LD Scores using the {-}{-}per-allele flag in \texttt{ldsc}, and
 we estimated MAF-binned LD Scores using the {-}{-}cts-bin and {-}{-}cts-breaks flags in ldsc.
 Following \cite{buliksullivan2014}, we estimated LD Scores using a 1 centiMorgan (cM) window
-(with the ldsc flag {-}{-}ld-wind-cm 1).
+(with the \texttt{ldsc} flag {-}{-}ld-wind-cm 1).
 Unlike \cite{buliksullivan2014}, we used a MAF cutoff of $1\%$ when estimating LD Scores,
 in order to reduce the impact of LD measurement error on our regressions.
 Since we only include variants with MAF $> 5\%$ in LD Score regressions for estimating genetic correlation,
 and because there is very little LD between variants with MAF $> 5\%$ and variants with MAF $< 5\%$, 
-this is unlikely to impact our results. For the analyses with HapMap 3 \cite{international2010integrating} LD Scores,
+this is unlikely to impact our results. 
+
+For the analyses with HapMap 3 \cite{international2010integrating} LD Scores,
 we took the sum of $r^2$'s over the same subset of HapMap 3 SNPs retained for LD Score regression in
 \cite{buliksullivan2014}, (that is, HapMap 3 SNPs with MAF $> 1\%$, excluding centromeres and regions with long-range LD)
-using the {-}{-}keep flag in ldsc.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Quality Control}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Imputation error can bias LD Score regression estimates of heritability and genetic covariance (Supplementary Note), though the biases in the numerator and denominator of the genetic correlation estimates will tend to cancel, so genetic correlation estimates are more robust to imputation error (Supplementary Figure NNN). To minimize this bias, we restricted to SNPs with reported INFO $> 0.9$ in all analyses, and we recommend restricting to INFO $>0.9$ as best practice for all LD Score regressions.
-
-Genomic control correction biases LD Score regression estimates of heritability and genetic covariance downwards
-(see the Supplementary Note of \cite{buliksullivan2014});
-however, the bias in the numerator and denominator of the genetic correlation estimates will cancel, 
-so genomic control correction will not bias LD Score regression estimates of genetic correlation.
-Nevertheless, we wished to obtain accurate heritability estimates as well as genetic correlation estimates,
-so we undid meta-analysis level genomic control correction by re-inflating all test statistics by multiplying by the reported 
-$\lambda_{GC}$ correction factor.
+using the {-}{-}keep flag in \texttt{ldsc}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,11 +339,15 @@ We allow the variance explained per SNP to vary from bin to bin, but assume that
 equal within each bin. 
 This amounts to approximating the unknown function that maps MAF to variance explained per SNP with a locally 
 constant approximation. 
-This presents a bias/variance tradeoff: if the mesh of our locally constant approximation is too coarse (\emph{e.g.,} if we were to use two MAF bins instead of five), our locally constant approximation would be poor, and this would result in bias. 
+This presents a bias/variance tradeoff: if the mesh of our locally constant approximation is too coarse (
+\emph{e.g.,} if we were to use two MAF bins instead of five), 
+our locally constant approximation would be poor, and this would result in bias. 
 On the other hand, if we use too many bins, the standard error of our estimates will increase. 
 However, we show in the simulations under the header "Misspecified Models of Genetic Architecture" that
 we can remove almost all MAF- and LD-bias under realistic parameter settings using only a few tens of bins, which 
 increases the standard error only modestly.
+MAF- and LD- partitioned LD Scores can be estimated using the \texttt{--cts-bin} and  \texttt{--cts-breaks} flags
+from our \texttt{ldsc} software.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -372,7 +389,7 @@ These regression weights are only an approximation to the optimal weights,
 but this will not introduce bias into the regression;
 it will only increase the standard error. 
 The standard errors for LD Score regressions with summary statistics 
-from GWAS with $N > 10,000$ are low enough to be interpretable,
+from GWAS with sample size below 10,000 are low enough to be interpretable,
 so non-optimality of the regression weights does not seem to be a major hindrance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -380,42 +397,58 @@ so non-optimality of the regression weights does not seem to be a major hindranc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Genetic correlation is defined as a ratio of quantities: 
-$$r_g := \frac{\gencov}{\sqrt{\hsqo\hsqt}}.$$
-The naive estimator of this ratio, 
-$$\rhat_{g,naive} := \frac{\hat{\rho}_g }{ \sqrt{\hat{h}^2_1\hat{h}^2_2}},$$
-is biased, and it is difficult to estimate a standard error for this estimator. 
-Therefore, we use the block jackknife estimator of the ratio,
-which is less biased:
-$$
-\hat{r}_{g,jackknife} := 
-n_b\hat{r}_{g,naive} -
- \frac{n_b-1}{n_b}
- \sum_{i=1}^{n_b}
- 	\frac{\hat{\rho}_{g,i} }
-		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}},
-$$
+\begin{equation*}
+	r_g := \frac{\gencov}{\sqrt{\hsqo\hsqt}}.
+\end{equation*}
+Instead of the naive estimator of this ratio, 
+\begin{equation*}
+	\rhat_{g,naive} := \frac{\hat{\rho}_g }{ \sqrt{\hat{h}^2_1\hat{h}^2_2}},
+\end{equation*}
+we use the weighted block jackknife estimator \cite{busing1999delete} of the ratio, 
+with the jackknife taken over blocks of adjacent SNPs
+\begin{equation}
+    \hat{r}_{g,jackknife} := 
+    n_b\hat{r}_{g,naive} -
+     \frac{n_b-1}{n_b}
+     \sum_{i=1}^{n_b}
+     	\frac{\hat{\rho}_{g,i} }
+    		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}},
+\end{equation}
 where $n_b$ is the number of blocks, and $\hat{\rho}_{g,i}, \hat{h}^2_{1,i}$ and $\hat{h}^2_{2,i}$
-are the estimates of genetic covariance and heritability obtained by deleting the $i^{th}$ block.
-Our standard error estimates are also obtained from the block jackknife:
-$$
-\widehat{se}\left[\hat{r}_{g,jackknife}\right] := 
-\sqrt{n_b} \sum_{i=1}^{n_b} \left(
- 	\frac{\hat{\rho}_{g,i} }
-		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}} - \mean_i\left[
-			\frac{\hat{\rho}_{g,i} }
-			{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}}\right]
-	\right).
-$$
-Block jackknife standard errors are robust to the  correlated error structure 
-of GWAS $\chi^2$-statistics, 
-so long as the block size exceeds the typical range of LD
-(see \cite{buliksullivan2014} and \cite{moorjani2011history} 
-for examples of papers in the statistical and population genetics literature that use this technique). 
+are the estimates of genetic covariance and heritability obtained by deleting the $i^{th}$ block of SNPs.
+The weighted block jackknife ratio estimator is less biased than the naive estimate (though this is not so important at our sample sizes), 
+and comes with a convenient nonparametric standard error \cite{busing1999delete},
+\begin{equation}
+    \widehat{se}\left[\hat{r}_{g,jackknife}\right] := 
+    \sqrt{n_b} \sum_{i=1}^{n_b} \left(
+     	\frac{\hat{\rho}_{g,i} }
+    		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}} - \mean_i\left[
+    			\frac{\hat{\rho}_{g,i} }
+    			{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}}\right]
+    	\right).
+\end{equation}
+Weighted block jackknife standard errors (over blocks of SNPs) are robust to the  correlated error structure of GWAS $\chi^2$-statistics, 
+so long as the block size exceeds the typical range of LD. S
+ee \cite{buliksullivan2014, finucane2014partitioning, moorjani2011history} 
+for examples of papers in the statistical and population genetics literature that use this technique. 
 We checked the reliability of our standard errors via simulations with real genotypes
-(Supplementary Table NNN),
-and found that the ldsc default setting  of 2000 blocks genome-wide
+(Supplementary Table \textbf{NNN}),
+and found that the \texttt{ldsc} default setting  of 2000 blocks genome-wide
 (which can be adjusted with the {-}{-}num-blocks flag) gives standard error estimates
 that agree well with the empirical standard deviation across simulation replicates.
+
+In another set of simulations with much lower power (not shown), we observed that the LD Score regression
+genetic correlation estimates became unstable when either sample size or heritability was so low that at least one 
+of the two heritability estimates was not significantly different from zero. 
+This is a general difficult with attempting to estimate a ratio where the denominator is close to zero, and is not 
+specific to LD Score regression. 
+As a rule of thumb, 
+we recommend discarding (or at least being very cautious with) 
+any genetic correlation estimates where either of the following conditions is met:
+\begin{enumerate}
+	\item Either of the heritability estimates is less than 2 SE's from zero, or
+	\item The block jackknife SE for the genetic correlation estimate is greater than 0.2.
+\end{enumerate}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -444,14 +477,20 @@ If these data are not available, we recommend retaining only HapMap 3 SNPs with 
 (note: for \emph{regression}, not for estimation of the LD Scores), 
 since HapMap3 SNPs seem to be well-imputed in most studies.
 
+\subsection{Huge Effect Loci}
+
+
 
 \subsubsection{IGAP}
 
-International Genomics of Alzheimer's Project (IGAP) is a large two-stage study based upon genome-wide association studies (GWAS) on individuals of European ancestry. 
-In stage 1, IGAP used genotyped and imputed data on 7,055,881 single nucleotide polymorphisms (SNPs) to meta-analyze four previously-published GWAS datasets consisting of 17,008 Alzheimer's disease cases and 37,154 controls 
-(The European Alzheimer's disease Initiative, EADI; the Alzheimer Disease Genetics Consortium, ADGC; The Cohorts for Heart and Aging Research in Genomic Epidemiology consortium, CHARGE; The Genetic and Environmental Risk in AD consortium, GERAD). 
-In stage 2, 11,632 SNPs were genotyped and tested for association in an independent set of 8,572 Alzheimer's disease cases and 11,312 controls. 
-Finally, a meta-analysis was performed combining results from stages 1 and 2.
+IGAP (which provided the summary statistics for Alzheimer's disease) requests that we include the following text in our methods section:
+\begin{quotation}
+    International Genomics of Alzheimer's Project (IGAP) is a large two-stage study based upon genome-wide association studies (GWAS) on individuals of European ancestry. 
+    In stage 1, IGAP used genotyped and imputed data on 7,055,881 single nucleotide polymorphisms (SNPs) to meta-analyze four previously-published GWAS datasets consisting of 17,008 Alzheimer's disease cases and 37,154 controls 
+    (The European Alzheimer's disease Initiative, EADI; the Alzheimer Disease Genetics Consortium, ADGC; The Cohorts for Heart and Aging Research in Genomic Epidemiology consortium, CHARGE; The Genetic and Environmental Risk in AD consortium, GERAD). 
+    In stage 2, 11,632 SNPs were genotyped and tested for association in an independent set of 8,572 Alzheimer's disease cases and 11,312 controls. 
+    Finally, a meta-analysis was performed combining results from stages 1 and 2.
+\end{quotation}
 Note that we only used stage 1 data for LD Score regression.
 
 \newpage
@@ -499,8 +538,9 @@ Note that we only used stage 1 data for LD Score regression.
 	\item Plasma Lipid summary statistics:\\
 		\texttt{www.broadinstitute.org/mpg/pubs/lipids2010/}
 	
-	\item Coffee:\\
-		\texttt{barismo.com}
+	\item Beans:\\
+		\texttt{www.barismo.com}\\
+		\texttt{www.bluebottlecoffee.com}
 \end{enumerate}
 
 
