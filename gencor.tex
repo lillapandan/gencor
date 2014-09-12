@@ -65,11 +65,11 @@ which lies in the interval $[-1,1]$.
 Note that genetic correlation is a stronger condition than pleiotropy. 
 To exhibit genetic correlation,
 if is not sufficient for two phenotypes to be influenced by the same genetic loci:
-the directions of effect of the variants that influence the phenotypes must also be consistent across the genome.
+the directions of effect of the variants that influence the phenotypes must also be aligned consistent across the genome.
 
 Existing methods for estimating genetic correlation from genotype data 
 (\emph{e.g.,} restricted maximum likelihood (REML) as implemented in the software package GCTA 
-\cite{yang2010, yang2011gcta}, or polgyenic risk scores \cite{dudbridge2013power})
+\cite{yang2010, yang2011gcta} -- hereafter referred to as GCTA-REML -- or polgyenic risk scores \cite{dudbridge2013power})
 require genotype data, which is often impossible to obtain due to restrictions on data sharing. 
 For this reason, papers typically report at most a handful of genetic correlations, 
 usually estimated from samples of at most a few tends of thousands of individuals,
@@ -81,7 +81,7 @@ that can estimate genetic correlation from GWAS summary statistics.
 Precisely, if $z_{1,j}z_{2,j}$ are the $Z$-scores for a SNP $j$ from two GWAS, and $\ell_j$, the LD Score of SNP $j$,
 and we assume a simple model of genetic architecture where all SNP effect sizes are drawn \emph{i.i.d.}, we can write
 \begin{equation}
-		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_gN_1N_2}{M}\ell_j + \dfrac{N_s\rho}{N_1N_2}
+		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_g\sqrt{N_1N_2}}{M}\ell_j + \dfrac{N_s\rho}{\sqrt{N_1N_2}},
 \end{equation}
 where $N_1$ and $N_2$ are the sample sizes of each study, $N_s$ is the number of shared samples,
 $\rho$ is the phenotypic covariance and $\rho_g$ is the genetic covariance. 
@@ -90,7 +90,7 @@ is an ascertained study of a binary phenotype.
 The relationship becomes more complicated if effect sizes are not identically distributed, but instead depend on MAF 
 or linkage disequilibrium; 
 however, we can easily accommodate such dependencies with partitioned LD Score regression 
-(as described in the results and methods section of this paper and \cite{finucane2014partitioning}).
+(as described in the results and methods sections of this paper and also \cite{finucane2014partitioning}).
 
 Thus, if we regress the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS against $\ell_j$, the LD Score of SNP $j$, 
 the slope times a constant estimates genetic covariance.
@@ -114,7 +114,7 @@ despite reports of psychosis in patients with Alzheimers, reduced risk of RA in 
 and high rate of smoking in patients with schizophrenia.
 
 The computational demands of our method are mild, and we provide an open-source software package, \texttt{ldsc},
-written in python, which implements the procedures described in this paper and also 
+written in python, which implements the analyses described in this paper and also the analyses from
 \cite{buliksullivan2014, finucane2014partitioning} (URLs).
 
 
@@ -157,33 +157,32 @@ and estimated the genetic correlation using LD Score regression.
 Results from these simulations are summarized in [\textbf{SUPP TABLE N}],
 and confirm that LD Score regression recovers the true heritability and genetic correlation, even with heavy ascertainment.
 The simplified LD structure should not hinder interpretation of these simulation results, especially
-since we also provide a proof that LD Score regression is valid when applied to ascertained samples (Supplementary Note).
+since we also provide a proof that unlike GCTA-REML \cite{golan2013narrowing},
+ LD Score regression is valid when applied to ascertained samples of binary phenotypes (Supplementary Note).
 
 
-\subsubsection{Complicated Ascertainment}
+%\subsubsection{Complicated Ascertainment}
 
 %%% TODO WRITE ME %%%%
 
-Next, we simulated a more complicated ascertainment scheme,
-representative of the study design used by many large GWAS consortia,
-where all case samples are independent, 
-but there is a large pool of healthy controls 
-(\emph{i.e.,} individuals who are controls for both phenotypes)
-shared between all studies.
-...
-We caution that while LD Score regression estimates of genetic correlation are robust to
-standard case/control ascertainment and the healthy controls model of ascertainment, 
-it can be difficult to interpret LD Score regression estimates of genetic covariance 
-obtained from GWAS with more complicated ascertainment schemes.
-As an example, 
-if one were to attempt to estimate the genetic correlation between body-mass index (BMI) and type-2 diabetes (T2D)
-using LD Score regression and summary statistics from a non-ascertained GWAS for BMI
-and a GWAS for T2D consisting of high-BMI controls and low-BMI cases,
-then the resulting estimate would not be on a readily-interpretable scale.
+%Next, we simulated a more complicated ascertainment scheme,
+%representative of the study design used by many large GWAS consortia,
+%where all case samples are independent, 
+%but there is a large pool of healthy controls 
+%(\emph{i.e.,} individuals who are controls for both phenotypes)
+%shared between all studies.
+%...
+%We caution that while LD Score regression estimates of genetic correlation are robust to
+%standard case/control ascertainment and the healthy controls model of ascertainment, 
+%it can be difficult to interpret LD Score regression estimates of genetic covariance 
+%obtained from GWAS with more complicated ascertainment schemes.
+%As an example, 
+%if one were to attempt to estimate the genetic correlation between body-mass index (BMI) and type-2 diabetes (T2D)
+%using LD Score regression and summary statistics from a non-ascertained GWAS for BMI
+%and a GWAS for T2D consisting of high-BMI controls and low-BMI cases,
+%then the resulting estimate would not be on a readily-interpretable scale.
 
 \subsubsection{Misspecified Models of Genetic Architecture}
-
-%%% TODO WRITE ME %%%
 
 Estimates of heritability and genetic covariance can be biased if the underlying model of genetic architecture is misspecified.
 For example, Speed, \emph{et. al.} \cite{speed2012improved} 
@@ -224,7 +223,8 @@ that allow for both MAF- and LD-dependence.
 Results from these simulations are presented in supplementary tables \textbf[NNN-NNN].
 The heritability and genetic covariance estimates from naive LD Score regression are badly biased in all cases
 (which is similar to the results obtained by Speed, \emph{et. al.}), 
-but the bias in the genetic correlation estimates was much less severe, except in the third set of simulations.
+but the bias in the genetic correlation estimates was much less severe, except in the third set of simulations,
+where genetic correlation varied with LD.
 As expected, partitioned LD Score regression was able to remove almost all bias introduced by LD- and MAF-dependence,
 and the increase in standard error was only mild.
 
@@ -236,9 +236,8 @@ and the increase in standard error was only mild.
 
 \subsubsection{Replication of PGC Cross Disorder Results}
 
-As a sanity check, we replicated the genetic correlation results obtained with
-raw genotypes and GCTA-REML in
-the PGC Cross-Disorder Group paper \cite{pgccdg2013}, 
+As a sanity check, we replicated the estimates of genetic correlations between psychiatric phenotypes  obtained with
+raw genotypes and GCTA-REML in the PGC Cross-Disorder Group paper \cite{pgccdg2013}, 
 using the summary statistics from \cite{cross2013identification} downloaded from the PGC website (URLs).
 For this replication, we used an LD Score with $r^2$'s from the 1000 Genomes Europeans \cite{10002012integrated}
 but with the sum of $r^2$'s taken only over SNPs in HapMap 3 \cite{international2010integrating} 
@@ -246,11 +245,15 @@ but with the sum of $r^2$'s taken only over SNPs in HapMap 3 \cite{international
 because this is most similar to the model of genetic architecture fit by GCTA-REML,
 where only the effects of genotyped SNPs are modeled
 (see the section ``LD Score Regression is Haseman-Elston Regression'' in the Supplementary Note). 
-The results from the PGC Cross-Disorder Group paper replicated closely, 
-and the standard errors were similar to those obtained from GCTA-REML.
+We believe that our partitioned LD Score regression model is more reliable, so we fit the GCTA-REML model
+simply as a technical demonstration.
+The genetic correlations estimates in the next section ("Application to a Large Set of Publicly Available Summary Statistics")
+are more reliable, since they use the partitioned LD Score regression model and much larger sample sizes.
+Nonetheless, when we fit the GCTA-RELM model using LD Score regression
+we replicated the results from the PGC Cross-Disorder Group paper closely, 
+and the standard errors were similar to those obtained from GCTA-REML (Figure 1).
 
 %%% TODO MAKE THIS FIGURE %%%
-
 
 \subsubsection{Application to a Large Set of Publicly Available Summary Statistics}
 Finally, we applied our method to a large set of publicly available summary statistics, 
@@ -281,9 +284,21 @@ However, the simpler model gives much lower standard error when applied to real 
 and performed better in simulations as measured by MSE,
 we report results from the naive model hereafter (results from the more sophisticated model are displayed in Supplementary Figure NNN).
 
+
+The full set of 700 genetic correlation estimates are provided in tabular format in supplementary table \textbf{NNN}
+
 Note that LD Score regression heritability estimates are biased downwards by genomic control correction \cite{buliksullivan2014}, so we cannot report heritability estimates for the majority of the phenotypes in our dataset. 
 The only GWAS that did not use GC correction were the psychiatric GWAS and the bowel disease GWAS. 
 We report estimates of heritability for these phenotypes in table \textbf{NNN}
+
+
+%%% TODO
+
+% Highlight interesting results
+
+% Factor analysis
+
+% Pretty picture 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{Discussion}
@@ -351,7 +366,7 @@ from our \texttt{ldsc} software.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Regression Weights} 
+\subsection{Genetic Covariance Regression Weights} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 For heritability estimation, we use the LD Score regression weights derived in the 
@@ -380,10 +395,10 @@ which are often not known a priori, so some approximation is required.
 In order to obtain approximate regression weights, 
 we use heritability estimates from the single-phenotype LD Score regressions, then
 we assume that $N_s$ is close enough to zero that the term $\rho N_s/N_1N_2$ is negligible
-(though this default can be adjusted using the {-}{-}overlap and {-}{-}rho flags in ldsc),
+(though this default can be adjusted using the {-}{-}overlap and {-}{-}rho flags in \texttt{ldsc}),
 and estimate a rough genetic covariance (which we only use for the regression weights)
 using the aggregate estimator 
-$$\hat{\rho}_{g, agg} := \frac{1}{\lbar}\sum_{j=1}^M \bhat_j\chat_j,$$
+$$\hat{\rho}_{g, agg} := \frac{1}{\lbar\sqrt{N_1N_2}}\sum_{j=1}^M z_{1,j}z_{2,j},$$
 where $\lbar$ denotes the mean LD Score among SNPs included in the regression.
 These regression weights are only an approximation to the optimal weights,
 but this will not introduce bias into the regression;
@@ -393,7 +408,7 @@ from GWAS with sample size below 10,000 are low enough to be interpretable,
 so non-optimality of the regression weights does not seem to be a major hindrance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Genetic Correlation}
+\subsection{Weighted Block Jackknife Genetic Correlation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Genetic correlation is defined as a ratio of quantities: 
@@ -402,30 +417,29 @@ Genetic correlation is defined as a ratio of quantities:
 \end{equation*}
 Instead of the naive estimator of this ratio, 
 \begin{equation*}
-	\rhat_{g,naive} := \frac{\hat{\rho}_g }{ \sqrt{\hat{h}^2_1\hat{h}^2_2}},
+	\rhat_{g} := \frac{\hat{\rho}_g }{ \sqrt{\hat{h}^2_1\hat{h}^2_2}},
 \end{equation*}
 we use the weighted block jackknife estimator \cite{busing1999delete} of the ratio, 
 with the jackknife taken over blocks of adjacent SNPs
 \begin{equation}
-    \hat{r}_{g,jackknife} := 
-    n_b\hat{r}_{g,naive} -
-     \frac{n_b-1}{n_b}
+    \hat{r}_{g,jack} := 
+    n_b\hat{r}_{g} -
      \sum_{i=1}^{n_b}
-     	\frac{\hat{\rho}_{g,i} }
-    		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}},
+     	\left(1-\frac{m_i}{M_g}\right)\hat{r}_{g,i}
 \end{equation}
-where $n_b$ is the number of blocks, and $\hat{\rho}_{g,i}, \hat{h}^2_{1,i}$ and $\hat{h}^2_{2,i}$
-are the estimates of genetic covariance and heritability obtained by deleting the $i^{th}$ block of SNPs.
+where $n_b$ is the number of blocks, and $\hat{r}_{g,i}$ is
+the naive estimate of genetic correlation obtained by deleting the $i^{th}$ block of SNPs, 
+$m_i$ is the number of SNPs in block $i$, and $M_g$ is the number of SNPs included in the regression.
 The weighted block jackknife ratio estimator is less biased than the naive estimate (though this is not so important at our sample sizes), 
-and comes with a convenient nonparametric standard error \cite{busing1999delete},
+and comes with a convenient nonparametric variance estimator \cite{busing1999delete},
 \begin{equation}
-    \widehat{se}\left[\hat{r}_{g,jackknife}\right] := 
-    \sqrt{n_b} \sum_{i=1}^{n_b} \left(
-     	\frac{\hat{\rho}_{g,i} }
-    		{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}} - \mean_i\left[
-    			\frac{\hat{\rho}_{g,i} }
-    			{ \sqrt{\hat{h}^2_{1,i}\hat{h}^2_{2,i}}}\right]
-    	\right).
+    \widehat{\mathrm{Var}}\left[\hat{r}_{g,jack}\right] 
+:= 
+    \frac{1}{n_b} \sum_{i=1}^{n_b}
+    	\frac{1}{h_i - 1}
+	\left(
+		(h_i-n_b)\hat{r}_g - (h_i-1)\hat{r}_{g,i} + \sum_{j=1}^{n_b} \left(1-\frac{m_i}{M_g}\hat{r}_{g,j}\right)
+		\right)
 \end{equation}
 Weighted block jackknife standard errors (over blocks of SNPs) are robust to the  correlated error structure of GWAS $\chi^2$-statistics, 
 so long as the block size exceeds the typical range of LD. S
@@ -465,7 +479,7 @@ The minimum summary data required for estimating genetic correlation with LD Sco
 		summary statistics will result in downward bias in the LD Score regression estimates of heritability and
 		genetic covariance, and deflated LD Score regression intercepts, though the genetic correlation estimates will be fine.
 	\item The summary statistics must not be meta-analyzed with targeted genotyping at significant loci 
-		(\emph{e.g.,} specialty genotyping arrays like immunochip, psych chip or metabochip, or replication cohorts) 
+		(\emph{e.g.,} specialty genotyping arrays like immunochip, exome chip, psychchip, metabochip, or replication cohorts) 
 \end{enumerate}
 The next details are nice to have, but are only used for filtering SNPs:
 \begin{enumerate}
@@ -473,12 +487,19 @@ The next details are nice to have, but are only used for filtering SNPs:
 	\item Sample size at each SNP (for binary traits, number of cases and number of controls)
 	\item Sample MAF
 \end{enumerate}
-If these data are not available, we recommend retaining only HapMap 3 SNPs with reference panel MAF above 5\% for the LD Score regression as a workaround
+If these data are not available, 
+we recommend retaining only HapMap 3 SNPs with reference panel MAF above 5\% for the LD Score regression as a workaround
 (note: for \emph{regression}, not for estimation of the LD Scores), 
 since HapMap3 SNPs seem to be well-imputed in most studies.
 
-\subsection{Huge Effect Loci}
 
+\subsubsection{Huge Effect Loci}
+
+Though the derivation of LD Score regression makes no distributional assumptions about effect sizes, 
+the LD Score regression standard error can become very large if effect sizes are drawn from a highly kurtotic distribution,
+\emph{i.e.,} if there are huge-effect loci. 
+The \texttt{ldsc} default is to remove a window around SNPs with $\chi^2 > 0.01N$
+(this can be disabled with the \texttt{--no-filter-chisq} flag).
 
 
 \subsubsection{IGAP}
@@ -509,6 +530,9 @@ Note that we only used stage 1 data for LD Score regression.
 		
 	\item LD block genotype simulation code:\\
 		\texttt{github.com/bulik/ldsc-sim}
+		
+	\item This paper:\\
+		\texttt{github.com/bulik/gencor\_tex}
 		
 	\item PGC (psychiatric) summary statistics:\\ 
 		\texttt{www.med.unc.edu/pgc/downloads}
@@ -543,20 +567,34 @@ Note that we only used stage 1 data for LD Score regression.
 		\texttt{www.bluebottlecoffee.com}
 \end{enumerate}
 
-
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{./tex/main/acknowledgements}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{./tex/main/author_contributions}
+\section{Acknowledgements}\label{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+We would like to thank P. Sullivan for helpful discussion. This work was supported by NIH grants R01 HG006399 (ALP), R03 CA173785 (HF) and by the Fannie and John Hertz Foundation (HF). The coffee for this paper was roasted by Barismo in Arlington, MA. 
+
+Data on glycaemic traits have been contributed by MAGIC investigators and have been downloaded from www.magicinvestigators.org.
+
+Data on coronary artery disease / myocardial infarction have been contributed by CARDIoGRAMplusC4D investigators and have been downloaded from 
+www.CARDIOGRAMPLUSC4D.ORG
+
+We thank the International Genomics of Alzheimer's Project (IGAP) for providing summary results data for these analyses. The investigators within IGAP contributed to the design and implementation of IGAP and/or provided data but did not participate in analysis or writing of this report. IGAP was made possible by the generous participation of the control subjects, the patients, and their families. The i-Select chips was funded by the French National Foundation on Alzheimer's disease and related disorders. EADI was supported by the LABEX (laboratory of excellence program investment for the future) DISTALZ grant, Inserm, Institut Pasteur de Lille, Université de Lille 2 and the Lille University Hospital. GERAD was supported by the Medical Research Council (Grant 503480), Alzheimer's Research UK (Grant 503176), the Wellcome Trust (Grant 082604/2/07/Z) and German Federal Ministry of Education and Research (BMBF): Competence Network Dementia (CND) grant 01GI0102, 01GI0711, 01GI0420. CHARGE was partly supported by the NIH/NIA grant R01 AG033193 and the NIA AG081220 and AGES contract N01-AG-12100, the NHLBI grant R01 HL105756, the Icelandic Heart Association, and the Erasmus Medical Center and Erasmus University. ADGC was supported by the NIH/NIA grants: U01 AG032984, U24 AG021886, U01 AG016976, and the Alzheimer's Association grant ADGC-10-196728.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{./tex/main/competing_financial_interests}
+\section{Author Contributions}\label{author_contribs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nobody likes author contributions.
+All authors revised and approved the final manuscript.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Competing Financial Interests}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We declare no financial conflicts of interest.
 
 \newpage
 \bibliographystyle{plain}
