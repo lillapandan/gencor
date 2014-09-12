@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Definitions}{2}
+\contentsline {section}{\numberline {2}Models}{3}
+\contentsline {subsection}{\numberline {2.1}Quantitative Traits}{3}
+\contentsline {subsection}{\numberline {2.2}Liability Threshold Model}{4}
+\contentsline {section}{\numberline {3}Derivations}{5}
+\contentsline {subsection}{\numberline {3.1}Non-Ascertained Samples}{5}
+\contentsline {subsubsection}{\numberline {3.1.1}Genetic Covariance}{5}
+\contentsline {subsubsection}{\numberline {3.1.2}Regression Weights}{6}
+\contentsline {subsection}{\numberline {3.2}Ascertainment}{6}
+\contentsline {subsubsection}{\numberline {3.2.1}Case/Control Test Statistics}{7}
+\contentsline {subsubsection}{\numberline {3.2.2}Heritability of the Observed Phenotype}{8}
+\contentsline {subsubsection}{\numberline {3.2.3}Genetic Covariance with the Observed Phenotype}{9}
+\contentsline {subsubsection}{\numberline {3.2.4}Heritability and Genetic Covariance of Liability}{10}
+\contentsline {subsubsection}{\numberline {3.2.5}Regression Weights}{11}
+\contentsline {section}{\numberline {4}LD Score Regression is Haseman-Elston Regression}{11}
+\contentsline {subsection}{\numberline {4.1}Heritability}{11}
+\contentsline {subsection}{\numberline {4.2}Genetic Covariance}{13}
+\contentsline {subsection}{\numberline {4.3}Local LD}{16}
+\contentsline {section}{\numberline {5}Supplementary Figures}{17}
+\contentsline {section}{\numberline {6}Supplementary Tables}{18}
+\contentsline {subsection}{\numberline {6.1}Simulations with Sample Overlap}{18}
+\contentsline {subsection}{\numberline {6.2}Comparison of Standard Error Estimates to Empirical Standard Deviation across Simulations}{19}
+\contentsline {subsection}{\numberline {6.3}Simulations with One Quantitative Trait and One Binary Trait}{20}
+\contentsline {subsection}{\numberline {6.4}Simulations with Parallel LD- and MAF-Dependence}{21}
+\contentsline {subsection}{\numberline {6.5}Simulations with Antiparallel LD- and MAF-Dependence}{22}
+\contentsline {subsection}{\numberline {6.6}Simulations with LD- and MAF-Dependent Genetic Correlation}{23}

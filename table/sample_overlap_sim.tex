@@ -1,0 +1,26 @@
+
+\begin{table}[ht]\centering
+\begin{tabular}{c | cc}
+  \hline
+Parameter & True Value & Estimate\\
+ \hline
+$h^2_1$ & 0.40 & 0.41 (0.12) \\ 
+$h^2_2$ & 0.60 & 0.60 (0.12) \\ 
+$\rho_g$ & 0.34 & 0.33 (0.10) \\ 
+$r_g$      & 0.70 & 0.66 (0.15) \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+We simulated two GWAS with quantitative phenotypes,
+using genotypes from the 4,292 individuals in the WTCCC1 bipolar disorder cohort for the first GWAS
+and genotypes from the 4,482 individuals in the WTCCC1 coronary artery disease cohort for the second GWAS.
+These cohorts contain 2,713 overlapping individuals. 
+Additive genetic effect sizes were drawn from a bivariate point-normal distribution 
+with 10\% of SNPs causal. 
+The environmental correlation between the two phenotypes was 0.3. 
+The true values of each parameter are displayed in the column labeled true value.
+Means and standard deviations of the LD Score regression estimates of these parameters across 100 simulation replicates
+are displayed in the column labeled estimate.
+These simulations confirm that LD Score regression estimates of genetic covariance are not biased by sample overlap,
+as proved in \ref{supp_condexp_qt}.
