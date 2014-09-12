@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{verbatim}
+\usepackage{fullpage}
+\usepackage{gencor}
+\usepackage{mathrsfs}
+\frenchspacing
+
+%\setlength\parindent{0pt}
+
+\title{Supplementary Note to Estimating Genetic Correlation from GWAS Summary Statistics}
+\author{Brendan Bulik-Sullivan, Hilary Finucane}
+\date{July 8, 2014}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\listoftables
+\listoffigures
+\newpage
+
+\section{Definitions}
+\label{Definitions}
+\input{./tex/supp/supp_definitions}
+
+\section{Models}
+\subsection{Genetic Architecture}
+\label{ctsmodel}
+\input{./tex/supp/supp_model}
+
+\subsection{Case/Control Ascertainment}
+
+\subsection{Liability Threshold Model}
+
+\section{Derivations}
+
+\subsection{Conditional Expectation, Quantitative Traits}
+\label{supp_condexp_qt}
+\input{./tex/supp/supp_condexp_qt}
+\input{./tex/supp/supp_condvar_qt}
+\input{./tex/supp/supp_cca_model}
+
+\subsection{Conditional Expectation, Case/Control Traits}
+\label{Conditional Expectation, Case/Control Traits}
+\subsubsection{Population Allele Frequencies}
+\input{./tex/supp/supp_condexp_cca}
+
+\input{./tex/supp/supp_condvar_cca}
+
+
+\input{./tex/supp/supp_he_regression}
+
+\newpage
+\section{Supplementary Figures}
+\newpage
+\section{Supplementary Tables}
+
+\subsection{Comparison of Standard Error Estimates to Empirical Standard Deviation across Simulations}
+\input{./table/parallel_arch_sim_se}
+\input{./table/parallel_arch_sim_se_caption}
+
+\newpage
+\subsection{Simulations with One Quantitative Trait and One Binary Trait}
+\input{./table/qt_cc_sim_table}
+\input{./table/qt_cc_sim_caption}
+
+\newpage
+\subsection{Simulations with Parallel LD- and MAF-Dependence}
+\label{parallel}
+\input{./table/parallel_arch_sim}
+\input{./table/parallel_arch_sim_caption}
+
+\newpage
+\subsection{Simulations with Antiparallel LD- and MAF-Dependence}
+\input{./table/antiparallel_arch_sim}
+\input{./table/antiparallel_arch_sim_caption}
+
+\newpage
+\subsection{Simulations with LD- and MAF-Dependent Genetic Correlation}
+\label{antiparallel}
+\input{./table/gencor_dep_sim}
+\input{./table/gencor_dep_sim_caption}
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{gencor}
+
+\end{document}
