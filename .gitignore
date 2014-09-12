@@ -1,0 +1,12 @@
+# tex 
+*.aux
+*.log
+*.gz
+
+# bibtex
+*.bbl
+*.blg
+
+# python
+*.pyc
+
