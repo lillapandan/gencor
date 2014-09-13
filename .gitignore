@@ -3,6 +3,8 @@
 *.log
 *.gz
 *.toc
+*.lot
+*.lot
 
 # bibtex
 *.bbl
