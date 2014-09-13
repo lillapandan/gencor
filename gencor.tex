@@ -10,6 +10,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \numberwithin{equation}{section}
+\usepackage[nottoc,numbib]{tocbibind}
 
 \frenchspacing
 
@@ -17,12 +18,7 @@
 \author{Brendan Bulik-Sullivan*, Hilary Finucane*, ... , \emph{et. al.}}
 
 \begin{document}
-
 \maketitle
-\newpage
-\tableofcontents
-\newpage
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}\label{abstract}
@@ -48,6 +44,13 @@ and demonstrate that our method is not confounded
 when effect size depends on allele frequency or linkage disequilibrium.
 
 \end{abstract}
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,7 +223,7 @@ except that genetic correlation was 0.2 for variants with LD Score less than 100
 We  estimated heritability, genetic covariance and genetic correlation using both naive LD Score regression 
 and two partitioned LD Score regression models (one with 30 bins, one with 60 bins) 
 that allow for both MAF- and LD-dependence.
-Results from these simulations are presented in supplementary tables \textbf[NNN-NNN].
+Results from these simulations are presented in supplementary tables \textbf{[NNN-NNN]}.
 The heritability and genetic covariance estimates from naive LD Score regression are badly biased in all cases
 (which is similar to the results obtained by Speed, \emph{et. al.}), 
 but the bias in the genetic correlation estimates was much less severe, except in the third set of simulations,
@@ -251,9 +254,27 @@ The genetic correlations estimates in the next section ("Application to a Large 
 are more reliable, since they use the partitioned LD Score regression model and much larger sample sizes.
 Nonetheless, when we fit the GCTA-RELM model using LD Score regression
 we replicated the results from the PGC Cross-Disorder Group paper closely, 
-and the standard errors were similar to those obtained from GCTA-REML (Figure 1).
+and the standard errors were similar to those obtained from GCTA-REML 
+(Figure \ref{Fig:Replication of PGC Cross Disorder Results}).
+\begin{figure}[!ht]
 
-%%% TODO MAKE THIS FIGURE %%%
+\begin{centering}
+\caption{Replication of PGC Cross Disorder Results}
+    \includegraphics[scale=0.9]{figs/ldsc_vs_gcta.pdf}
+         \label{Fig:Replication of PGC Cross Disorder Results}
+
+\end{centering}
+This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) 
+The horizontal axis indicates pairs of phenotypes, and the vertical axis indicates genetic correlation.
+The red bars are the LD Score regression estimates, the blue bars are the GCTA-REML estimates from \cite{pgccdg2013},
+and the black lines indicate one standard error. 
+For this plot, we used a HapMap3 LD Score (Online Methods), since this more closely corresponds to the model
+fit by GCTA-REML (which only models the effects of genotyped SNPs). 
+This plot should be interpreted as a technical sanity check. 
+The estimates of genetic correlation between psychiatric phenotypes presented under the header 
+"Application to a Large Set of Publicly Available Summary Statistics" use larger sample sizes and rely on fewer
+assumptions about genetic architecture, and so are more robust.
+\end{figure}
 
 \subsubsection{Application to a Large Set of Publicly Available Summary Statistics}
 Finally, we applied our method to a large set of publicly available summary statistics, 
@@ -349,7 +370,7 @@ using the {-}{-}keep flag in \texttt{ldsc}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In partitioned LD Score regression, we cut the set of SNPs in our reference panel into bins, for example,
-we might use five MAF bins, corresponding to MAF 0-10\%, 10-20\%, ... , 40-50\%. 
+we might use five MAF bins, corresponding to MAF 0-10\%, 10-20\%, ... , 40-50\% (as in supplementary table 4 of \cite{pgccdg2013}).  
 We allow the variance explained per SNP to vary from bin to bin, but assume that variance explained per SNP is (roughly) 
 equal within each bin. 
 This amounts to approximating the unknown function that maps MAF to variance explained per SNP with a locally 
