@@ -262,7 +262,7 @@ assume that the phenotypes follow a multivariate normal distribution\footnote{
 For instance, it is sufficient but not necessary to assume that $\beta$, $\gamma$, $\delta$ and $\epsilon$ are multivariate normal, 
 and that $N_1$ and $N_2$ are sufficiently large that we can invoke the central limit theorem. 
 More generally, the phenotypes will be approximately normal if $\delta$ and $\epsilon$ are normal 
-and if $\beta$ and $\gamma$ are reasonably polygenic. s
+and if $\beta$ and $\gamma$ are reasonably polygenic.
 If there are few casual SNPs, then the conditional variance may be larger.}.
 
 If phenotypes are normally distributed, then by the central limit theorem,
@@ -952,7 +952,7 @@ This follows from propositions \ref{agg} and  \ref{he_vs_agg}.
 
 Finally, we can interpret ordinary LD Score regression with LD Scores estimated from a sequenced reference panel
 as a modification of HE regression with a GRM computed from all SNPs. 
-We provide this interpretation in terms of the heritability estimators; the corresponding statements for the genetic covariance estimators
+We state this interpretation in terms of the heritability estimators; the corresponding statements for the genetic covariance estimators
 are directly analogous.
 The approximation consists of observing that although the equality $\varhat[A_{hi}]=\lbar_X$ holds exactly only when $\lbar_X$ is computed using a
 whole-genome window (\emph{i.e.,} including LD across chromosomes), all real LD is local, and all non-local LD results from
@@ -960,17 +960,16 @@ finite sample bias in $\hat{r}^2$ or sample structure, so we can write
 \begin{equation}\label{local ld eqn}
 	\hat{\ell}_j \approx \ell_j + \dfrac{M}{N} + a,
 \end{equation}
-where $\hat{\ell}_j$ denotes the sample LD Score for SNP $j$, and $a$ is a term that depends on sample structure.
+where $\hat{\ell}_j$ denotes the sample LD Score for SNP $j$, and $a$ is a term that depends on sample structure \cite{buliksullivan2014}.
 This approximation justifies replacing $\hat{\ell}_j$ and $\lbar_X$ with an unbiased estimate of population LD Score 
-($\ell_j$) from a sequenced reference panel.
-
-This approximation step provide several advantages:
+($\ell_j$) from a sequenced reference panel. This approximation step provides several advantages:
 \begin{enumerate}
 	\item The computational complexity of LD Score regression is much lower than HE regression. HE regression requires time
 	$\mathscr{O}(M_gN^2)$ for computing the GRM and $\mathscr{O}(N^2)$ for the regression. LD Score regression requires
 	time $\mathscr{O}(MN_{ref})$ for computing LD Scores (times a constant factor $B\approx 5000$,
 	the mean window size measured in number of SNPs), where $N_{ref}$ is the sample size of the sequenced reference panel,
-	$\mathscr{O}(MN)$ for computing summary statistics, and time $O(M_g)$ for the regression. 
+	$\mathscr{O}(MN)$ for computing summary statistics\footnote{It almost doesn't seem fair to count the time it takes to compute summary statistics towards the time complexity of LD Score regression, since computing summary statistics is the first thing that every GWAS consortium does.},
+	 and time $O(M_g)$ for the regression. 
 	Thus, HE regression is quadratic in $N$, and LD Score regression is linear\footnote{If instead of local LD, we had used 
 	genome-wide LD, the complexity of estimating LD Scores would have been $\mathscr{O}(M^2N)$, which is intimidating.}. 
 	
@@ -1020,6 +1019,13 @@ This approximation step provide several advantages:
 \label{antiparallel}
 \input{./table/gencor_dep_sim}
 \input{./table/gencor_dep_sim_caption}
+
+\newpage
+\subsection{700 Genetic Correlations}
+
+\newpage
+\subsection{Summary Statistic Metadata}
+
 
 \newpage
 \bibliographystyle{plain}
