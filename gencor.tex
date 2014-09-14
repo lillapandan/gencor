@@ -263,7 +263,7 @@ at fixed sample size when the distributional assumptions
 (normally distributed phenotypes, environmental effects independent of genetic effects in the sample) 
 made by GCTA-REML are met, which will often be the case for non-ascertained studies of quantitative traits.
 In ascertained studies of binary phenotypes, the distributional assumptions made by GCTA-REML do not hold
-\cite{golan2013narrowing}, and so it is not surprising that LD Score regression performs about as well.
+\cite{golan2013narrowing}, and so it is not surprising that LD Score regression performs about as well in this example.
 \begin{figure}[!ht]
 
 \begin{centering}
@@ -292,12 +292,13 @@ major depression \cite{ripke2012mega},
 bipolar disorder \cite{sklar2011large}, 
 autism \cite{cross2013identification},
 attention-deficit hyperactivity disorder \cite{neale2010meta},
+anorexia \cite{boraska2014genome},
 height \cite{allen2010hundreds}, 
 body mass index \cite{speliotes2010association}, 
 waist-hip ratio \cite{heid2010meta}, 
 obesity \cite{berndt2013genome}, 
 various insulin- and glucose- related traits
-\cite{prokopenko2014central,scott2012large,manning2012genome,strawbridge2011genome,saxena2010genetic,dupuis2010new,soranzo2010common},
+\cite{manning2012genome},
 smoking \cite{tobacco2010genome},
 coronary artery disease \cite{schunkert2011large}, 
 type-2 diabetes \cite{morris2012large}, 
@@ -444,7 +445,7 @@ This presents a bias/variance tradeoff: if the mesh of our locally constant appr
 \emph{e.g.,} if we were to use two MAF bins instead of five), 
 our locally constant approximation would be poor, and this would result in bias. 
 On the other hand, if we use too many bins, the standard error of our estimates will increase. 
-However, we show in the simulations under the header "Misspecified Models of Genetic Architecture" that
+However, we show in the simulations under the header ``Misspecified Models of Genetic Architecture" that
 we can remove almost all MAF- and LD-bias under realistic parameter settings using only a few tens of bins, which 
 increases the standard error only modestly.
 MAF- and LD- partitioned LD Scores can be estimated using the \texttt{--cts-bin} and  \texttt{--cts-breaks} flags
@@ -496,10 +497,15 @@ so non-optimality of the regression weights does not seem to be a major hindranc
 Users of our \texttt{ldsc} software package should note that when attempting to compute the genetic 
 correlation between a trait and itself using the same GWAS data twice, the result will generally be different from 
 one unless the weights are set appropriately. 
+With the default weights (which are set for zero sample overlap), \texttt{ldsc} is simply computing the ratio
+between the slope of and LD Score regression with efficient weights and the slope of an LD Score regression
+with inefficient regression weights, which is equal to one in expectation, but with noise.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weighted Block Jackknife Genetic Correlation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section describes the inner workings of the \texttt{--sumstats-gencor} flag in \texttt{ldsc}.
 
 Genetic correlation is defined as a ratio of quantities: 
 \begin{equation*}
@@ -528,17 +534,19 @@ and comes with a convenient nonparametric variance estimator \cite{busing1999del
     \frac{1}{n_b} \sum_{i=1}^{n_b}
     	\frac{1}{h_i - 1}
 	\left(
-		(h_i-n_b)\hat{r}_g - (h_i-1)\hat{r}_{g,i} + \sum_{j=1}^{n_b} \left(1-\frac{m_i}{M_g}\hat{r}_{g,j}\right)
+		(h_i-n_b)\hat{r}_g - (h_i-1)\hat{r}_{g,i} + \sum_{j=1}^{n_b} \left(1-\frac{m_i}{M_g}\hat{r}_{g,j}\right),
 		\right)
 \end{equation}
-Weighted block jackknife standard errors (over blocks of SNPs) are robust to the  correlated error structure of GWAS $\chi^2$-statistics, 
-so long as the block size exceeds the typical range of LD. S
-ee \cite{buliksullivan2014, finucane2014partitioning, moorjani2011history} 
+where $h_i := M_g / m_i$.
+Weighted block jackknife standard errors (over blocks of adjacent SNPs) 
+are robust to the  correlated error structure of GWAS $\chi^2$-statistics, 
+so long as the block size exceeds the typical range of LD. 
+See references \cite{buliksullivan2014, finucane2014partitioning, moorjani2011history} 
 for examples of papers in the statistical and population genetics literature that use this technique. 
 We checked the reliability of our standard errors via simulations with real genotypes
 (Supplementary Table \ref{supp-se_sim}),
 and found that the \texttt{ldsc} default setting  of 2000 blocks genome-wide
-(which can be adjusted with the {-}{-}num-blocks flag) gives standard error estimates
+(which can be adjusted with the \texttt{--num-blocks} flag) gives standard error estimates
 that agree well with the empirical standard deviation across simulation replicates.
 
 In another set of simulations with much lower power (not shown), we observed that the LD Score regression
@@ -662,7 +670,7 @@ Note that we only used stage 1 data for LD Score regression.
 \section{Acknowledgements}\label{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We would like to thank P. Sullivan and S. Caldwell for helpful discussion. This work was supported by NIH grants R01 HG006399 (ALP), R03 CA173785 (HF) and by the Fannie and John Hertz Foundation (HF). The coffee that Brendan drank while writing this paper was roasted by Barismo in Arlington, MA and Blue Bottle Coffee in Oakland, CA. 
+We would like to thank P. Sullivan and S. Caldwell for helpful discussion. This work was supported by NIH grants R01 HG006399 (ALP), R03 CA173785 (HKF) and by the Fannie and John Hertz Foundation (HKF). The coffee that Brendan drank while writing this paper was roasted by Barismo in Arlington, MA and Blue Bottle Coffee in Oakland, CA. 
 
 Data on glycaemic traits have been contributed by MAGIC investigators and have been downloaded from www.magicinvestigators.org.
 
