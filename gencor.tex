@@ -44,7 +44,7 @@ and demonstrate that our method is not confounded
 when effect size depends on allele frequency or linkage disequilibrium.
 Since dozens of sets of summary statistics can be freely downloaded from the internet,
 we can report a much larger number of  genetic correlations 
- -- more than 200 in this paper alone -- than was previously possible.
+ -- 300 in this paper alone -- than was previously possible.
 
 \end{abstract}
 
@@ -112,7 +112,7 @@ and use these heritability estimates to transform the estimates of genetic covar
 In this paper, we describe a series of simulations that validate these claims. 
 We then replicate the genetic correlations reported by the PGC Cross-Disorder Group using GCTA-REML in \cite{pgccdg2013},
 using only the summary statistics from \cite{cross2013identification}, 
-before reporting more than 200 (mostly novel) 
+before reporting 300 (mostly novel) 
 genetic correlations between phenotypes with publicly available GWAS summary data.
 We find that phenotypes generally tend to cluster within categories defined by clinical practice and observational epidemiology; 
 nonetheless, we do observe some surprising results.
@@ -289,6 +289,7 @@ and less than 1GB of RAM.
          \label{Fig:Replication of PGC Cross Disorder Results}
 
 \end{centering}
+
 This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) 
 The horizontal axis indicates pairs of phenotypes, and the vertical axis indicates genetic correlation.
 The red bars are the LD Score regression estimates, the blue bars are the GCTA-REML estimates from \cite{pgccdg2013},
@@ -356,8 +357,19 @@ as the ``variance explained by genotyped SNPs'', and denoted either $h^2_g$ or $
 because the definition of the parameter $h^2_g$ depends on the set $g$ of SNPs used for computing the kinship matrix). 
 
 %%% Discuss h2(5-50%)
-The full list of 253 genetic correlation estimates are provided in tabular format in supplementary table \textbf{NNN},
-and are displayed as a heatmap in Figure \textbf{NNN}. 
+The full list of 253 genetic correlation estimates are provided in tabular format in the Supplementary Data,
+and are displayed as a heatmap in Figure \ref{Fig:300 Gencors}.
+
+\begin{figure}[!ht]
+
+\begin{centering}
+\caption{Genetic Correlations Between 25 Published GWAS}
+    \includegraphics[scale=0.9]{figs/rg_heatmap.pdf}
+         \label{Fig:300 Gencors}
+
+Placeholder figure (HM3 LD Score). Caption goes here.
+\end{centering}
+\end{figure}
 We find that phenotypes tend to cluster into categories defined by clinical practice and observational epidemiology;
 for instance, we observe high genetic correlations between anthopometric traits, between psychiatric traits,  between 
 metabolic traits and between autoimmune traits.
