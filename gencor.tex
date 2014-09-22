@@ -92,7 +92,7 @@ from distributions with equal means and variances,
 		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_g\sqrt{N_1N_2}}{M}\ell_j + \dfrac{N_s\rho}{\sqrt{N_1N_2}},
 \end{equation}
 where $N_1$ and $N_2$ are the sample sizes of each study, $N_s$ is the number of shared samples,
-$\rho$ is the phenotypic covariance and $\rho_g$ is the genetic covariance. 
+$\rho$ is the overall phenotypic correlation and $\rho_g$ is the genetic covariance. 
 This equation is derived in the supplementary note, and a similar relationship holds if one or both of the studies 
 is an ascertained study of a binary phenotype. 
 The relationship becomes more complicated if effect sizes are not identically distributed, but instead depend on  
@@ -104,7 +104,7 @@ Thus, if we regress the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS aga
 the slope times a constant estimates genetic covariance.
 Since sample overlap affects the term $z_{1,j}z_{2,j}$ equally for all SNPs, and the quantity $N_s$ appears only 
 as the intercept term, the LD Score regression estimator of genetic covariance is not biased by sample overlap. 
-Indeed, if $\rho$ is known (\emph{e.g.,} if both studies assay the same phenotype and trivially $\rho=1$), the intercept 
+Indeed, if $\rho$ is known (\emph{e.g.,} if both studies assay the same phenotype and $\rho=1$), the intercept 
 from this regression times a constant can be used as an estimator of the number of shared samples.
 We can estimate heritability using LD Score regression (as described in \cite{buliksullivan2014}),
 and use these heritability estimates to transform the estimates of genetic covariance into estimates of genetic correlation.
@@ -113,11 +113,12 @@ In this paper, we describe a series of simulations that validate these claims.
 We then replicate the genetic correlations reported by the PGC Cross-Disorder Group using GCTA-REML in \cite{pgccdg2013},
 using only the summary statistics from \cite{cross2013identification}, 
 before reporting 300 (mostly novel) 
-genetic correlations between phenotypes with publicly available GWAS summary data.
+genetic correlations between pairs of phenotypes with publicly available GWAS summary data.
 We find that phenotypes generally tend to cluster within categories defined by clinical practice and observational epidemiology; 
 nonetheless, we do observe some surprising results.
 For instance, we estimate genetic correlations close to zero between Alzheimer's and all of the psychiatric traits;
-although Alzheimer?s disease is classified as a psychiatric disorder in ICD-10, it appears to be genetically distinctive. Instead, Alzheimer's disease clusters (weakly, but significantly) with anthopometric and metabolic traits.
+although Alzheimer?s disease is classified as a psychiatric disorder in ICD-10, it appears to be genetically distinctive. 
+Instead, Alzheimer's disease clusters (weakly, but significantly) with anthopometric and metabolic traits.
 
 The computational demands of our method are mild, and we provide an open-source software package, \texttt{ldsc},
 written in python, which implements the analyses described in this paper and also the analyses from
@@ -356,9 +357,13 @@ as the ``variance explained by genotyped SNPs'', and denoted either $h^2_g$ or $
 (indeed, estimates of $h^2_g$ from different GWAS of the same trait are strictly speaking not directly comparable to one another, 
 because the definition of the parameter $h^2_g$ depends on the set $g$ of SNPs used for computing the kinship matrix). 
 
-%%% Discuss h2(5-50%)
-The full list of 253 genetic correlation estimates are provided in tabular format in the Supplementary Data,
+The full list of 300 genetic correlation estimates are provided in tabular (csv) format in the Supplementary Data,
 and are displayed as a heatmap in Figure \ref{Fig:300 Gencors}.
+Note that the standard error of the genetic correlation estimate depends not only on sample size but also heritability.
+As a rule of thumb, the higher heritability $Z$-score ($\hat{h}^2/\mathrm{se}(\hat{h}^2)$) the lower the standard error
+(this is valid even for GC-corrected data).
+This is a general feature of ratio estimators:
+it is difficult to produce an accurate estimate of $1/x$ when the random variable $x$ is close to zero.
 
 \begin{figure}[!ht]
 
@@ -379,7 +384,9 @@ Reassuringly, most genetic correlations across categories were non-significantly
 We observed some interesting individual results (Table \textbf{NNN}).
 A few examples:
 We estimate genetic correlations close to zero between Alzheimer's and all of the psychiatric traits.
-Even though Alzheimer?s disease is classified as a psychiatric disorder in ICD-10, it appears to be genetically distinctive. Instead, Alzheimer's disease clusters (weakly, but significantly) with anthopometric traits.We estimate genetic correlation close to zero between rheumatoid arthritis (RA) and schizophrenia, 
+Even though Alzheimer?s disease is classified as a psychiatric disorder in ICD-10, it appears to be genetically distinctive. 
+Instead, Alzheimer's disease clusters (weakly, but significantly) with anthopometric traits.
+We estimate genetic correlation close to zero between rheumatoid arthritis (RA) and schizophrenia, 
 and between smoking traits and schizophrenia,
 despite reduced risk of RA in patients with schizophrenia
 and high rate of smoking in patients with schizophrenia
@@ -390,12 +397,40 @@ and high rate of smoking in patients with schizophrenia
 \section{Discussion}\label{Discussion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\
 
-Recap of the highlights
+\subsection{Limitations and Future Directions}
+We note some limitations of LD Score regression. 
+First, LD Score regression requires large sample sizes (at least a few thousand) in order to give estimates with reasonable
+standard error. 
+For smaller sample sizes, GCTA-REML is are more statistically efficient estimator of genetic correlation when its assumptions
+are met (in particular, for non-ascertained studies) and individual genotypes are available.
+In our opinion, figuring out how to obtain an efficient estimate of genetic correlation from a small and highly ascertained
+sample (\emph{e.g.,} a study of a rare polygenic disease, where finding even a few thousand cases to genotype is challenging) 
+is an open question.
 
-Main point: it is now almost trivial (mod admixed or non european GWAS)
-to produce the all phenotype by all phenotype matrix of genetic correlations without 
-the ethical issues around sharing genotypes IF people are willing to share INFO
-(or at least provide a file with QC+ INFO > 0.9 SNPs)
+Second, LD Score regression assumes that all individuals in the GWAS were sampled from populations with similar LD Scores,
+and that these LD Scores can be estimated from sequence data.
+For multi-continental GWAS, the solution is to run LD Score regression on each continental subcohort separately, 
+but nevertheless, LD Score regression can only be applied to samples from populations for which there exists a large 
+sequenced reference panel. 
+Currently, LD Score regression cannot be applied to samples from admixed populations.
+We provide a flowchart in Supplementary Figure \textbf{NNN} describing the situations in which LD Score regression is likely
+to be useful for estimating genetic correlation.
+
+Finally, while genetic correlations are less confounded than overall phenotypic correlations from observational
+epidemiology, genetic correlations cannot be interpreted as causal effects, even genetic correlations between intermediate 
+phenotypes and disease.
+For example, consider the strong positive genetic correlation between LDL and CAD in Figure \ref{Fig:300 Gencors}.
+This genetic correlation could result from a causal effect, \emph{e.g.,} $\mathrm{LD}\rightarrow\mathrm{CAD}$,
+but could also result from shared genetic etiology 
+\emph{e.g.,} $\mathrm{LDL}\leftarrow\mathrm{G}\rightarrow\mathrm{CAD}$, where $\mathrm{G}$ is some set of genetic factors.
+
+Developing methods to distinguish between these models based on genetic data is a particularly exciting direction for future 
+research.
+
+\subsection{Data Sharing}
+
+Under the header ``Minimum Viable Summary Statistics'' in the Methods.
+\subsection{Recap}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
