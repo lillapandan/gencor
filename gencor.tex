@@ -22,10 +22,16 @@
 \begin{document}
 \maketitle
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{abstract}\label{abstract}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
 
+
+
+
+\section{Abstract}
 Discovering relationships between phenotypes is a fundamental goal of epidemiology,
 with implications for drug development, nosology and treatment.
 The interpretation of phenotypic correlations in observational epidemiological studies 
@@ -46,16 +52,6 @@ Since dozens of sets of summary statistics can be freely downloaded from the int
 we can report a much larger number of  genetic correlations 
  -- 300 in this paper alone -- than was previously possible.
 
-\end{abstract}
-
-\newpage
-\tableofcontents
-\listoffigures
-\listoftables
-\newpage
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{Introduction}
@@ -73,12 +69,6 @@ To exhibit positive genetic correlation,
 it is not sufficient for two phenotypes to be influenced by the same genetic loci:
 the directions of effect of the variants that influence the phenotypes must also be consistently aligned across the genome.
 
-Estimating the genetic correlation can lead to insight about the shared genetic basis of two phenotypes. 
-For example, the genetic correlation between schizophrenia and bipolar disorder is estimated to be 0.8 \cite{BipSczGC}, 
-indicating that despite the different clinical presentation of these two disorders, there is a strong shared genetic basis.  
-[[Did the high gc between UC and CD lead people to do things differently like pool samples or something like that?
-It would be great to have one or two examples of why genetic correlation is interesting here.]]
-
 Existing methods for estimating genetic correlation from GWAS genotype data, 
 such as restricted maximum likelihood (REML) as implemented in the software package GCTA 
 \cite{yang2010, yang2011gcta} -- hereafter referred to as GCTA-REML -- or polgyenic risk scores \cite{dudbridge2013power},
@@ -92,31 +82,34 @@ and only a few dozen genetic correlations have been estimated using GWAS data to
 Here, we propose a modification of LD Score regression \cite{buliksullivan2014}
 that can estimate the genetic correlation between two traits from GWAS summary statistics, 
 allowing us to estimate hundreds of genetic correlations with computational ease. 
-These estimates greatly extend the understanding gleaned from the handful of previously estimated
+These estimates extend the understanding gleaned from the handful of previously estimated
 genetic correlations, giving us a big-picture view of how phenotypes cluster together as well as allowing 
 us to skim for surprising and interesting genetic correlations.
 
 Our method is based on a simple equation relating the product of $Z$-scores of a given SNP from two GWAS's to the LD Score of the SNP, the genetic correlation, and the phenotypic correlation. 
 More precisely, let $z_{1,j}$ and $z_{2,j}$ be the $Z$-scores for a SNP $j$ from two GWAS's, and let $\ell_j$ be the LD Score of SNP $j$; 
-i.e.\ . $\ell_j = \sum_k r^2(j,k)$.
-Then assuming a simple model of genetic architecture where for each phenotype, SNP effect sizes are drawn in an uncorrelated fashion from distributions with mean zero and a fixed variance, we have
+\emph{i.e.,} $\ell_j = \sum_k r^2(j,k)$.
+Then, assuming a simple model of genetic architecture where for each phenotype, SNP effect sizes are drawn in an uncorrelated fashion from distributions with mean zero and a fixed variance and covariance, we have
 \begin{equation}
 \label{eq.main}
 		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_g\sqrt{N_1N_2}}{M}\ell_j + \dfrac{N_s\rho}{\sqrt{N_1N_2}},
 \end{equation}
 where $N_1$ and $N_2$ are the sample sizes of the two studies, $N_s$ is the number of shared samples,
 $\rho$ is the overall phenotypic correlation and $\rho_g$ is the genetic covariance. Since sample overlap affects the term $z_{1,j}z_{2,j}$ equally for all SNPs, and the quantity $N_s$ appears only in the intercept term.
+Equation~\eqref{eq.main} is derived in the supplementary note. 
 
-
-We can estimate the genetic covariance $\rho_g$ by regressing the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS against $\ell_j$, the LD Score of SNP $j$, and dividing the resulting slope by $\frac{\sqrt{N_1N_2}}{M}$. Because sample overlap only affects the intercept, the LD Score regression estimator of genetic covariance is not biased by sample overlap. 
+We can estimate the genetic covariance, $\rho_g$, by regressing the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS against $\ell_j$, the LD Score of SNP $j$, and dividing the resulting slope by $\frac{\sqrt{N_1N_2}}{M}$. Because sample overlap only affects the intercept, the LD Score regression estimator of genetic covariance is not biased by sample overlap. 
 Indeed, if $\rho$ is known (\emph{e.g.,} if both studies assay the same phenotype and $\rho=1$), the intercept 
 from this regression times a constant can be used as an estimator of the number of shared samples.
 We can estimate heritability using LD Score regression (as described in \cite{buliksullivan2014}),
 and use these heritability estimates to transform the estimates of genetic covariance into estimates of genetic correlation.
 
 An equation similar to Equation~\eqref{eq.main} holds if one or both of the studies 
-is an ascertained study of a binary phenotype, and so the same method can be used regardless of whether the $Z$-scores are from a study of quantitative or case-control traits. If effect sizes do not share a variance, but instead have a variance that depends on minor allele frequency (MAF) or linkage disequilibrium (LD), as discussed in \cite{speed2012improved}, we can use partitioned LD Score regression as described in the results and methods sections of this paper and also \cite{finucane2014partitioning}. Equation~\eqref{eq.main} and these analogues are derived in the supplementary note. 
-
+is an ascertained study of a binary phenotype, and so the same method can be used regardless of whether the $Z$-scores are from studies of quantitative or case-control traits (Supplementary Note). 
+If the variance of effect sizes depends on minor allele frequency (MAF) or linkage disequilibrium (LD), as discussed in \cite{speed2012improved, buliksullivan2014}, this can introduce model misspecification bias into estimates of heritability
+and genetic correlation from methods such as LD Score regression and GCTA-REML. 
+However, we can easily accommodate MAF- and LD-dependent genetic architectures using partitioned LD Score regression,
+as described in the results and methods sections of this paper and also \cite{finucane2014partitioning}. 
 
 In this paper, we describe a series of simulations establishing that the LD Score regression estimates genetic correlation. 
 We then replicate the genetic correlations reported by the PGC Cross-Disorder Group using GCTA-REML in \cite{pgccdg2013},
@@ -126,9 +119,17 @@ We find that phenotypes tend to cluster within categories defined by clinical pr
 nonetheless, we do observe some surprising results.
 For instance, we estimate genetic correlations close to zero between Alzheimer's and all of the psychiatric traits;
 although Alzheimer's disease is classified as a psychiatric disorder in ICD-10, it appears to be genetically distinctive. 
-Instead, Alzheimer's disease clusters (weakly, but significantly) with anthropometric and metabolic traits.
+Instead, Alzheimer's disease clusters (weakly, but significantly) with anthopometric and metabolic traits.
+These results would not have been possible to obtain except with methods that operate on summary statistics,
+because the consortia in question do not share individual genotype data.
 
-The computational demands of our method are mild, and we provide an open-source software package, \texttt{ldsc},
+The computational demands of our method are very mild. 
+If $N$ denotes sample size and $M$ denotes the number of SNPs, then LD Score regression takes
+$\mathscr{O}(MN)$ time for computing summary statistics and $\mathscr{O}(M)$ time for the regression. 
+For comparison, GCTA-REML takes time $\mathscr{O}(MN^2)$ for computing the genetic relatedness matrix (GRM)
+and $\mathscr{O}(N^3)$ time for maximizing the likelihood.
+Practically, LD Score regression takes a matter of minutes on a standard laptop.
+We provide an open-source software package, \texttt{ldsc},
 written in python, which implements the analyses described in this paper and also the analyses from
 \cite{buliksullivan2014, finucane2014partitioning} (URLs).
 
@@ -212,7 +213,7 @@ the bias will tend to approximately cancel, unless genetic correlation
 
 When genetic correlation depends on MAF or LD, LD Score regression is subject to similar biases as REML; 
 however, it is possible to remove these biases by allowing for MAF- or LD-dependent genetic architectures by using partitioned LD Score regression (see \cite{finucane2014partitioning} and Methods). 
-We used simulations to explore the behavior of both  partitioned and naive (i.e.\ not partitioned) LD Score regression 
+We used simulations to explore the behavior of both  partitioned and naive (\emph{i.e.,} not partitioned) LD Score regression 
 under three sets of bivariate genetic architectures with MAF- and LD-dependence.
 
 For the first genetic architecture,
@@ -240,13 +241,12 @@ and two partitioned LD Score regression models (one with 30 bins, one with 60 bi
 that allow for both MAF- and LD-dependence.
 Results from these simulations are presented, in the order described, in Supplementary Tables 
 \ref{supp-parallel}, \ref{supp-antiparallel} and \ref{supp-depcor}.
-The heritability and genetic covariance estimates from naive LD Score regression were badly biased in all cases
+As expected, the heritability and genetic covariance estimates from naive LD Score regression were badly biased in all cases
 (similar to the results obtained by Speed, \emph{et. al.}), 
 but the bias in the genetic correlation estimates was much less severe, except in the third set of simulations,
 where genetic correlation varied with LD.
-However, as expected, partitioned LD Score regression was able to remove almost all bias introduced by 
-LD- and MAF-dependence,
-and the increase in the standard errors was only mild.
+Nevertheless, partitioned LD Score regression was able to remove almost all bias introduced by 
+LD- and MAF-dependence, and the increase in the standard errors was only mild.
 
 
 
@@ -254,47 +254,51 @@ and the increase in the standard errors was only mild.
 \subsection{Real Data}\label{Real Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Replication of PGC Cross Disorder Results}
+\subsubsection{Replication of PGC Cross Disorder Results}\label{PGCCDG}
 
 For further validation, we replicated the estimates of genetic correlations between psychiatric phenotypes obtained with
 individual genotypes and GCTA-REML in the PGC Cross-Disorder Group paper \cite{pgccdg2013}, 
 using LD Score regression and the summary statistics from \cite{cross2013identification},
 downloaded from the PGC website (URLs).
 
-With LD Score regression, we can model the effects of SNPs that are not genotyped in the GWAS
-because we have LD information about these SNPs from a sequenced reference panel.
-(See the section ``LD Score Regression is [[approximates?]] Haseman-Elston Regression'' in the Supplementary Note.) 
-In particular, we usually use LD Scores with $r^2$s summed over all 1000 Genomes SNPs that are polymorphic in Europeans \cite{10002012integrated}, 
-corresponding to an assumption that any of these SNPs could be contributing to heritability. We will call these 1000G LD Scores.
+GCTA-REML with a GRM computed using only $\sim\!\!1$ million genotyped SNPs 
+estimates a different quantity than LD Score regression with sum $r^2$
+taken over all $\sim\!\!15$ million SNPs in 1kG (1kG LD Scores).
+GCTA-REML with $\sim\!\!1$ million genotyped SNPs estimates quantity which describe properties of 
+best linear predictor of phenotype that one could obtain using only the $\sim\!\!1$ million genotyped SNPs.
+LD Score regression with 1kG LD Scores estimates quantities which are properties of the best linear predictor of phenotype
+that one could obtain using all 1kG SNPs.
 
-GCTA-REML, on the other hand, is based on a model that only includes the effects of genotyped SNPs. 
-So for our comparison, we temporarily assumed an analogous model in which only the 1.2 million autosomal HapMap 3 SNPs  \cite{international2010integrating} were causal, 
-which meant using LD Scores with  
-the sum of $r^2$s taken only over the HapMap 3 SNPs
-(hereafter referred to as HapMap3 LD Score). 
+Since LD Score regression with 1kG LD Scores models a much larger proportion of all causal SNPs, we believe that these
+results are more reliable and biologically meaningful (see section \ref{h2550} in the Methods).
+As a practical matter, the differences between these quantities tends to be small\footnote{
+Except for partitioned heritability, where results from a million genotyped SNPs are not biologically meaningful.
+}, and will get smaller as the quality of imputation reference panels continues to increase.
+Thus, to give a fair comparison to GCTA-REML, we include results from LD Score regression results obtained using
+an LD Score with the sum of $r^2$ taken only over the 1.2 million autosomal HapMap 3 (HM3) SNPs \cite{international2010integrating} -- which we refer to as HM3 LD Score -- as well as results from LD Score regression with
+a 1kG LD Score partitioned on derived allele frequency (DAF) and recombination rate, to account for potential DAF-
+and LD-dependence in genetic architecture.
 
-While here we use non-partitioned HapMap3 LD Scores for our comparison, 
-in general we believe that partitioned 1000G LD Scores provide more reliable results.
-The genetic correlation estimates in the next section (``Application to a Large Set of Publicly Available Summary Statistics")
-use partitioned 1000G LD Scores and much larger sample sizes, and so we believe those results to be more reliable.
+Including an intercept in the LD Score regression protects the results from QC issues such as population stratification (as described in \cite{buliksullivan2014})
+as well as sample overlap, but at the cost of a substantial increase in standard error, which is non-negligible at the relatively
+small sample sizes from \cite{cross2013identification}.
+Since the summary statistics from \cite{cross2013identification} were generated after a careful QC process, and the 
+samples used for each disease were non-overlapping, we also fit LD Score regression with a constrained intercept,
+which -- in the non-partitioned case -- is equivalent to HE regression
+(See the section ``LD Score Regression is Haseman-Elston Regression'' in the Supplementary Note). 
 
+Results from this analysis are displayed in Figure \ref{Fig:Replication of PGC Cross Disorder Results}.
+The genetic correlation estimates from LD Score regression with HM3 LD Scores were very similar to the results from GCTA-REML. LD Score regression without intercept gave standard errors that were only slightly larger than GCTA-REML,
+while the standard errors from LD Score regression with intercept were somewhat larger, especially for the very small studies
+(\emph{e.g.,} ADD, Autism).
+The results from the DAF- and recombination rate-partitioned LD Score regression with 1kG LD Scores ... WRITE ME
 
-Nonetheless, when we fit the GCTA-REML model using LD Score regression
-we replicated the results from the PGC Cross-Disorder Group paper closely, 
-and the standard errors were similar to those obtained from GCTA-REML,
-except for the smallest studies (Attention Deficit Hyperactivity Disorder, Autism)
-(Figure \ref{Fig:Replication of PGC Cross Disorder Results}).
-In general, we expect the standard errors from GCTA-REML to be lower than the LD Score regression standard errors
-at fixed sample size when the distributional assumptions 
-(normally distributed phenotypes, environmental effects independent of genetic effects in the sample) 
-made by GCTA-REML are met, which will often be the case for non-ascertained studies of quantitative traits.
-In ascertained studies of binary phenotypes, the distributional assumptions made by GCTA-REML do not hold
-\cite{golan2013narrowing}, and so it is not surprising that LD Score regression performs about as well in this example.
+The differences between all four estimators are consistent with noise. ... ?
 
 The computational demands of this analysis were trivial: after computing LD Scores and pre-processing the summary statistics, 
 the LD Score regression took about one minute per pair of phenotypes
-(most of which was reading compressed LD Score files into memory) 
-and less than 1GB of RAM.
+(most of which was spent reading compressed LD Score files into memory) 
+and less than 1GB of RAM. 
 
 \begin{figure}[!ht]
 
@@ -305,17 +309,13 @@ and less than 1GB of RAM.
 
 \end{centering}
 
-This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}).
+This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) to 
+estimates obtained from GCTA-REML in \cite{pgccdg2013}.
 The horizontal axis indicates pairs of phenotypes, and the vertical axis indicates genetic correlation.
-The red bars are the LD Score regression estimates, the blue bars are the GCTA-REML estimates from \cite{pgccdg2013},
-and the black lines indicate one standard error. (Note that it is not clear whether the asymptotic standard errors 
-reported by GCTA-REML are valid for small ascertained studies; these may be underestimates.)
-For this plot, we used a HapMap3 LD Score (Online Methods), since this more closely corresponds to the model
-fit by GCTA-REML, which only models the effects of genotyped SNPs. 
-This plot should be interpreted as a technical sanity check. 
+Colors indicate different estimation procedures, as described in the main text.
 The estimates of genetic correlation between psychiatric phenotypes presented under the header 
-``Application to a Large Set of Publicly Available Summary Statistics" use larger sample sizes and rely on fewer
-assumptions about genetic architecture, and so are more robust.
+``Application to a Large Set of Publicly Available Summary Statistics" use larger sample sizes, and so are more reliable;
+this plot is intended primarily as a technical sanity check.
 Abbreviations: 
 ADD = Attention Deficit Hyperactivity Disorder (1947 trio cases, 1947 trio pseudocontrols, 840 cases, 688 controls);
 ASD = Autism Spectrum Disorder (4788 trio cases, 4788 trio pseudocontrols, 161 cases, 526 controls);
@@ -460,7 +460,7 @@ See the supplementary note for a thorough derivation of the models behind LD Sco
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{$h^2_{5\myhyphen50\%}$}
+\subsection{$h^2_{5\myhyphen50\%}$}\label{h2550}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Let $S$ denote the set of all SNPs in 1000 Genomes (or whatever much larger sequenced reference panel future readers
@@ -597,6 +597,30 @@ between the slope of and LD Score regression with efficient weights and the slop
 with inefficient regression weights, which is equal to one in expectation, but with noise.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{LD Score Regression Intercept}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%As described in \cite{buliksullivan2014}, including an intercept in the LD Score regression protects against QC problems 
+%(population stratification, cryptic relatedness) and sample overlap; however, these advantages come at the cost of a substantial
+%increase in standard error. 
+%This is unavoidable when dealing with summary statistics from large meta-analyses that do not
+%share individual genotype data, since it is not otherwise possible to correct for sample overlap, and since 
+%LD Score regression with constrained intercept can be badly biased when applied to summary statistics generated with GC
+%correction, since GC correlation chances the expectation of the intercept \cite{buliksullivan2014}.
+%However, if all individual genotypes are available for two studies for which we want to compute genetic correlation,
+%the most efficient approach is the following:
+%\begin{enumerate}
+%\item If the phenotype is a quantitative trait or a non-ascertained binary trait, use REML. For ascertained binary traits,
+%REML is biased, and LD Score regression with constrained intercept is the most efficient estimator.
+%\item Perform careful QC (\emph{e.g.,} removing ancestry outliers, PCA, etc) \emph{before} computing summary statistics.
+%\item Estimate heritability with the LD Score regression intercept constrained to one. It may be useful to run LD Score regression with intercept as a model check: intercepts much larger than one after population stratification has been excluded can indicate model misspecification bias. 
+%\item Estimate genetic covariance with the LD Score regression intercept constrained to $\rho N_s/N_1N_2$, where $\rho$ denotes the phenotypic correlation among individuals who appear in both studies (this expression equals zero if there is no sample overlap).
+%\end{enumerate}
+
+%The choice of whether to use in-sample LD from imputed genotype data vs. out-of-sample LD from a sequenced reference panel implicitly changes the model, as discussed in section \ref{PGCCDG}; however, with densely imputed genotyped data
+%(for instance, if using 1kG as the imputation reference), the difference will be small, especially for genetic correlation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weighted Block Jackknife Genetic Correlation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -684,6 +708,9 @@ If these data are not available,
 we recommend retaining only HapMap 3 SNPs with reference panel MAF above 5\% for the LD Score regression as a workaround
 (note: for \emph{regression}, not for estimation of the LD Scores), 
 since HapMap3 SNPs seem to be well-imputed in most studies.
+For newer studies with dense imputation, restricting to HapMap 3 SNPs is an inefficient use of data. 
+Using a larger set of SNPs for the regression will lower the standard error (\emph{e.g.,} using all common 1kG
+SNPs instead of all common HM3 SNPs for the regression reduces the standard error by about 10\% in simulations).
 
 
 \subsubsection{Huge Effect Loci}
