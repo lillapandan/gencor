@@ -438,13 +438,13 @@ Liability scale heritability estimates for CD, UC, SCZ and BPD.
 The first row contains estimates of $h^2_{5\myhyphen50\%}$ from LD Score regression with intercept constrained to one.
 The second row contains estimates of $h^2_{5\myhyphen50\%}$ from LD Score regression with unconstrained intercept.
 The LD Score regressions for CD, UC and SCZ used approximately 6 million well-imputed (INFO $>$ 0.9) 1kG SNPs. 
-The LD Score regression for BPD used only HM3 SNPs.
+The LD Score regression for BPD used 1.2 million HM3 SNPs since this GWAS did not use 1kG imputation.
 All LD Score regressions in this table used a DAF $\times$ LD Score partitioned LD Score regression model with 35 bins. 
 The estimates of $h^2_g$ for CD and UC are from \cite{chen2014estimation}; 
 the estimates of $h^2_g$ for SCZ and BPD are from \cite{pgccdg2013}.
 The prevalence row contains the population prevalences used for transformation to the liability scale. 
-We note that estimates of liability scale heritability should be interpreted cautiously, since prevalence estimates
-for many diseases are somewhat fuzzy quantities.
+Estimates of liability scale heritability should be interpreted cautiously, since for many diseases,
+estimates of prevalence are fuzzy.
 \end{table}
 
 
@@ -458,7 +458,7 @@ The heritability estimates with constrained intercept differed from the estimate
 standard error in all cases except for UC, where the difference was substantial. 
 This could be explained either 
 by a small amount of residual population stratification in the summary statistics (even after careful QC), 
-reference/target LD mismatch or (most likely) model misspecification bias not fully accounted for by the partitioning. 
+reference/target LD mismatch or model misspecification bias not fully accounted for by the partitioning. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -646,18 +646,18 @@ The optimal regression weights for genetic covariance estimation are
 	\left( 
 		\frac{\hsqo\ell_j}{M} 
 		+ 
-		\frac{1-\hsqo}{N_1} 
+		\frac{1}{N_1} 
 	\right) \left(  
 		\frac{\hsqt\ell_j}{M} 
 		+ 
-		\frac{1-\hsqt}{N_2}
+		\frac{1}{N_2}
 	\right) 
 	+ 					
 	2\left( 
 		\frac{\gencov\ell_j}{M} 
 		+ 
 		\frac{\rho N_s}{N_1N_2} 
-	\right);
+	\right)^2;
 \end{equation}
 (Supplementary Note) however, this quantity depends on both heritabilities, 
 the genetic covariance and the number of overlapping samples,
