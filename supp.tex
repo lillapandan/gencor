@@ -12,6 +12,7 @@
 \numberwithin{prop}{section}
 \numberwithin{cor}{section}
 \numberwithin{hyp}{section}
+\usepackage{graphicx}
 
 
 \frenchspacing
@@ -987,42 +988,75 @@ This approximation justifies replacing $\hat{\ell}_j$ and $\lbar_X$ with an unbi
 
 \newpage
 \section{Supplementary Figures}
+\subsection{Comparison of Metabolic Genetic Correlations from LDSC to Results from Vattikuti, et al}
+\begin{figure}[!ht]
+
+\begin{centering}
+%\caption{S}
+    \includegraphics[scale=0.8]{figs/vattikuti.pdf}
+         \label{vattikuti}
+
+This figure compares the estimates of genetic correlations between metabolic traits from table 3 of \cite{vattikuti2012heritability}
+to the results obtained using roughly 10x larger sample sizes and LD Score regression in this paper.
+\end{centering}
+\end{figure}
+
 \newpage
 \section{Supplementary Tables}
 
-\subsection{Simulations with Sample Overlap}
-\label{sample_overlap_sim}
-\input{./table/sample_overlap_sim}
-\newpage
-
-\newpage
-\subsection{Simulations with One Quantitative Trait and One Binary Trait}
-\input{./table/qt_cc_sim_table}\label{qt_cc_sim}
-\input{./table/qt_cc_sim_caption}
-
-\newpage
 \subsection{Simulations with Parallel LD- and MAF-Dependence}
 \label{parallel}
 \input{./table/parallel_arch_sim}
-\input{./table/parallel_arch_sim_caption}
+This table displays simulations with MAF- and LD-dependent genetic architecture where the MAF- and LD- dependence was the same for both phenotypes and genetic correlation did not vary with MAF or LD. Precisely, effect sizes were drawn from a normal distribution so that the magnitude of per-allele effect sizes were uncorrelated with MAF and variants with LD Score below 100 were $4\times$ enriched for heritability.
+
+In all simulations, the sample size was 2062 individuals with full sample overlap between studies; the causal SNPs were best-guess imputed 1000 Genomes SNPs on chromosome 2, and the SNPs retained for the LD Score regression were HapMap 3 SNPs. 
+
+Estimates are averages across 100 simulations. Standard deviations (in parentheses) are calculated as the empirical standard deviation across 100 simulations.
+
+LD Scores were estimated using in-sample LD and a 1cM window. 
+HM3 LD Score is $\sum r^2$ with the sum taken over SNPs in HapMap 3. 
+The PNG LD Score is $\sum r^2$ with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. The 30 bins LD Score is a per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. The 60 bins LD Score is a per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300
+
+These simulations demonstrate that naive LD Score regression can give accurate genetic correlation estimates even in situations where the heritability and genetic covariance estimates are badly biased, so long as genetic correlation does not depend on MAF or LD. In addition, these simulations demonstrate that MAF- and LD-binned LD Score regression can give accurate estimates of heritability and genetic covariance even for genetic architectures with MAF- and LD-dependence.
 
 \newpage
 \subsection{Simulations with Antiparallel LD- and MAF-Dependence}
 \label{antiparallel}
 \input{./table/antiparallel_arch_sim}
-\input{./table/antiparallel_arch_sim_caption}
-
+This table displays simulations with MAF- and LD-dependent genetic architecture where the MAF- and LD- dependence was in opposite directions for each phenotype, and genetic correlation did not vary with MAF or LD. Precisely, per-allele effect sizes for the first phenotype were drawn from a normal distribution so that the variance of per-allele effect sizes were uncorrelated with MAF, and variants with LD Score below 100 were $4\times$ enriched for heritability. Per-allele effect sizes for the second phenotype were drawn from a normal distribution so that the variance of per-allele effect size followed $\sqrt{p(1-p)}$, where $p$ is MAF, and variants with LD Score above 100 were $4\times$ enriched for heritability. Otherwise, the parameters of these simulations were the same as in \ref{parallel}
+These simulations demonstrate that naive LD Score regression can give approximately accurate genetic correlation estimates even in situations where the heritability and genetic covariance estimates are badly biased, so long as genetic correlation does not depend on MAF or LD. In addition, these simulations demonstrate that MAF- and LD-binned LD Score regression can give accurate estimates of heritability and genetic covariance even for genetic architectures with MAF- and LD-dependence.
 \newpage
 \subsection{Simulations with LD- and MAF-Dependent Genetic Correlation}
 \label{depcor}
 \input{./table/gencor_dep_sim}
-\input{./table/gencor_dep_sim_caption}
+
+In these simulations, effect sizes for the first phenotype were drawn from a normal distribution with mean zero and variance
+$(pq)^{0.6}(1+\mathrm{log}(\ell_j)/50)^2$, 
+effect sizes for the second phenotype were drawn form a normal distribution with mean zero and variance
+$(pq)^{0.3}(1-\mathrm{log}(\ell_j)/50)^2$,
+then noise following a normal distribution with mean zero and variance 
+$ 1+(7-1)\ell_j/700$,
+was added to the effect sizes for the second phenotype, so that genetic correlation was roughly 0.35 for low LD SNPs and 
+0.65 for high LD SNPs.   
+
+%\input{./table/gencor_dep_sim_caption}
+
 
 \newpage
 \subsection{Comparison of Standard Error Estimates to Empirical Standard Deviation across Simulations}
 \label{se_sim}
 \input{./table/parallel_arch_sim_se}
-\input{./table/parallel_arch_sim_se_caption}
+This table compares the block jackknife standard errors from ldsc (denoted $\widehat{se}$, which represents the mean standard error estimate across 100 simulation replicates) in the simulations from \ref{parallel} to the empirical standard deviations of the parameter estimates (denoted $sd$) across 100 simulation replicates. The block jackknife standard errors closely match the empirical standard deviations. This confirms that block jackknife standard error estimates are approximately unbiased even with locally correlated error terms, so long as the block size is sufficiently large.
+\newpage
+\subsection{Comparison of BMI-Adjusted WHR Genetic Correlations from LDSC to Unadjusted WHR from Vattikuti, et al}
+\label{whr}
+\input{./table/whr}
+
+This table contrasts the genetic correlation profiles of waist-hip ratio (WHR) and BMI-adjusted WHR.
+In this paper, we estimated genetic correlations with BMI-adjusted WHR using the summary statistics from \cite{heid2010meta}.
+Vattikuti \emph{et. al.} \cite{vattikuti2012heritability}
+estimated genetic correlations between unadjusted WHR and other metabolic traits using REML. 
+The genetic correlation profiles of these two phenotypes are quite dissimilar, especially with regards to BMI.
 
 %\newpage
 %\subsection{300 Genetic Correlations}
@@ -1030,8 +1064,8 @@ This approximation justifies replacing $\hat{\ell}_j$ and $\lbar_X$ with an unbi
 %\input{./table/300_gencors}
 
 
-\newpage
-\subsection{Summary Statistic Metadata}
+%\newpage
+%\subsection{Summary Statistic Metadata}
 
 
 \newpage
