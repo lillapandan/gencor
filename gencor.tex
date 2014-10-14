@@ -128,6 +128,8 @@ from another study.
 This turns out not to be a difficulty for LD Score regression. 
 Since sample overlap affects all SNPs equally, sample overlap merely inflates the LD Score regression intercept,
 and does not affect the slope (Supplementary Note).
+If the amount of sample overlap and the phenotypic correlation among overlapping individuals is known ahead of time,
+then it is possible to reduce the standard error of the genetic covariance estimate by constraining the intercept (Online Methods).
 In addition, because LD Score is minimally correlated with $F_{ST}$ \cite{buliksullivan2014},
 the LD Score regression estimator of genetic covariance is protected from shared population stratification.
 
@@ -234,7 +236,7 @@ and less than 1GB of RAM.
 
 \end{centering}
 
-This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) to 
+\small{\textit{This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) to 
 estimates obtained from REML in \cite{pgccdg2013}.
 The horizontal axis indicates pairs of phenotypes, and the vertical axis indicates genetic correlation.
 Colors indicate different estimation procedures. Grey is REML,
@@ -247,7 +249,7 @@ ADD = Attention Deficit Hyperactivity Disorder (1947 trio cases, 1947 trio pseud
 ASD = Autism Spectrum Disorder (4788 trio cases, 4788 trio pseudocontrols, 161 cases, 526 controls);
 BPD = Bipolar Disorder (6990 cases, 4820 controls);
 MDD = Major Depressive Disorder (9227 cases, 7383 controls);
-SCZ = Schizophrenia (9379 cases, 7736 controls).
+SCZ = Schizophrenia (9379 cases, 7736 controls).}}
 
 \end{figure}
 
@@ -298,10 +300,10 @@ and the full set of genetic correlation estimates are provided in tabular (\text
     \includegraphics[scale=1]{figs/rg_heatmap.pdf}
          \label{Fig:300 Gencors}
 
-This figure displays genetic correlations between the 27 phenotypes analyzed estimated with HM3 LD Score. 
+\small{\textit{This figure displays genetic correlations between the 27 phenotypes analyzed estimated with HM3 LD Score. 
 The genetic correlations are color coded according to sign and magnitude.
 Only the genetic correlations that are statistically significantly different from zero at an FDR of 0.05 are displayed;
-the rest have been whited out.
+the rest have been whited out.}}
 
 \end{centering}
 \end{figure}
@@ -320,19 +322,22 @@ The data that we used were from a GWAS for BMI-adjusted WHR \cite{heid2010meta};
 Vattikuti \emph{et. al.} use unadjusted WHR. 
 These are very different phenotypes, 
 so it is unsurprising that their genetic correlation profiles differ (Supplementary Table \ref{supp-whr}).
+In addition, our estimate of the genetic correlation between Crohn's disease and ulcerative colitis (0.57 SE 0.063) is consistent
+with the estimate from \cite{chen2014estimation} (0.62 SE 0.042).
 
 
-\textbf{COOL EXAMPLES?}
 
-Suggestions
+\textbf{SUGGESTED COOL EXAMPLES}
+\begin{enumerate}
 
-- smoking traits all have near total rg despite no shared gwsig SNPs
-- AN + everything
-- zero rg between alzheimers and psychiatric stuff
-- alzheimers and height (Z = 9)???
-- dense metabolic cluster at the top left
-- replication of previous results from Vattikuti / PGC-CDG / 
-
+	\item smoking traits all have near total rg despite no shared gwsig SNPs (goes against the interpretation offered by TAG)
+	\item first ever SNP rg's for AN (BMI/SCZ have best p-values, replicate in PGC-AN)
+	\item zero rg between alzheimers and psychiatric stuff
+	\item alzheimers and height (Z = 9)???
+	\item dense metabolic cluster at the top left
+	\item CD/UC and SCZ \cite{benros2011autoimmune, benros2014nationwide}
+	\item 0 rg for SCZ and RA (though a small effect may be meaningful, and we are not well-powered to detect anything between 		0 and -0.1)
+\end{enumerate}
 
 
 
@@ -350,7 +355,6 @@ so we used all 1kG SNPs with sample MAF above 3\% and INFO above 0.9 for these L
 since using a larger set of SNPs or the regression decreases the standard error.   
 We estimated heritability using the same partitioned LD Scores as in figure \ref{Fig:300 Gencors},
 both with and without constraining the LD Score regression intercept to equal one. 
-
 Heritability estimates for UC, CD, SCZ and BPD are displayed in Table \ref{Table:h2}.
 \begin{table}[t]
 \centering
@@ -361,7 +365,7 @@ Heritability estimates for UC, CD, SCZ and BPD are displayed in Table \ref{Table
 \input{./table/h2}\label{Table:h2}
 \end{tabular}
 
-Liability scale heritability estimates for CD, UC, SCZ and BPD.
+\small{\textit{Liability scale heritability estimates for CD, UC, SCZ and BPD.
 The first row contains estimates of $h^2_{5\myhyphen50\%}$ from LD Score regression with intercept constrained to one.
 The second row contains estimates of $h^2_{5\myhyphen50\%}$ from LD Score regression with unconstrained intercept.
 The LD Score regressions for CD, UC and SCZ used approximately 6 million well-imputed (INFO $>$ 0.9) 1kG SNPs. 
@@ -371,16 +375,16 @@ The estimates of $h^2_g$ for CD and UC are from \cite{chen2014estimation};
 the estimates of $h^2_g$ for SCZ and BPD are from \cite{pgccdg2013}.
 The prevalence row contains the population prevalences used for transformation to the liability scale. 
 Estimates of liability scale heritability should be interpreted cautiously, since for many diseases,
-estimates of prevalence are fuzzy.
+estimates of prevalence are fuzzy.}}
 \end{table}
 
 
 We also display estimates of $h^2_g$ from earlier publications, 
 though we caution that $h^2_g$ and $h^2_{5\myhyphen50\%}$ are not the same quantity,
 so any comparison between them is technically
-apples-to-oranges (see the section $h^2_{5\myhyphen50\%}$ in the Methods).
-The estimates of $h^2_g$ in table \ref{Table:h2} were obtained using REML on ascertained samples, 
-and so are biased downwards \cite{golan2013narrowing}.
+apples-to-oranges (see the Section \ref{h2550} in the Methods).
+The estimates of $h^2_g$ in Table \ref{Table:h2} were obtained using REML on ascertained samples, 
+and so are biased downwards \cite{golan2013narrowing, }.
 The heritability estimates with constrained intercept differed from the estimates with unconstrained intercept by less than one
 standard error in all cases except for UC, where the difference was substantial. 
 This could be explained either 
@@ -470,8 +474,7 @@ Although LD Score regression does not use individual-level data,
 the increase in standard error relative to methods that do use individual genotype and phenotype data is only moderate. 
 In fact, LD Score regression without intercept is equivalent to HE regression \cite{buliksullivan2014he}.
 
-SAY WHY RG IS COOL>
-
+...etc
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -484,24 +487,136 @@ SAY WHY RG IS COOL>
 
 See the supplementary note for a thorough derivation of the models behind LD Score regression.
 
-\subsection{Two Phenotype LD Score Regression}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definitions}\label{h2550}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Heritability}
+
+Let $S$ denote a set of $M$ SNPs, 
+let $X$ denote the random $M$-vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
+and let $y$ denote a phenotype. Define 
+\begin{equation}
+	\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y, X\alpha\right]^2,
+\end{equation}
+where the maximization is performed in the population (\emph{i.e.,} at infinite sample size), rather than in a finite sample.
+This is a projection, so uniqueness of $\beta$ is guaranteed as we remove SNPs that are linearly dependent (in the population). 
+Then $h^2_S$, the heritability accounted for by SNPs in $S$, is defined
+\begin{equation}\label{h2}
+	h^2_S := \sum_{j=1}^M \beta_j^2.
+\end{equation}
+We obtain the Yang/Visscher parameter $h^2_g$ by taking $S$ to be the set of genotyped SNPs.
+Next, let$S$ denote the set of all SNPs in 1000 Genomes Europeans \cite{10002012integrated}, 
+and let $S'$ denote the set of SNPs with MAF$>5\%$. Then
+\begin{equation}
+	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_j^2.
+\end{equation}
+We choose 5\% as the lower bound, because we can estimate LD Scores for 5\% SNPs reasonably well from the $N=387$ 
+samples in 1000 Genomes. 
+Technically, we should write $h^2_{5\myhyphen50\%,1kG}$ to indicate that we are only accounting for SNPs in 1000 Genomes,
+but 1000 Genomes has sufficiently good power to observe 5\% and higher SNPs that we feel justified in omitting 1kG from the subscript.
+With larger sample sizes in future sequenced reference panels, this lower bound can be pushed lower.
+It is perhaps more important to also note that we are only accounting for autosomal variation.
+Most GWAS do not report summary statistics for SNPs on the sex chromosomes or in mitochondrial DNA.
+
+The definition of the Yang-Visscher parameter $h^2_g$ \cite{yang2010} is obtained by replacing 1kG with the set $g$ of genotyped SNPs
+in equation \ref{h2}.
+There are two main distinctions between $h^2_{5\myhyphen50\%}$ and $h^2_g$,
+First, $h^2_g$ does not include the effects of common SNPs that are not tagged by the set of genotyped SNPs $g$.
+Second, the effects of causal 4\% SNPs are not counted towards $h^2_{5\myhyphen50\%}$.
+In practice, neither of these distinctions makes a large difference, since most GWAS arrays focus on common variation
+and manage to assay or tag almost all common variants.
+
+Estimating $h^2_{5\myhyphen50\%}$ involves only as simple modification of LD Score regression: the raw slope from the 
+regression divided by sample size yields an estimate of the average value of $\beta^2_j$. 
+If we multiply this number by $M$, the number of SNPs in 1000 Genomes, then technically we obtain an estimate of the 
+heritability explained by all 1000 Genomes SNPs; however, this interpretation amounts to extrapolating 
+our estimate of heritability per SNP among common SNPs to rare variants.
+This is unreasonable, since GWAS data contains very little information about rare variants.
+Therefore, we instead multiply the slope by $M_{5\myhyphen50\%}$, the number of 1000 Genomes SNPs with 
+MAF between 5\% and 50\%, in order to obtain an estimate of $h^2_{5\myhyphen50\%}$.
+The default option in \texttt{ldsc} is to estimate $h^2_{5\myhyphen50\%}$; this can be overridden with the 
+\texttt{--not-M-5-50} flag.
+
+The value of $h^2_{5\myhyphen50\%}$ will always be less than the total narrow-sense heritability, $h^2$, 
+since $h^2$ takes into account all forms of genetic variation 
+-- rare variants, microsatellites, indels, copy number variants -- not just common SNPs.
+In addition, estimates of $h^2$ from family studies may 
+be biased upwards by non-additive genetic architectures \cite{zuk2012mystery}.
+ 
+\subsubsection{Genetic Covariance and Correlation}
+
+For this section, we keep the same notation from the previous section, except with two phenotypes
+$y_1$ and $y_2$.
+Define
+\begin{equation}\label{beta}
+	\beta := \mathrm{argmax}_{\alpha\in\R^M}\corr[y_1, X\alpha]^2,
+\end{equation}
+and 
+\begin{equation}\label{beta}
+	\gamma := \mathrm{argmax}_{\alpha\in\R^M}\corr[y_2, X\alpha]^2,
+\end{equation}
+Then the genetic covariance among SNPs in $S$ is defined
+\begin{equation}
+	\rho_S := \sum_{j\in S} \beta_j\gamma_j,
+\end{equation}
+Next, let$S$ denote the set of all SNPs in 1000 Genomes Europeans \cite{10002012integrated}, 
+and let $S'$ denote the set of SNPs with MAF$>5\%$. Then
+\begin{equation}
+	\pf := \sum_{j\in S'} \beta_j\gamma_j.
+\end{equation}
+
+The distinctions between these quantities are the same as the distinctions between $h^2_g$ and $\hf$.
+Rescaling genetic covariance to lie in the range $[-1,1]$ makes it easier to interpret, so it is more common to instead report 
+genetic correlation, which is defined as 
+\begin{equation}\label{EQN: rg}
+	r_S := \dfrac{\rho_S}{\sqrt{h^2_{S,1}h^2_{S,2}}},
+\end{equation}
+The quantity $\rf$ is defined by replacing $S$ with $5\myhyphen50\%$ in equation \ref{EQN: rg}.
+As a practical matter, the difference between $r_g$ (the genetic correlation among genotyped SNPs)
+and $\rf$ will be quite small when $g$ contains a large proportion of all common SNPs.
+This is supported by the simulations described in the main text. 
+Technically, LD Score regression with HM3 LD Score is an estimator of $r_{HM3(5\myhyphen50\%)}$,
+the genetic correlation among SNPs in HM3 with MAF between 5 and 50\% MAF, but the resulting estimates
+of genetic correlation were almost identical to the estimates of $r_{1kG(5\myhyphen50\%)}$ obtained with 1kG LD Scores
+(Supplementary Tables \ref{supp-parallel}, \ref{supp-antiparallel} and \ref{supp-depcor}), 
+which is why we do not emphasize this distinction in the main text.
+
+It is however important to note that all of the flavors of GWAS genetic covariance and correlation 
+($\rho_g$, $\pf$, $r_g$ and $\rf$) are different from the quantities estimated from family studies.
+In a family study, the relationship matrix captures information about all genetic variation, not just common SNPs,
+so family studies attempt to estimate the total narrow-sense genetic covariance and the total narrow-sense
+genetic correlation. 
+Unlike the relationship between $h^2_g$ or $\hf$ and the total narrow-sense heritability $h^2$, there is no simple inequality
+relating $\rho_g$ and $\pf$ to the total narrow-sense genetic covariance, or $r_g$ and $\rf$ to the total narrow-sense genetic 
+correlation.
+For example, if $\beta$ and $\gamma$ are strongly correlated among common variants, but only weakly correlated among rare
+variants, then the total narrow-sense genetic correlation will be less than $r_g$ and $\rf$.
+
+\subsection{Two-Phenotype LD Score Regression}
 Our method is based on a simple equation relating the product of $Z$-scores of a given SNP from two GWAS's to the LD Score of the SNP, the genetic correlation, and the phenotypic correlation. 
 Precisely, let $z_{1,j}$ and $z_{2,j}$ be the $Z$-scores for a SNP $j$ from two GWAS's, and let $\ell_j$ be the LD Score of SNP $j$; 
 \emph{i.e.,} $\ell_j = \sum_k r^2(j,k)$.
 Then, assuming a simple model of genetic architecture where for each phenotype, SNP effect sizes are drawn in an uncorrelated fashion from distributions with mean zero and a fixed variance and covariance, we have
 \begin{equation}
 \label{eq.main}
-		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_g\sqrt{N_1N_2}}{M}\ell_j + \dfrac{N_s\rho}{\sqrt{N_1N_2}},
+		\E[z_{1,j}z_{2,j}] = \dfrac{\rho_g\sqrt{N_1N_2}}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}},
 \end{equation}
 where $N_1$ and $N_2$ are the sample sizes of the two studies, $N_s$ is the number of shared samples,
 $\rho$ is the overall phenotypic correlation and $\rho_g$ is the genetic covariance. Since sample overlap affects the term $z_{1,j}z_{2,j}$ equally for all SNPs, and the quantity $N_s$ appears only in the intercept term.
 Equation~\eqref{eq.main} is derived in the Supplementary Note. 
 
-We can estimate the genetic covariance, $\rho_g$, by regressing the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS against $\ell_j$, the LD Score of SNP $j$, and dividing the resulting slope by $\frac{\sqrt{N_1N_2}}{M}$. Because sample overlap only affects the intercept, the LD Score regression estimator of genetic covariance is not biased by sample overlap. 
+We can therefore estimate the genetic covariance, $\rho_g$, by regressing the product $z_{1,j}z_{2,j}$ of $Z$-scores from two GWAS against $\ell_j$, the LD Score of SNP $j$, and dividing the resulting slope by $\frac{\sqrt{N_1N_2}}{M}$. Because sample overlap only affects the intercept, the LD Score regression estimator of genetic covariance is not biased by sample overlap. 
 Indeed, if $\rho$ is known (\emph{e.g.,} if both studies assay the same phenotype and $\rho=1$), the intercept 
 from this regression times a constant can be used as an estimator of the number of shared samples.
+Alternatively, if both $N_s$ and $\rho$ are known ahead of time, constraining the intercept can substantially reduce the 
+standard error, though this also has the side effect of removing the robustness to shared population stratification.
+Constraining the intercept is accomplished via the \texttt{--no-intercept} or \texttt{--constrain-intercept} flags in \texttt{ldsc}.
+
 We can estimate heritability using LD Score regression (as described in \cite{buliksullivan2014}),
-and use these heritability estimates to transform the estimates of genetic covariance into estimates of genetic correlation.
+and use these heritability estimates to transform the estimates of genetic covariance into estimates of genetic correlation
+(see section \ref{Block Jackknife} in the Methods).
 
 An equation similar to Equation~\eqref{eq.main} holds if one or both of the studies 
 is an ascertained study of a binary phenotype, and so the same method can be used regardless of whether the $Z$-scores are from studies of quantitative or case-control traits (Supplementary Note). 
@@ -512,115 +627,33 @@ as described in the results and methods sections as well as \cite{finucane2014pa
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{$h^2_{5\myhyphen50\%}$}\label{h2550}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Let $S$ denote the set of all SNPs in 1000 Genomes (or whatever much larger sequenced reference panel future readers
-are more familiar with); let $X_j$ denote the random variable whose value is the 0-1-2 coded genotype at SNP $j$, and let $y$
-denote a phenotype. Let 
-\begin{equation}
-	\beta := \mathrm{argmax}_\alpha\left( \corr\left[y, \sum_{j\in S} X_j\alpha_j\right]^2 \right)
-\end{equation}
-(uniqueness of $\beta$ is guaranteed because this is a projection). 
-Let $S'$ denote the set of SNPs with MAF$>5\%$. Then
-\begin{equation}
-	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_j^2.
-\end{equation}
-We choose 5\% as the lower bound, because we can estimate LD Scores for 5\% SNPs reasonably well from the $N=387$ 
-samples in 1000 Genomes. With larger sample sizes in future sequenced reference panels, this lower bound can be pushed lower.
-
-The main distinction between $h^2_{5\myhyphen50\%}$ and $h^2_g$ is that the effects of causal 4\% SNPs are not counted towards $h^2_{5\myhyphen50\%}$
-This differs from the definition of the quantity $h^2_g$ estimated by REML, in that REML considers a set of SNPs
-$g$, and then projects the phenotype onto those SNPs, without accounting for SNPs that are not in the set $g$. 
-Thus if there is a 5\% SNP in set $g$ that is in high LD with a 4\% SNP that happens to be causal for the phenotype of interest
-but is not in $g$, then the effect of the 4\% SNP is counted towards $h^2_g$ (or at least the component of the effect of 
-the 4\% SNP that is tagged by the 5\% SNP that is in $g$).
-There tends not to be very much LD between SNPs with different MAFs, 
-so in the specific case of a MAF cutoff, this distinction likely makes only a small difference.
-
-Technically, we should write $h^2_{5\myhyphen50\%,1kG}$ to indicate that we are only accounting for SNPs in 1000 Genomes,
-but 1000 Genomes has sufficiently good power to observe 5\% and higher SNPs that we feel justified in omitting $1kG$
-from the subscript for notational simplicity. 
-It is perhaps more important to also note that we are only accounting for autosomal variation.
-Most GWAS do not report summary statistics for SNPs on the sex chromosomes or in mitochondrial DNA.
-
-Estimates of  $h^2_{5\myhyphen50\%}$ should generally be less than pedigree-based estimates of heritability
-(modulo standard error), since pedigree estimators take into account all forms of genetic variation 
-rare variants, microsatellites, indels, copy number variants, non-autosomal variation, etc).
-
-The genetic covariance and genetic correlation quantitates that we estimate are direct bivariate analogues of 
-$h^2_{5\myhyphen50\%}$. 
-It is possible that the genetic covariance between two phenotype may be different among MAF$>5\%$ variants than
-among rare variants; however, we could not detect such a phenomenon with GWAS data, since current GWAS only reliably
-assay common variation.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Estimation of LD Scores}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We estimated LD Scores from the European samples in the 1000 Genomes Project \cite{10002012integrated}
-reference panel using the \texttt{--l2} flag in the \texttt{ldsc }software package by the authors (URLs) as in \cite{buliksullivan2014}.
-We estimated per-allele LD Scores using the \texttt{--per-allele} flag in \texttt{ldsc}, and
-we estimated MAF-binned LD Scores using the \texttt{--cts-bin} and \texttt{--cts-breaks} flags in \texttt{ldsc}.
-Following \cite{buliksullivan2014}, we estimated LD Scores using a 1 centiMorgan (cM) window
-(with the \texttt{ldsc} flag \texttt{--ld-wind-cm 1}).
-Unlike \cite{buliksullivan2014}, we used a MAF cutoff of $1\%$ when estimating LD Scores,
-in order to reduce the impact of LD measurement error on our regressions.
-Since we only include variants with MAF $> 5\%$ in LD Score regressions for estimating genetic correlation,
-and because there is very little LD between variants with MAF $> 5\%$ and variants with MAF $< 5\%$, 
-this is unlikely to impact our results. 
-
-For the analyses with HapMap 3 \cite{international2010integrating} LD Scores,
-we took the sum of $r^2$'s over the same subset of HapMap 3 SNPs retained for LD Score regression in
-\cite{buliksullivan2014}, (that is, HapMap 3 SNPs with MAF $> 1\%$, excluding centromeres and regions with long-range LD)
-using the \texttt{--keep} flag in \texttt{ldsc}.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Partitioned LD Score Regression}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In partitioned LD Score regression, we cut the set of SNPs in our reference panel into bins, for example,
 we might use five MAF bins, corresponding to MAF 0-10\%, 10-20\%, ... , 40-50\% (as in supplementary table 4 of \cite{pgccdg2013}).  
-We allow the variance explained per SNP to vary from bin to bin, but assume that variance explained per SNP is (roughly) 
+This allows the variance explained per SNP to vary from bin to bin, but assume that variance explained per SNP is (roughly) 
 equal within each bin. 
+Concretely, if we wish to run MAF-binned LD Score regression with five MAF bins $B_1,\ldots,B_5$, we compute five LD Scores,
+where the $i^{th}$ LD Score is defined
+\begin{equation}
+	\ell_j(i) := \sum_{k\in B_i} r^2_{jk},
+\end{equation}
+then run multivariate LD Score regression $\chi^2_j \sim \ell_j(1) + \ldots \ell_j(5)$ 
+(or $z_{1,j}z_{2,j}\sim\ell_j(1) + \ldots \ell_j(5)$ in the two-phenotype case).
 This amounts to approximating the unknown function that maps MAF to variance explained per SNP with a locally 
 constant approximation. 
-This presents a bias/variance tradeoff: if the mesh of our locally constant approximation is too coarse 
+
+Partitoned LD Score regression presents a bias/variance tradeoff: if the mesh of our locally constant approximation is too coarse 
 (\emph{e.g.,} if we were to use two MAF bins instead of five), 
-our locally constant approximation would be poor, and this would result in bias. 
+our locally constant approximation would be poor, 
+and this would result in bias if the underlying genetic architecture were MAF-dependent. 
 On the other hand, if we use too many bins, the standard error of our estimates will increase. 
-However, we show in the simulations under the header ``Misspecified Models of Genetic Architecture" that
-we can remove almost all MAF- and LD-bias under realistic parameter settings using only a few tens of bins, which 
-increases the standard error only modestly.
+In this paper, we use non-partitioned LD Scores for the estimates of genetic correlation, since genetic correlation
+is less subject to MAF- and LD-biases than heritability, and LD Scores with 30 bins for heritability estimation.
+
 MAF- and LD- partitioned LD Scores can be estimated using the \texttt{--cts-bin} and  \texttt{--cts-breaks} flags
 from our \texttt{ldsc} software.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Binning on in-Sample LD Score}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-When estimating MAF- (or DAF-) and LD-partitioned LD Scores, we partition on LD Score and MAF estimated from the 
-1000 Genomes Europeans.
-At small sample sizes, this could present an overfitting problem.
-For example, if we estimate LD Scores noisily, the SNPs assigned to the low-LD bin will be a mixture of SNPs that actually belong
-in the low LD bin and SNPs whose LD Scores were underestimated, just by chance. 
-This magnitude of this problem decreases as the sample size used for estimating LD Scores increases:
-our estimator of LD Score is consistent,
-so at very large sample sizes, the amount of sampling error in the LD Score estimates becomes very small, and the only SNPs
-that will be misclassified are those SNPs whose LD Scores are very close to the boundary.
-
-The quantify the extent to which this form of bias might be affecting our 1kG LD Scores, we performed a series of simulations. 
-We simulated phenotypes following the infinitesimal model with \emph{i.i.d.} per-normalized genotype SNP effects using the same 
-genotypes from section \ref{Simulations}.
-We then estimated partitioned heritability and genetic correlation using an LD-partitioned 1kG LD Score with 5 bins.
-If the overfitting problem described above were a real concern at the sample size of 1kG, 
-we would expect to see either biased heritability and genetic covariance estimates or biased estimates of partitioned heritability. 
-Results from these simulations are displayed in supplementary table \textbf{NNN}.
-We do not observe appreciable bias in these simulations, so we conclude that binning on in-sample LD Score when estimating 
-LD-partitioned LD Scores is acceptable at the sample size of 1kG.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -654,7 +687,7 @@ which are often not known a priori, so some approximation is required.
 In order to obtain approximate regression weights, 
 we use heritability estimates from the single-phenotype LD Score regressions, then
 we assume that $N_s$ is close enough to zero that the term $\rho N_s/N_1N_2$ is negligible
-(though this default can be adjusted using the {-}{-}overlap and {-}{-}rho flags in \texttt{ldsc}),
+(this default can be adjusted using the {-}{-}overlap and {-}{-}rho flags in \texttt{ldsc}),
 and estimate a rough genetic covariance (which we only use for the regression weights)
 using the aggregate estimator 
 $$\hat{\rho}_{g, agg} := \frac{1}{\lbar\sqrt{N_1N_2}}\sum_{j=1}^M z_{1,j}z_{2,j},$$
@@ -673,32 +706,9 @@ With the default weights (which are set for zero sample overlap), \texttt{ldsc} 
 between the slope of and LD Score regression with efficient weights and the slope of an LD Score regression
 with inefficient regression weights, which is equal to one in expectation, but with noise.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{LD Score Regression Intercept}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%As described in \cite{buliksullivan2014}, including an intercept in the LD Score regression protects against QC problems 
-%(population stratification, cryptic relatedness) and sample overlap; however, these advantages come at the cost of a substantial
-%increase in standard error. 
-%This is unavoidable when dealing with summary statistics from large meta-analyses that do not
-%share individual genotype data, since it is not otherwise possible to correct for sample overlap, and since 
-%LD Score regression with constrained intercept can be badly biased when applied to summary statistics generated with GC
-%correction, since GC correlation chances the expectation of the intercept \cite{buliksullivan2014}.
-%However, if all individual genotypes are available for two studies for which we want to compute genetic correlation,
-%the most efficient approach is the following:
-%\begin{enumerate}
-%\item If the phenotype is a quantitative trait or a non-ascertained binary trait, use REML. For ascertained binary traits,
-%REML is biased, and LD Score regression with constrained intercept is the most efficient estimator.
-%\item Perform careful QC (\emph{e.g.,} removing ancestry outliers, PCA, etc) \emph{before} computing summary statistics.
-%\item Estimate heritability with the LD Score regression intercept constrained to one. It may be useful to run LD Score regression with intercept as a model check: intercepts much larger than one after population stratification has been excluded can indicate model misspecification bias. 
-%\item Estimate genetic covariance with the LD Score regression intercept constrained to $\rho N_s/N_1N_2$, where $\rho$ denotes the phenotypic correlation among individuals who appear in both studies (this expression equals zero if there is no sample overlap).
-%\end{enumerate}
-
-%The choice of whether to use in-sample LD from imputed genotype data vs. out-of-sample LD from a sequenced reference panel implicitly changes the model, as discussed in section \ref{PGCCDG}; however, with densely imputed genotyped data
-%(for instance, if using 1kG as the imputation reference), the difference will be small, especially for genetic correlation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Weighted Block Jackknife Genetic Correlation}
+\subsection{Weighted Block Jackknife Genetic Correlation}\label{Block Jackknife}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 This section describes the implementation of the \texttt{--rg} flag in \texttt{ldsc}.
@@ -756,21 +766,16 @@ genetic correlation estimates became unstable when either sample size or heritab
 of the two heritability estimates was not significantly different from zero. 
 This is a general difficult with attempting to estimate a ratio where the denominator is close to zero, and is not 
 specific to LD Score regression. 
-As a rule of thumb, 
-we recommend discarding (or at least being very cautious with) 
-any genetic correlation estimates where either of the following conditions is met:
-\begin{enumerate}
-	\item Either of the heritability estimates is less than 2 SE's from zero, or
-	\item The block jackknife SE for the genetic correlation estimate is greater than 0.2.
-\end{enumerate}
-
+As a rule of thumb,  we recommend discarding any genetic correlation estimates
+where of the block jackknife SE for the genetic correlation estimate is greater than 0.25.
+If this occurs, \texttt{ldsc} will print an error message by default.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{GWAS Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Minimum Viable Summary Statistics}
+\subsubsection{Summary Statistics}
 
 The minimum summary data required for estimating genetic correlation with LD Score regression are the following:
 \begin{enumerate}
