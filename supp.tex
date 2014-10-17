@@ -643,9 +643,11 @@ of liability:
 Lorem Ipsum Dolor Sic Amet
 
 
-
 \newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Supplementary Figures}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Comparison of Metabolic Genetic Correlations from LDSC to Results from Vattikuti, et al}
 \begin{figure}[!ht]
 
@@ -658,9 +660,73 @@ This figure compares the estimates of genetic correlations between metabolic tra
 to the results obtained using roughly 10x larger sample sizes and LD Score regression in this paper.
 \end{centering}
 \end{figure}
-
 \newpage
+
+
+\subsection{Linkage Disequilibrium May Create False Positive Pleiotropy}
+\begin{figure}[!ht]
+
+\begin{centering}
+%\caption{S}
+    \includegraphics[scale=0.8]{figs/infinitesimal_sim.pdf}
+         \label{pleiotropy}
+
+
+Conditional QQ plot from two completely independent simulated phenotypes with phenotypes generated according to the 
+infinitesimal model ($y=X\beta + \epsilon$ with $\beta$ and $\epsilon$ drawn from normal distributions). 
+The two phenotypes were independent with zero genetic correlation, but the conditional QQ plots show substantial enrichment
+(\emph{i.e.,} the light blue line is well above the dark blue line), 
+and the correlation between log $p$-values was $0.14$. 
+This effect can be explained by the tendency for $p$-values to be lower at SNPs with high LD Score noted in 
+\cite{buliksullivan2014}. 
+The set of SNPs with $p$-values for trait 1 below some threshold is enriched for SNPs with high LD Scores,
+which will tend to have lower $p$-values for trait 2 as well. 
+
+\end{centering}
+\end{figure}
+\newpage
+
+\subsection{Pleiotropy Between Triglycerides and Schizophrenia may be Confounded by LD}
+\begin{figure}[!ht]
+
+\begin{centering}
+%\caption{S}
+    \includegraphics[scale=0.6]{figs/qq_TG.pdf}
+         \label{qq_tg}
+
+We reproduced the conditional QQ plot comparing schizophrenia (SCZ) and triglycerides (TG) from \cite{andreassen2013improved} (left).
+We then residualized the TG $p$-values on LD Score and plotted a new conditional QQ-plot (right). 
+Residualizing on LD Score removed almost all of the enrichment, which is consistent with the 
+near-zero genetic correlation between schizophrenia and TG estimated via LD Score regression.
+
+\end{centering}
+\end{figure}
+\newpage
+
+
+\subsection{Pleiotropy Between Bipolar and Schizophrenia Remains after Correction for LD}
+\begin{figure}[!ht]
+
+\begin{centering}
+%\caption{S}
+    \includegraphics[scale=0.6]{figs/qq_BIP.pdf}
+         \label{qq_bip}
+         
+As a positive control, we performed the same experiment from the previous figure with schizophrenia (SCZ) and 
+bipolar disorder (BIP), which have a strong positive genetic correlation. 
+In this case, the conditional QQ plot continued to show signal of pleiotropy 
+after residualizing the BIP $p$-values on LD Score.
+
+\end{centering}
+\end{figure}
+\newpage
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Supplementary Tables}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Simulations with Parallel LD- and MAF-Dependence}
 \label{parallel}
@@ -715,6 +781,9 @@ In this paper, we estimated genetic correlations with BMI-adjusted WHR using the
 Vattikuti \emph{et. al.} \cite{vattikuti2012heritability}
 estimated genetic correlations between unadjusted WHR and other metabolic traits using REML. 
 The genetic correlation profiles of these two phenotypes are quite dissimilar, especially with regards to BMI.
+
+
+
 
 %\newpage
 %\subsection{300 Genetic Correlations}
