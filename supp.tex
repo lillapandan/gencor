@@ -246,7 +246,7 @@ Thus,
 Note that this expression does not contain any terms in which both the quantities $N_s$ and $\ell_j$ appear. 
 In the special case where there are no overlapping samples shared between the two cohorts, this expression simplifies to 
 \begin{equation*}
-	\E[\bhat\chat] = \frac{\gencov}{M}\ell_j.
+	\E[\bhat_j\chat_j] = \frac{\gencov}{M}\ell_j.
 \end{equation*}
 \end{proof}
 
@@ -641,6 +641,85 @@ of liability:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Lorem Ipsum Dolor Sic Amet
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Comparison with Polygenic Scoring}\label{Power}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this section, we compare the power of summary-statistic based approaches with polygenic risk scoring as tests of the null
+hypothesis $H_0: r_g=0$. LD Score regression with unconstrained intercept is robust to several
+common confounders, such as unknown sample overlap and shared population stratification, but this robustness
+comes at the cost of a substantial increase in standard error. 
+As a result, LD Score regression with unconstrained intercept is 
+underpowered as a test of $H_0$, except at very large sample sizes.
+For purposes of testing $H_0$ given only summary statistics, we recommend eliminating confounders via other methods
+(\emph{e.g.,} by quantifying sample overlap and correcting for population stratification with PCA) then using
+LD Score regression with constrained intercept, which (modulo weighting) is equivalent to testing for association between
+$\bhat$ and $\chat$.
+
+For simplicity, we consider only the case of LD pruned markers and independent samples for the
+comparison. 
+One can of course increase power by not LD pruning (both for prediction and with summary statistics), and the 
+samples need not be independent.
+
+The polygenic scoring method is described in detail by Dudbridge in \cite{dudbridge2013power}. 
+Briefly, given a vector $\bhat$ of effect size estimates for trait 1, and a genotype matrix $X$ for individuals phenotyped for
+trait 2, denoted $Y$, we can test the null hypothesis $H_0$ by testing whether $\corr[X\bhat, Y]$ is significantly different
+from zero.
+
+As derived by Dudbridge \cite{dudbridge2013power}, the NCP for the $\chi^2$ test of association between $X\bhat$ and $Y$ is 
+\begin{equation}
+	\lambda_{PRS} = \dfrac{N_2R^2_{PRS}}{1-R^2_{PRS}},
+\end{equation}
+where $R^2_{PRS}$ is the expected squared Pearson correlation between the predicted and true phenotypes, which is given by
+\begin{equation}
+	R^2_{PRS} = \dfrac{N_1\rho_g^2}{M(N_1h^2_1/M+1)},
+\end{equation}
+(assuming $Y$ has been pre-normalized to variance one).
+
+The squared correlation between $\bhat$ and $\chat$ (estimated in independent samples) is
+\begin{align*}
+R^2_S :&= \corr[\bhat, \chat]\\
+&= 
+	\dfrac{\cov[\bhat,\chat]^2}{\var[\bhat]\var[\chat]}\\
+&=
+	\dfrac{\cov[\beta+\delta,\gamma+\epsilon]^2}{\var[\beta+\delta]\var[\gamma+\epsilon]}\\
+&\approx
+	\dfrac{N_1N_2\rho_g^2}{M^2(N_1h^2_1/M + 1)(N_2h^2_2/M + 1)}\\
+\end{align*}
+where the approximation is $\var[\bhat+\epsilon] \approx h^2_1/M + N_1^{-1}$, which is the same approximation from 
+\cite{dudbridge2013power}, and holds when genetic effects are small.
+Thus, the NCP of the $\chi^2$ test for association between $\bhat$ and $\chat$ is 
+\begin{equation}
+	\lambda_{S} = \dfrac{MR^2_S}{1-R^2_S}.
+\end{equation}
+Since $MR_S$ is equal to $N_2R_{PRS} / (N_2h^2_2/M + 1)$, and the term in the denominator is greater than or equal to one, 
+we have the inequality $\lambda_S \leq \lambda_{PRS}$, with equality if and only if $h^2_2 = 0$. 
+The magnitude of the difference will increase with increasing $h^2_2N_2$. Thus, with no LD, no $p$-value
+thresholding, PRS is a more powerful test for genetic correlation than LD Score regression with constrained intercept (which under
+these conditions is equivalent to computing $\corr[\bhat,\chat]$).
+
+In the more realistic scenario where there is LD, PRS loses power as a result of LD pruning, which always removes some 
+signal of heritability (though we note that LD pruning need not be a necessary step in risk prediction). In addition, LD
+Score regression gains power via efficient regression weights and by the ease with which one can incorporate functional priors
+into the regression (simply by replacing $\sum r^2_{jk}$ with $\sum w_kr^2_{jk}$, where $w_k$ is an estimate of the 
+per-SNP heritability accounted for by a SNP having the same annotations as $k$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{$p$-Value Thresholding}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+If (as is likely) some SNPs are not causal, then we can improve power for both PRS and methods based on summary statistics
+by removing SNPs that have no effect on the phenotypes in question. We can accomplish this either with functional priors or 
+via p-value thresholding. The utility of p-value thresholding increases with sample size. If we have genotypes for trait 1, 
+and this study has much larger sample size than the study of trait 2, then our only option for polygenic risk scoring is to attempt
+to predict trait 1 via a risk score obtained from the study of trait 2. However, in this case we can only impose a $p$-value threshold
+based on the $p$-values from study 2, which will be much less useful than a $p$-value threshold based on $p$-values from
+the much larger study 2.
+In situations like this, summary statistic based methods may be more
+powerful than PRS, even under the simple no-LD model considered here.
+
 
 
 \newpage
