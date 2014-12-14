@@ -554,7 +554,7 @@ Supplementary Note from \cite{buliksullivan2014}.
 If effect sizes for both phenotypes are drawn from a bivariate normal distribution, then
 the optimal regression weights for genetic covariance estimation are 
 \begin{equation}
-\var[\bhat_j\chat_j \,|\, \ell_j ] = 
+\var[z_{1,j}z_{2,j} \,|\, \ell_j ] \propto
 	\left( 
 		\frac{\hsqo\ell_j}{M} 
 		+ 
@@ -569,9 +569,9 @@ the optimal regression weights for genetic covariance estimation are
 		\frac{\gencov\ell_j}{M} 
 		+ 
 		\frac{\rho N_s}{N_1N_2} 
-	\right)^2;
+	\right)^2
 \end{equation}
-(Supplementary Note) however, this quantity depends on both heritabilities, 
+(Supplementary Note). This quantity depends on both heritabilities, 
 the genetic covariance and the number of overlapping samples,
 which are not known a priori, so it is necessary to estimate them from the data.
 Linear regression with weights estimated from the data is feasible generalized least squares (FGLS),
@@ -684,7 +684,7 @@ The minimum summary data required for estimating genetic correlation with LD Sco
 \begin{enumerate}
 	\item Genome-wide summary statistics from cohorts with similar ancestry
 	\item The summary statistics must be \emph{signed} (allele and direction of effect)
-	\item The summary statistics should \emph{never} be ``corrected'' via genomic control (GC) correction. Using GC'ed
+	\item The summary statistics should not be ``corrected'' via genomic control (GC) correction. Using GC'ed
 		summary statistics will result in downward bias in the LD Score regression estimates of heritability and
 		genetic covariance, and deflated LD Score regression intercepts. Estimates of genetic correlation will not be affected.
 	\item The summary statistics should not be meta-analyzed with targeted genotyping at significant loci 
@@ -709,7 +709,7 @@ For newer studies with dense imputation, restricting to HM3 SNPs is an inefficie
 Using a larger set of SNPs for the regression will lower the standard error (\emph{e.g.,} using all common 1kG
 SNPs instead of all common HM3 SNPs for the regression reduces the standard error by about 10\% in simulations).
 
-\subsection{Huge Effect Loci}
+\subsection{Large Effect Loci}
 
 Though the derivation of LD Score regression makes no distributional assumptions about effect sizes, 
 the LD Score regression standard error can become very large if effect sizes are drawn from a heavy-tailed distribution,
