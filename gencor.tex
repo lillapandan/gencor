@@ -312,6 +312,7 @@ Finally, we report several instances where the genetic correlation is close to z
 We estimate genetic correlations close to zero between schizophrenia and rheumatoid arthritis, schizophrenia and smoking, and schizophrenia and plasma lipids. The lack of genetic correlation between schizophrenia and rheumatoid arthritis is interesting because schizophrenia has been observed to be protective for rheumatoid arthritis \cite{silman2002epidemiology}.
 The absence of genetic correlation between schizophrenia and smoking is notable because of the high prevalence of smoking among individuals with schizophrenia \cite{de2005meta}. 
 Our estimate of zero genetic correlation between schizophrenia and plasma lipids or cardiovascular disease contrasts with earlier reports of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}, which may have been artifacts of inadequate control for LD (see Discussion). 
+%%% Waiting to hear back from Sasha about the current state of the comparison to the Andreassen conditional QQ plot method
 Last, we estimate near zero genetic correlation between rheumatoid arthritis and both Crohn's disease and ulcerative colitis. Although these immune diseases share a large number of associated loci, it appears that the directions of effect are in the opposite direction as often as they are concordant, yielding close to zero genetic correlation overall.
 %%% Getting # of overlapping gwsig loci w/ concordant and discordant effects from Mark 
 
@@ -383,12 +384,9 @@ or even use pleiotropy to gain power \cite{zhou2014efficient, cotsapas2011pervas
 \subsection{Statistical Framework}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-See the supplementary note for a thorough derivation of the models behind LD Score regression.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Definitions}\label{h2550}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A discussion of modeling assumptions and a derivation of the two-phenotype LD Score regression equation 
+is provided in the Supplementary Note. 
+This section focuses on definitions of quantitates estimated and details of the estimation procedure.
 
 \subsection{Heritability}
 
@@ -683,12 +681,6 @@ We selected traits for inclusion in the main text via the following procedure:
 \item Prune sets of highly correlated phenotypes (\emph{e.g.,} obesity classes 1-3, or the several glucose and insulin measures from the MAGIC consortium) by picking the trait from each cluster with the highest heritability heritability $Z$-score (traits pruned in this step are displayed in the supplementary figures).
 
 \end{enumerate}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{GWAS Data}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Summary Statistics}\label{Summary Statistics}
 
