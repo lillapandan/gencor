@@ -573,23 +573,17 @@ the optimal regression weights for genetic covariance estimation are
 \end{equation}
 (Supplementary Note) however, this quantity depends on both heritabilities, 
 the genetic covariance and the number of overlapping samples,
-which are not known a priori, so an approximation is required.
-In order to obtain approximate regression weights, 
-we use heritability estimates from the single-phenotype LD Score regressions, then
-we assume that $N_s$ is close enough to zero that the term $\rho N_s/N_1N_2$ is negligible
-(this default can be adjusted using the \texttt{--overlap} and \texttt{--rho} flags in \texttt{ldsc}),
-and estimate a rough genetic covariance (used only for the regression weights)
-using the aggregate estimator 
+which are not known a priori, so it is necessary to estimate them from the data.
+Linear regression with weights estimated from the data is feasible generalized least squares (FGLS),
+which gives valid inference. 
+
+In order to estimate genetic covariance with efficient regression weights, we run a first LD Score 
+regression weighted with weights computed using the heritability estimates from the single-phenotype LD Score regressions,
+$N_s$ set to zero, and $\rho_g$ estimated with the aggregate estimator 
 $$\hat{\rho}_{g, agg} := \frac{1}{\lbar\sqrt{N_1N_2}}\sum_{j=1}^M z_{1,j}z_{2,j},$$
 where $\lbar$ denotes the mean LD Score among SNPs included in the regression.
 
-Users of our \texttt{ldsc} software package should note that when attempting to compute the genetic 
-correlation between a trait and itself using the same GWAS data twice, the result will generally be different from 
-one unless the weights are set appropriately. 
-With the default weights (which are set for zero sample overlap), \texttt{ldsc} is simply computing the ratio
-between the slope of and LD Score regression with efficient weights and the slope of an LD Score regression
-with inefficient regression weights, which is a noisy estimate of 1.
-
+We then update the weights using the estimates of $\rho_g$ and $\rho N_s$ obtained from the first LD Score regression.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weighted Block Jackknife Genetic Correlation}\label{Block Jackknife}
