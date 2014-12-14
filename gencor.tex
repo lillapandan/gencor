@@ -259,11 +259,16 @@ For many of these pairs of traits, we can reject the null hypothesis of zero gen
 significance (\emph{e.g.,} $p=6\times10^{-24}$ for age at onset of menarche and obesity; $p=6\times10^{-52}$ for obesity and childhood obesity).
 
 Our results on metabolic traits are directionally consistent with the recent Mendelian randomization results from \cite{wuertz2014metabolic}, except that we identify a statistically significant positive genetic correlation between fasting glucose and obesity, and they identify a positive effect of BMI on LDL that is not apparent in our data. 
-Some of these results have also been reported in the twin study literature; for example, our estimate of 0.12 (0.03) ($p=5\times10^{-4}$) for the genetic correlation between adult height and educational attainment is consistent with the genetic correlation estimates of 0.08 in males and 0.17 in females between adult height and IQ (for which educational attainment is a proxy phenotype) from \cite{keller2013genetic}. The negative genetic correlation between birth weight and type 2 diabetes that we report is also consistent with \cite{johansson2008association}.
+Some of these results have also been reported in the twin study literature; for example, our estimate of 0.12 (0.03) ($p=5\times10^{-4}$) for the genetic correlation between adult height and educational attainment is consistent with the genetic correlation estimates of 0.08 in males and 0.17 in females between adult height and IQ (for which educational attainment is a proxy phenotype) from \cite{keller2013genetic}. 
+This result has also been reported in the epidemiological literature \cite{magnusson2006height}, 
+though we stress that this genetic correlation should not be given a causal interpretation.
+Both height and educational attainment have genetic correlations with many other phenotypes, 
+and the observed genetic correlation between height and educational attainment could be mediated by any of these (see Discussion).
+The negative genetic correlation between birth weight and type 2 diabetes that we report is also consistent with overlap among top loci observed in \cite{johansson2008association}.
 
 % Novel genetic results that are not novel epidemiological results
 
-Many of our results are consistent with well-known epidemiological association, but, to the best of our knowledge, have never been reported using genetic data
+Many of our results are consistent with well-known epidemiological association, but, to the best of our knowledge, have never been reported using genetic data.
 For example, our estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
 We estimate a genetic correlation of -0.30 (0.08), $p=1\times10^{-4}$, between educational attainment and Alzheimer's disease, 
 consistent with the epidemiological observation that low educational attainment is one of the largest risk factors for Alzheimer's
@@ -271,8 +276,17 @@ consistent with the epidemiological observation that low educational attainment 
 The positive genetic correlation between educational attainment and bipolar disorder is consistent with psychiatric literature showing that education and bipolar disorder status are positively correlated
 \cite{maccabe2010excellent, tiihonen2005premorbid}, 
 Our estimate of a genetic correlation of -0.20 (0.04) ($p=4\times10^{-6}$) between anorexia and obesity is sensible considering that low BMI is one of the diagnostic criteria for anorexia, though it is interesting that the genetic factors that influence normal variation in BMI are similar to the genetic factors that influence unhealthily low BMI in the context of psychiatric illness.
-This result is consistent with recent observations that BMI GWAS findings appear to primarily implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
-\cite{finucane2014partitioning}
+This result is consistent with our observation that BMI GWAS findings appear to primarily implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
+\cite{finucane2014partitioning}.
+Our estimate of the genetic correlations between schizophrenia and inflammatory bowel disease (IBD -- Crohn's and UC) are not statistically significantly different from zero after correction
+for multiple tests, but the direction of the genetic correlation (positive) is consistent with recent epidemiological work showing an increased risk for schizophrenia after IBD diagnosis
+\cite{benros2011autoimmune} and an increased risk for IBD after schizophrenia diagnosis \cite{benros2014nationwide}.
+These observations are particularly interesting in light of recent results showing that immune cell-type-specific epigenetic marks are enriched for genetic variants that influence risk
+for schizophrenia \cite{finucane2014partitioning, schizophrenia2014biological}, although we emphasize that the evidence for genetic correlation is not yet conclusive.
+The positive genetic correlation between smoking and obesity is in the opposite direction of the epidemiological association (smoking is associated with lower body mass, although smoking cessation 
+often leads to weight gain) and Mendelian randomization results using rs1051730 \cite{aasvold2014causal}.
+We propose that the resolution of this apparent discrepancy is an interesting direction for future research.
+Our estimate of a negative genetic correlation between smoking and educational attainment is consistent with the epidemiological result that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
 Last, the genetic correlation of -0.17 (0.04) ($p=2\times10^{-4}$) between height and coronary artery disease (possibly related to the genetic correlation of -0.11 (0.03) ($p=0.001$) between height and LDL, a known risk factor for coronary artery disease \cite{do2013common, burgess2014using}) is consistent with a replicated epidemiological association  \cite{wang2011associations,hebert1993height,rich1995height}.
 
 % Novel results
@@ -330,15 +344,17 @@ This scenario can be represented graphically as
 $\mathrm{HDL}\leftarrow\mathrm{G}\rightarrow\mathrm{TG}\rightarrow\mathrm{CAD}$, 
 where $\mathrm{G}$ is the set of genetic variants with effects on both HDL and TG.
 Indeed, the second mechanism appears to account for a large proportion of the genetic correlation between HDL and CAD, 
-since the association between HDL and CAD is attenuated after controlling for other plasma lipids  \cite{do2013common, burgess2014using}.
+since the association between HDL and CAD is attenuated after controlling for other plasma lipids \cite{do2013common, burgess2014using}.
+Extending genetic correlation to deal with multiple phenotypes (\emph{e.g.,} genetic correlation between HDL and CAD controlling for TG, 
+analogous to \cite{do2013common,burgess2014using}, possibly with extension to nonlinear models) is an important direction for future work.
 
 % Limitations of the Method
 
 We note several limitations of the LD Score regression method.
 First, LD Score regression requires large sample sizes in order to give estimates with reasonable standard error 
-(as a rule of thumb, $Nh^2_g$ should be greater than 3000, where $h^2$ is on the observed scale for case/control studies).
+(as a rule of thumb, $Nh^2_g$ should be greater than 3000, where $h^2_g$ is on the observed scale for case/control studies).
 Constrained intercept LD Score regression gives lower standard errors, 
-but this estimator requires knowing the number of overlapping samples, which can often be difficult to determine for pairs of large meta-analyses.. 
+but this estimator requires knowing the number of overlapping samples, which can often be difficult to determine for pairs of large meta-analyses.
 REML and genetic risk scores are more efficient estimators of genetic correlation, though both require access to individual genotypes.
 Second, LD Score regression assumes that all individuals in the GWAS were sampled from populations with similar LD Scores,
 and that these LD Scores can be estimated from sequenced reference data such as 1kG.
@@ -356,7 +372,7 @@ Finally, we have developed a method that allows us to rapidly screen hundreds of
 Our results show that the matrix of genetic correlations -- especially among metabolic traits -- is dense, and that 
 genome-wide genetic pleiotropy is the rule rather than the exception.
 These findings highlight the importance of methods that account naturally for pleiotropy \cite{do2013common, burgess2014using},
-or even use pleiotropy to gain power \cite{zhou2014efficient}.
+or even use pleiotropy to gain power \cite{zhou2014efficient, cotsapas2011pervasive}.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
