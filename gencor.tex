@@ -21,26 +21,27 @@
 
 \frenchspacing
 \title{Estimating Genetic Correlation from GWAS Summary Statistics}
-\author[1,2]{Brendan Bulik-Sullivan\thanks{Co-first authors}$^{\dagger}$}
-\author[3,*]{Hilary K Finucane}
-\author[1,2]{Verneri Antilla}
-\author[4,5]{Alexander Gusev}
-\author[6]{Felix R. Day}
+\author[1,2,3]{Brendan Bulik-Sullivan\thanks{Co-first authors}$^{\dagger}$}
+\author[4,*]{Hilary K Finucane}
+\author[1,2,3]{Verneri Antilla}
+\author[5,6]{Alexander Gusev}
+\author[7]{Felix R. Day}
 \author[ ]{the ReproGen Consortium\hspace{-0.7ex}}
-\author[6]{John R.B. Perry}
-\author[1,2]{Cecilia Lindgren}
+\author[7]{John R.B. Perry}
+\author[1,2,3]{Cecilia Lindgren}
 \author[1]{Nick Patterson}
-\author[1,2]{Elise Robinson}
-\author[1,2]{Mark J Daly}
-\author[4,5]{Alkes L Price\thanks{Co-last authors}}
-\author[1,2,**]{Benjamin M Neale\thanks{Correspondence should be addressed to BBS (bulik@broadinstitute.org) or BMN (bmneale@broadinstitute.org).}}
+\author[1,2,3]{Elise Robinson}
+\author[1,2,3]{Mark J Daly}
+\author[5,6]{Alkes L Price\thanks{Co-last authors}}
+\author[1,2,3,**]{Benjamin M Neale\thanks{Correspondence should be addressed to BBS (bulik@broadinstitute.org) or BMN (bmneale@broadinstitute.org).}}
 
 \affil[1]{\small{Program in Medical and Population Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}}
-\affil[2]{Analytic and Translational Genetics Unit, Massachusetts General Hospital, Boston, MA, USA.}
-\affil[3]{Department of Mathematics, Massachusetts Institute of Technology, Cambridge, MA, USA.}
-\affil[4]{Department of Epidemiology, Harvard School of Public Health, Boston, MA, USA.}
-\affil[5]{Department of Biostatistics, Harvard School of Public Health, Boston, MA, USA.}
-\affil[6]{MRC Epidemiology Unit, University of Cambridge School of Clinical Medicine, Cambridge, UK}
+\affil[2]{Stanley Center for Psychiatric Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}
+\affil[3]{Analytic and Translational Genetics Unit, Massachusetts General Hospital, Boston, MA, USA.}
+\affil[4]{Department of Mathematics, Massachusetts Institute of Technology, Cambridge, MA, USA.}
+\affil[5]{Department of Epidemiology, Harvard School of Public Health, Boston, MA, USA.}
+\affil[6]{Department of Biostatistics, Harvard School of Public Health, Boston, MA, USA.}
+\affil[7]{MRC Epidemiology Unit, University of Cambridge School of Clinical Medicine, Cambridge, UK}
 \date{}
 \begin{document}
 \maketitle
@@ -106,6 +107,7 @@ where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance, $\
 A similar relationship holds if one or both of the studies is an ascertained study of a binary phenotype (Supplementary Note), and in this case, the estimate of genetic covariance will be on the observed scale.
 As a consequence of equation \ref{reg_eqn}, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score. This estimate will not be biased even if the two studies share samples, because sample overlap only 
 affects the intercept, not the slope.	
+Intuitively, bias from sample overlap affects all SNPs equally, similar to cryptic relatedness in the one-trait case \cite{buliksullivan2014}, and therefore this bias is not correlated with LD Score.
 
 If we normalize genetic covariance to lie in the interval $[-1,1]$, we obtain genetic correlation: 
 $r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the heritability of trait $i$. 
@@ -304,7 +306,7 @@ which features many low frequency variants with large odds ratios.
 Third, we estimate a genetic correlation of 0.28 (0.08) ($p=5\times10^{-4}$) between autism spectrum disorder (ASD) and educational attainment (a proxy for intelligence \cite{rietveld2013gwas}).
 The ASD summary statistics were generated using a case/pseudocontrol study design, so this result cannot be explained by diagnostic biases, such as the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. The distribution of IQ among individuals with ASD has lower mean than the general population, but with heavy tails \cite{robinson2014autism} (\emph{i.e.,} an excess of individuals with extremely low and extremely high IQ).
 In addition, there is evidence that the genetic architectures of high IQ and low IQ ASD are dissimilar \cite{samocha2014framework}.
-Thus, one potential explanation for the apparent genetic correlation between educational attainment and ASD is that this observation is driven by the genetic variants that influence the heavy upper tail of the IQ distribution of individuals with ASD.
+We are unable to offer an explanation for this result, but propose that further exploration of this genetic correlation is an interesting direction for future research.
 
 % Interesting negative results
 
@@ -331,7 +333,7 @@ These advantages allow estimation of genetic correlations between a much large s
 We applied our method to a large dataset of publicly available GWAS summary statistics, spanning 25 traits and more than 1.5 million phenotyped individuals. 
 We replicated many previously-reported GWAS-based genetic correlations, observations of overlap among genome-wide significant SNPs, and known epidemiological associations, thus validating the utility of genetic correlation as an epidemiological tool.
 In addition, we report several novel results, including a positive genetic correlation between educational attainment and ASD, 
-which may shed some light on emerging differences between the genetic architectures of high IQ and low IQ ASD. 
+which may be related to emerging differences between the genetic architectures of high IQ and low IQ ASD. 
 
 % Limitations of Genetic Correlation
 We note some limitations on the interpretation of genetic correlation.
