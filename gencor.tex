@@ -26,7 +26,7 @@
 \author[1,2,3]{Verneri Antilla}
 \author[5,6]{Alexander Gusev}
 \author[7]{Felix R. Day}
-\author[8]{the ReproGen Consortium}
+\author[8]{ReproGen Consortium}
 \author[7]{John R.B. Perry}
 \author[1,2,3]{Cecilia Lindgren}
 \author[1]{Nick Patterson}
@@ -41,7 +41,7 @@
 \affil[4]{Department of Mathematics, Massachusetts Institute of Technology, Cambridge, MA, USA.}
 \affil[5]{Department of Epidemiology, Harvard School of Public Health, Boston, MA, USA.}
 \affil[6]{Department of Biostatistics, Harvard School of Public Health, Boston, MA, USA.}
-\affil[7]{MRC Epidemiology Unit, University of Cambridge School of Clinical Medicine, Cambridge, UK}
+\affil[7]{MRC Epidemiology Unit, University of Cambridge School of Clinical Medicine, Institute of Metabolic Science, Cambridge Biomedical Campus, Cambridge, CB2 0QQ, UK}
 \affil[8]{A list of members and affiliations appears in the Supplementary Note.}
 \date{}
 \begin{document}
@@ -51,9 +51,9 @@
 
 \begin{abstract}
 
-A recent focus in statistical genetics has been leveraging genetic association results from multiple phenotypes simultaneously to assist in the interpretation of results from genome-wide association studies (GWAS). 
-Here we describe a novel method for estimating genetic correlations between traits that requires only GWAS summary statistics as input.
-We apply our method to 25 sets of publicly available GWAS summary statistics, which include more than 1.5 million phenotyped samples. 
+A recent focus in statistical genetics has been combining genetic association results from multiple phenotypes simultaneously in order understand the relationship between them.
+Here we describe a novel method for estimating genetic correlations between traits that requires only summary statistics from genome-wide association studies (GWAS) as input.
+We apply our method to 25 sets of publicly available GWAS summary statistics, which include more than 1.5 million genotype-phenotype pairs. 
 Our results replicate many known genetic and epidemiological associations, including correlations between psychiatric traits, anthropometric traits, and components of metabolic syndrome. 
 In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa (AN) and schizophrenia and a negative genetic correlation between AN and body mass. 
 These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for AN. 
@@ -66,25 +66,26 @@ We provide open source software implementing these analyses.
 \label{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Discovering relationships between phenotypes is a fundamental goal of epidemiology, with applications to classification and treatment of disease, as well as to development of pharmaceutical drugs.  
+Discovering directed relationships between phenotypes is a fundamental goal of epidemiology, 
+with applications to classification and treatment of disease, as well as to development of pharmaceutical drugs.  
 The traditional strategy in epidemiology is to search for correlations between phenotypes via large cross-sectional or longitudinal observational studies; 
 however, the interpretation of results from these studies can be confounded by environmental factors and reverse causation. 
 An alternative strategy that is more robust to confounding is to search instead for pairs of phenotypes with shared genetic etiology \cite{smith2003mendelian}. 
-Many such methods have the additional advantage that they do not require measuring the same traits on the same individuals, 
-which is particularly useful for phenotypes that are rare or costly to assay.  
 	
 The largest currently available sources of genotype-phenotype data are genome-wide association studies (GWAS). 
-There are three main approaches for testing relationships between phenotypes using GWAS data. 
+Methods based on GWAS data have the particular advantage that because GWAS yields effect-size estimates for individual genetic variants,
+it is not necessary to measure multiple traits on the same individuals.
+This is a sizable advantage for phenotypes that are rare or costly to assay.  
+There are three main approaches for discovering directed relationships between phenotypes using GWAS data. 
 Mendelian randomization has proved effective for traits for which there exist large-effect genetic variants \cite{smith2014mendelian}. 
 However for many complex traits, the heritability is distributed over thousands of variants with small effect sizes \cite{visscher2012five}. 
 For these traits, Mendelian randomization suffers from low power and weak instrument bias \cite{angrist2008mostly}, 
 so it is more effective to estimate genetic correlations using techniques such as restricted maximum likelihood (REML) \cite{yang2010, yang2011gcta, lee2012estimation}
 or polygenic scores \cite{purcell2009common, dudbridge2013power} that model the effects of all SNPs, including those that do not reach genome-wide significance \cite{pgccdg2013, vattikuti2012heritability, chen2014estimation}.
-
 REML and polygenic scores have only been applied to a small number of traits so far, because these methods requires access to individual genotypes, 
 which are often difficult to obtain due to privacy considerations and informed consent limitations. 
-Here we introduce a method for estimating genetic correlation that requires only GWAS summary statistics as input and is several orders of magnitude less computationally demanding than REML.
 
+Here we introduce a method for estimating genetic correlation that requires only GWAS summary statistics as input and is several orders of magnitude less computationally demanding than REML.
 We apply this method to all GWAS for which the summary statistics have been made publicly available for download (to our knowledge) and report genetic correlations between hundreds of pairs of traits. 
 The vast majority of our results are consistent with previously published genetic correlations, observations of overlap at genome-wide significant loci, and epidemiological associations. 
 In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa (AN) and schizophrenia and a negative genetic correlation between AN and BMI. 
@@ -96,24 +97,27 @@ These results demonstrate the advantages of a polygenic modeling framework, sinc
 
 \subsection{Overview of Methods}
 
-The $\chi^2$-statistic at a given SNP incorporates the effects of all SNPs in LD with that SNP. 
+Our method for estimating genetic correlation from summary statistics relies on the fact that the $\chi^2$-statistic at a given SNP incorporates the effects of all SNPs in LD with that SNP\cite{yang2011ejhg,buliksullivan2014}. 
 For a polygenic trait, SNPs in regions with strong LD will have higher $\chi^2$-statistics on average than SNPs in regions with little LD \cite{buliksullivan2014}. 
-A similar relationship holds if we replace $\chi^2$-statistics for a single trait with the product $z_1z_2$, 
-where $z_i$ denotes the $Z$-score for trait $i$.
+A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product $z_1z_2$, 
+where $z_i$ denotes the $Z$-score for study $i$.
 
 More precisely, under a polygenic model \cite{yang2010}, the expected value of $z_1z_2$ is 
 \begin{equation}\label{reg_eqn}
 	\E[z_{1j}z_{2j}] = \dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}},
 \end{equation}
-where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance, $\ell_j$ is LD Score, $N_s$ is the number of samples shared between study 1 and study 2, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples.
+where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance (defined in methods), $\ell_j$ is LD Score, $N_s$ is the number of samples shared between study 1 and study 2, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples.
 If study one and study two are the same study, then this reduces to the single-phenotype result from \cite{buliksullivan2014}, because the genetic covariance between a trait and itself is simply $h^2$, and $\chi^2 = z^2$.
 A similar relationship holds if one or both of the studies is an ascertained study of a binary phenotype (Supplementary Note), and in this case, the estimate of genetic covariance will be on the observed scale.
-As a consequence of equation \ref{reg_eqn}, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score. This estimate will not be biased even if the two studies share samples, because sample overlap only 
+As a consequence of equation \ref{reg_eqn}, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score. 
+This estimate will not be biased even if the two studies share samples, because sample overlap only 
 affects the intercept, not the slope.	
 Intuitively, bias from sample overlap affects all SNPs equally, similar to cryptic relatedness in the one-trait case \cite{buliksullivan2014}, and therefore this bias is not correlated with LD Score.
+Similarly, the estimate will be only minimally biased by shared population stratification or genotpying artifacts, because these sources of bias are also not correlated with LD Score and will
+only affect the intercept \cite{buliksullivan2014}.
 
 If we normalize genetic covariance to lie in the interval $[-1,1]$, we obtain genetic correlation: 
-$r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the heritability of trait $i$. 
+$r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability of trait $i$. 
 In this paper, we report genetic correlations obtained using genetic covariances estimated with two-phenotype LD Score regression
 and heritabilities estimated using univariate LD Score regression \cite{buliksullivan2014}.
 
@@ -167,7 +171,7 @@ downloaded from the PGC website (URLs).
 Including an intercept in the LD Score regression protects the results from QC issues such as population stratification (as described in \cite{buliksullivan2014})
 and sample overlap, but at the cost of larger standard errors.
 Since the summary statistics from \cite{cross2013identification} were generated after a careful QC process, and the 
-samples used for each disease were non-overlapping, we also fit LD Score regression with constrained intercept.
+samples used for each disease were non-overlapping, applied also fit LD Score regression with no intercept.
 
 Results from this analysis are displayed in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
 As expected, the genetic correlation estimates from LD Score regression were similar to the results from REML.
@@ -206,13 +210,13 @@ SCZ = schizophrenia.}}}
 
 \subsection{Application to a Large Set of Publicly Available Summary Statistics}
 
-We used LD Score regression to estimate genetic correlations between 25 phenotypes (Table \ref{data}, URLs), 
+We used LD Score regression to estimate genetic correlations between 25 phenotypes (Table \ref{data}, URLs, Methods), 
 including all phenotypes with publicly available summary statistics and sufficiently large sample size and heritability (see Methods).
+Genetic correlation estimates for the 25 traits are displayed in Figure \ref{Fig:300 Gencors}.
 For clarity of presentation, we pruned to one phenotype from each cluster of highly correlated phenotypes for the main text; 
 highly correlated anthropometric phenotypes are displayed in supplementary table XXX, 
 smoking phenotypes are displayed in supplementary table YYY, 
 and insulin-related traits are displayed in supplementary table ZZZ. 
-Genetic correlation estimates for the 25 traits are displayed in Figure \ref{Fig:300 Gencors}.
 
 \begin{table}[t]
 
@@ -316,7 +320,7 @@ We are unable to offer an explanation for this result, but propose that further 
 Finally, we report several instances where the genetic correlation is close to zero, in contrast to previous reports of epidemiological correlation or genetic overlap.
 We estimate genetic correlations close to zero between schizophrenia and rheumatoid arthritis, schizophrenia and smoking, and schizophrenia and plasma lipids. The lack of genetic correlation between schizophrenia and rheumatoid arthritis is interesting because schizophrenia has been observed to be protective for rheumatoid arthritis \cite{silman2002epidemiology}.
 The absence of genetic correlation between schizophrenia and smoking is notable because of the high prevalence of smoking among individuals with schizophrenia \cite{de2005meta}. 
-Our estimate of zero genetic correlation between schizophrenia and plasma lipids or cardiovascular disease contrasts with earlier reports of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}, which may have been artifacts of inadequate control for LD (see Discussion). 
+Our estimate of zero genetic correlation between schizophrenia and plasma lipids or cardiovascular disease contrasts with earlier reports of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}, which could potentially be explained by linkage disequilibrium, rather than trait biology (see Methods). 
 %%% Waiting to hear back from Sasha about the current state of the comparison to the Andreassen conditional QQ plot method
 Last, we estimate near zero genetic correlation between rheumatoid arthritis and both Crohn's disease and ulcerative colitis. Although these immune diseases share a large number of associated loci, it appears that the directions of effect are in the opposite direction as often as they are concordant, yielding close to zero genetic correlation overall.
 %%% Getting # of overlapping gwsig loci w/ concordant and discordant effects from Mark 
