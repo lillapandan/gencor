@@ -21,8 +21,8 @@
 
 \frenchspacing
 \title{Estimating Genetic Correlation from GWAS Summary Statistics}
-\author[1,2,3]{Brendan Bulik-Sullivan\thanks{Co-first authors}$^{\dagger}$}
-\author[4,*]{Hilary K Finucane}
+\author[1,2,3]{Brendan Bulik-Sullivan$^{\dagger}$\thanks{Co-first authors}$^,$}
+\author[*,4]{Hilary K Finucane}
 \author[1,2,3]{Verneri Antilla}
 \author[5,6]{Alexander Gusev}
 \author[7]{Felix R. Day}
@@ -32,8 +32,8 @@
 \author[1]{Nick Patterson}
 \author[1,2,3]{Elise Robinson}
 \author[1,2,3]{Mark J Daly}
-\author[5,6]{Alkes L Price\thanks{Co-last authors}}
-\author[1,2,3,**]{Benjamin M Neale\thanks{Correspondence should be addressed to BBS (bulik@broadinstitute.org) or BMN (bmneale@broadinstitute.org).}}
+\author[5,6]{Alkes L Price\thanks{Co-last authors}$^,$}
+\author[**,1,2,3]{Benjamin M Neale\thanks{Correspondence should be addressed to BBS (bulik@broadinstitute.org) or BMN (bmneale@broadinstitute.org).}}
 
 \affil[1]{\small{Program in Medical and Population Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}}
 \affil[2]{Stanley Center for Psychiatric Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}
@@ -68,20 +68,25 @@ We provide open source software implementing these analyses.
 
 Discovering directed relationships between phenotypes is a fundamental goal of epidemiology, 
 with applications to classification and treatment of disease, as well as to development of pharmaceutical drugs.  
-The traditional strategy in epidemiology is to search for correlations between phenotypes via large cross-sectional or longitudinal observational studies; 
-however, the interpretation of results from these studies can be confounded by environmental factors and reverse causation. 
-An alternative strategy that is more robust to confounding is to search instead for pairs of phenotypes with shared genetic etiology \cite{smith2003mendelian}. 
-	
-The largest currently available sources of genotype-phenotype data are genome-wide association studies (GWAS). 
-Methods based on GWAS data have the particular advantage that because GWAS yields effect-size estimates for individual genetic variants,
-it is not necessary to measure multiple traits on the same individuals.
-This is a sizable advantage for phenotypes that are rare or costly to assay.  
-There are three main approaches for discovering directed relationships between phenotypes using GWAS data. 
-Mendelian randomization has proved effective for traits for which there exist large-effect genetic variants \cite{smith2014mendelian}. 
+The traditional strategy in epidemiology is to search for correlations between phenotypes via cross-sectional or longitudinal observational studies; 
+however, the interpretation of results from these studies can be confounded and are vulnerable to reverse causation. 
+An alternative strategy that is effective for heritable traits and is more robust to confounding is to search instead for pairs of phenotypes with shared genetic etiology \cite{smith2003mendelian}. 
+
+The earliest attempts to probe for traits with genetic overlap were twin and family studies.
+The applicability of these methods is limited, because they require sampling twins and families and measuring different traits on the same individuals.
+Genome-wide association studies (GWAS) produce effect size estimates for specific genetic variants, so it is possible to test for shared genetic
+etiology using these effect size estimates, which circumvents the requirement to measure the same traits on the same individuals.
+This can substantially reduce the cost and difficult of epidemiological studies for phenotypes that are rare or expensive to assay.
+
+One widely-used technique for testing relationships between phenotypes using GWAS data is Mendelian randomization
+which  has proved effective for traits for which there exist large-effect genetic variants \cite{smith2014mendelian}. 
 However for many complex traits, the heritability is distributed over thousands of variants with small effect sizes \cite{visscher2012five}. 
-For these traits, Mendelian randomization suffers from low power and weak instrument bias \cite{angrist2008mostly}, 
-so it is more effective to estimate genetic correlations using techniques such as restricted maximum likelihood (REML) \cite{yang2010, yang2011gcta, lee2012estimation}
+For such traits, Mendelian randomization suffers from low power and weak instrument bias \cite{angrist2008mostly}.
+
+When few large-effect SNPs are available, it is more effective to use techniques such as restricted maximum likelihood (REML) \cite{yang2010, yang2011gcta, lee2012estimation}
 or polygenic scores \cite{purcell2009common, dudbridge2013power} that model the effects of all SNPs, including those that do not reach genome-wide significance \cite{pgccdg2013, vattikuti2012heritability, chen2014estimation}.
+These methods report estimates of a parameter called genetic correlation, which is the framework that we adopt in this paper; however,
+genetic correlation can be interpreted as a re-scaling of the instrumental variables estimate obtained from an instrument constructed using all SNPs (see Methods).
 REML and polygenic scores have only been applied to a small number of traits so far, because these methods requires access to individual genotypes, 
 which are often difficult to obtain due to privacy considerations and informed consent limitations. 
 
@@ -97,7 +102,7 @@ These results demonstrate the advantages of a polygenic modeling framework, sinc
 
 \subsection{Overview of Methods}
 
-Our method for estimating genetic correlation from summary statistics relies on the fact that the $\chi^2$-statistic at a given SNP incorporates the effects of all SNPs in LD with that SNP\cite{yang2011ejhg,buliksullivan2014}. 
+Our method for estimating genetic correlation from summary statistics relies on the fact that the $\chi^2$-statistic at a given SNP incorporates the effects of all SNPs in LD with that SNP\cite{yang2011genomic,buliksullivan2014}. 
 For a polygenic trait, SNPs in regions with strong LD will have higher $\chi^2$-statistics on average than SNPs in regions with little LD \cite{buliksullivan2014}. 
 A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product $z_1z_2$, 
 where $z_i$ denotes the $Z$-score for study $i$.
@@ -115,13 +120,14 @@ affects the intercept, not the slope.
 Intuitively, bias from sample overlap affects all SNPs equally, similar to cryptic relatedness in the one-trait case \cite{buliksullivan2014}, and therefore this bias is not correlated with LD Score.
 Similarly, the estimate will be only minimally biased by shared population stratification or genotpying artifacts, because these sources of bias are also not correlated with LD Score and will
 only affect the intercept \cite{buliksullivan2014}.
+If we can rule out shared population stratification,
+ and the intercept term $\rho N_s/\sqrt{N_1N_2}$ is known ahead of time (\emph{e.g.,} if there is no sample overlap and it is zero), 
+we can obtain a lower standard error by constraining the intercept.
 
 If we normalize genetic covariance to lie in the interval $[-1,1]$, we obtain genetic correlation: 
 $r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability of trait $i$. 
 In this paper, we report genetic correlations obtained using genetic covariances estimated with two-phenotype LD Score regression
 and heritabilities estimated using univariate LD Score regression \cite{buliksullivan2014}.
-
-
 
 
 \subsection{Simulations}\label{Simulations}
@@ -171,7 +177,7 @@ downloaded from the PGC website (URLs).
 Including an intercept in the LD Score regression protects the results from QC issues such as population stratification (as described in \cite{buliksullivan2014})
 and sample overlap, but at the cost of larger standard errors.
 Since the summary statistics from \cite{cross2013identification} were generated after a careful QC process, and the 
-samples used for each disease were non-overlapping, applied also fit LD Score regression with no intercept.
+samples used for each disease were non-overlapping, we also estimated genetic correlation using LD Score regression with constrained intercept.
 
 Results from this analysis are displayed in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
 As expected, the genetic correlation estimates from LD Score regression were similar to the results from REML.
@@ -210,9 +216,8 @@ SCZ = schizophrenia.}}}
 
 \subsection{Application to a Large Set of Publicly Available Summary Statistics}
 
-We used LD Score regression to estimate genetic correlations between 25 phenotypes (Table \ref{data}, URLs, Methods), 
-including all phenotypes with publicly available summary statistics and sufficiently large sample size and heritability (see Methods).
-Genetic correlation estimates for the 25 traits are displayed in Figure \ref{Fig:300 Gencors}.
+We used LD Score regression to estimate genetic correlations among 25 phenotypes (Table \ref{data}, URLs, Methods).
+Genetic correlation estimates for all 300 pairwise combinations of the 25 traits are displayed in Figure \ref{Fig:300 Gencors}.
 For clarity of presentation, we pruned to one phenotype from each cluster of highly correlated phenotypes for the main text; 
 highly correlated anthropometric phenotypes are displayed in supplementary table XXX, 
 smoking phenotypes are displayed in supplementary table YYY, 
@@ -243,7 +248,7 @@ The color of the square indicates the value of the genetic correlation.
 Blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
 The size of the colored squares indicates the magnitude of the $p$-value. 
 Larger squares correspond to lower $p$-values, and all genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
-Genetic correlations that are significantly different from zero at $\alpha=0.05$ after Bonferroni correction for 300 tests are given an asterisk. 
+Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction for 300 tests are given an asterisk. 
 Note that this multiple testing correction is conservative, since many of the tests are not independent.
 }}}
 
@@ -252,7 +257,7 @@ Note that this multiple testing correction is conservative, since many of the te
 
 % Results that are consistent with previously reported GWAS rg's
 
-Our estimates of genetic correlation between metabolic traits are generally consistent with the estimates obtained using REML in 
+Our estimates of genetic correlations among metabolic traits are generally consistent with the estimates obtained using REML in 
 \cite{vattikuti2012heritability}, though our standard errors are much lower, since operating on summary statistics
 allows us access to larger sample sizes (Supplementary Table \ref{supp-vattikuti}). 
 In addition, our estimate of 0.57 (0.074) for the genetic correlation between Crohn's disease and ulcerative colitis is consistent
@@ -268,7 +273,7 @@ For many of these pairs of traits, we can reject the null hypothesis of zero gen
 significance (\emph{e.g.,} $p=6\times10^{-24}$ for age at onset of menarche and obesity; $p=6\times10^{-52}$ for obesity and childhood obesity).
 
 Our results on metabolic traits are directionally consistent with the recent Mendelian randomization results from \cite{wuertz2014metabolic}, except that we identify a statistically significant positive genetic correlation between fasting glucose and obesity, and they identify a positive effect of BMI on LDL that is not apparent in our data. 
-Some of these results have also been reported in the twin study literature; for example, our estimate of 0.12 (0.03) ($p=5\times10^{-4}$) for the genetic correlation between adult height and educational attainment is consistent with the genetic correlation estimates from \cite{keller2013genetic} of 0.08 in males and 0.17 in females between adult height and IQ (for which educational attainment is a proxy phenotype). 
+Some of these results have also been reported in the twin study literature; for example, our estimate of 0.12 (0.03) ($p=5\times10^{-4}$) for the genetic correlation between adult height and educational attainment is consistent with the genetic correlation estimates from \cite{keller2013genetic} of 0.08 in males and 0.17 in females between adult height and IQ (which is highly correlated with educational attainment \cite{deary2007intelligence, calvin2010sex, rietveld2013gwas}). 
 This result has also been reported in the epidemiological literature \cite{magnusson2006height}, 
 though we stress that this genetic correlation should not be given a causal interpretation.
 Both height and educational attainment have genetic correlations with many other phenotypes, 
@@ -284,7 +289,7 @@ consistent with the epidemiological observation that low educational attainment 
 \cite{barnes2011projected, norton2014potential}. 
 The positive genetic correlation between educational attainment and bipolar disorder is consistent with psychiatric literature showing that education and bipolar disorder status are positively correlated
 \cite{maccabe2010excellent, tiihonen2005premorbid}, 
-Our estimate of a genetic correlation of -0.20 (0.04) ($p=4\times10^{-6}$) between AN and obesity is intriguing given that the most striking feature of anorexia nervosa is a biologically perplexing ability to achieve and maintain dangerously low BMI \cite{american2013dsm} and suggests that similar genetic factors may influence normal variation in BMI as well as severely dysregulated BMI in psychiatric illness.
+Our estimate of a genetic correlation of -0.20 (0.04) ($p=4\times10^{-6}$) between AN and obesity (and a similar genetic correlation with BMI) is intriguing given that the most striking feature of anorexia nervosa is a biologically perplexing ability to achieve and maintain dangerously low BMI \cite{american2013dsm} and suggests that similar genetic factors may influence normal variation in BMI as well as severely dysregulated BMI in psychiatric illness.
 This result is consistent with our observation that BMI GWAS findings appear to primarily implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
 \cite{finucane2014partitioning}.
 Our estimate of the genetic correlations between schizophrenia and inflammatory bowel disease (IBD -- Crohn's and UC) are not statistically significantly different from zero after correction
@@ -310,7 +315,7 @@ We suggest that this should be interpreted with caution, given the unusually hig
 This either indicates substantial confounding due to population stratification or (more likely) that the LD Score regression model is a poor fit for the genetic architecture of UC,
 which features many low frequency variants with large odds ratios.
 
-Third, we estimate a genetic correlation of 0.28 (0.08) ($p=5\times10^{-4}$) between autism spectrum disorder (ASD) and educational attainment (a proxy for intelligence \cite{rietveld2013gwas}).
+Third, we estimate a genetic correlation of 0.28 (0.08) ($p=5\times10^{-4}$) between autism spectrum disorder (ASD) and educational attainment (a proxy for cognitive function \cite{deary2007intelligence, calvin2010sex, rietveld2013gwas}).
 The ASD summary statistics were generated using a case/pseudocontrol study design, so this result cannot be explained by diagnostic biases, such as the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. The distribution of IQ among individuals with ASD has lower mean than the general population, but with heavy tails \cite{robinson2014autism} (\emph{i.e.,} an excess of individuals with extremely low and extremely high IQ).
 In addition, there is evidence that the genetic architectures of high IQ and low IQ ASD are dissimilar \cite{samocha2014framework}.
 We are unable to offer an explanation for this result, but propose that further exploration of this genetic correlation is an interesting direction for future research.
@@ -409,7 +414,7 @@ and let $y$ denote a phenotype. Define
 \begin{equation}
 	\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y, X\alpha\right]^2,
 \end{equation}
-where the maximization is performed in the population (\emph{i.e.,} at infinite sample size), rather than in a finite sample.
+where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit), rather than in a finite sample.
 This is a projection, so uniqueness of $\beta$ is guaranteed as we remove SNPs that are linearly dependent (in the population). 
 Then $h^2_S$, the heritability accounted for by SNPs in $S$, is defined
 \begin{equation}\label{h2}
