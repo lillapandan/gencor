@@ -209,7 +209,7 @@ Blue corresponds to positive genetic correlations; red corresponds to negative g
 The size of the colored squares indicates the magnitude of the $p$-value. 
 Larger squares correspond to lower $p$-values, and all genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
 Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction for 300 tests are given an asterisk. 
-Note that this multiple testing correction is conservative, since many of the tests are not independent.
+Note that this multiple testing correction is conservative, since many of the tests are non-independent.
 }}}
 \end{centering}
 \end{figure}
@@ -256,12 +256,12 @@ Our results on metabolic traits are directionally consistent with the recent Men
 & Ever/Never Smoker & College (Yes/No) & -0.39 (0.07) & $1\times10^{-9\ **}$ \\
 & Ever/Never Smoker & Obesity (Adult) & 0.22 (0.05) & $7\times10^{-5\ **}$ \\
 \hline
-\multirow{3}{*}{Novel} 
+\multirow{3}{*}{Novel/Nonzero} 
 & Autism Spectrum Disorder & College (Yes/No) & 0.28 (0.08) & $5\times10^{-4\ *}$\\
 & Ulcerative Colitis & Childhood Obesity & -0.33 (0.08) & $3.9\times10^{-5\ **}$\\
 & Anorexia Nervosa & Schizophrenia & 0.19 (0.04)  & $1.5\times10^{-5\ **}$ \\
 \hline
-\multirow{11}{*}{Null} 
+\multirow{11}{*}{Novel/Zero} 
 & Anorexia Nervosa & Alzheimer's  & 0.09 (0.09) & 0.32\\
 & Major Depression &Alzheimer's & 0.08 (0.15) & 0.60 \\
 & Bipolar Disorder & Alzheimer's &  -0.021 (0.09) & 0.82 \\
@@ -274,14 +274,12 @@ Our results on metabolic traits are directionally consistent with the recent Men
 & Schizophrenia & Rheumatoid Arthritis & -0.05 (0.05) & 0.38 \\
 & Crohn's Disease & Rheumatoid Arthritis & -0.02 (0.09) & 0.83 \\
 & Ulcerative Colitis & Rheumatoid Arthritis & -0.09 (0.09) & 0.33 \\
-
-
 \end{tabular}
 \caption{
 \small{\textit{\label{table:results}Genetic correlation estimates, standard errors and $p$-values for selected pairs of traits. Results are grouped into
- genetic correlations that are novel genetic results, but are consistent with established epidemiological associations (``Epidemiological''), novel genetic correlations (``Novel'') and interesting null results (``Null''). 
+ genetic correlations that are novel genetic results, but are consistent with established epidemiological associations (``Epidemiological''), novel genetic correlations (``Novel/Nonzero'') and interesting null results (``Novel/Zero''). 
  The $p$-values displayed are uncorrected $p$-values.
-Results that pass paper-wide multiple testing correction at 1\% FDR are given a single asterisk; results that pass Bonferroni correction at significance level 0.05 after correction for the 300 tests in figure \ref{Fig:300 Gencors} are given two asterisks.
+Results that pass multiple testing correction for the 300 tests in figure \ref{Fig:300 Gencors} at 1\% FDR are given a single asterisk; results that pass Bonferroni correction at significance level 0.05 are given two asterisks.
 For completeness, we present some genetic correlations that are directionally consistent with epidemiological associations but that do not pass multiple testing correction in our data. }}}
 \end{table}
 
