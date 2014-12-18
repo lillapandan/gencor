@@ -9,7 +9,6 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
-\numberwithin{equation}{section}
 \usepackage{multirow}
 \usepackage[nottoc,notlof,notlot,numbib]{tocbibind}
 \usepackage{xr-hyper}
@@ -310,9 +309,9 @@ The second row of table \ref{table:results} lists results that are, to the best 
 First, we find a positive genetic correlation between between anorexia nervosa and schizophrenia.
 Suggestive evidence for comorbidity between anorexia nervosa and schizophrenia has been reported previously \cite{striegel1999psychiatric,blinder2006psychiatric};
 however, our result passes a more rigorous statistical threshold.
-Second, we estimate a negative genetic correlation between ulcerative colitis and childhood obesity 
-%%% what to say here???
-\textbf{[waiting on advice from Mark Daly and Ramnik Xavier about what to say here]}.
+Second, we estimate a negative genetic correlation between ulcerative colitis and childhood obesity.
+The relationship between premorbid BMI and ulcerative colitis is at present not well-understood (Ramnik Xavier, personal communication),
+and our results suggest that exploring this relationship may be a fruitful direction for further investigation. 
 Third, we estimate a positive genetic correlation between autism spectrum disorder (ASD) and educational attainment 
 (a proxy for cognitive function \cite{deary2007intelligence, calvin2010sex, rietveld2013gwas}, at least after controlling for socioeconomic status).
 The ASD summary statistics were generated using a case/pseudocontrol study design, so this result cannot be explained by diagnostic biases, such as the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. 
@@ -358,7 +357,7 @@ it does not require individual genotypes, genome-wide significant SNPs or measur
 it is not biased by sample overlap; 
 and it is computationally trivial.  
 Although it may be possible to extend existing methods such as LD-pruned polygenic scores to work on pairs of summary statistics (F. Dudbridge, personal communication), 
-such methods would not be biased from sample overlap, and would suffer from the disadvantage that LD-pruning always results in loss of information.
+such methods would be biased by sample overlap, and would suffer from the disadvantage that LD-pruning always results in loss of information.
 These advantages allow estimation of genetic correlations between a much large set of pairs of phenotypes than was previously possible.
 
 % Limitations of Genetic Correlation
