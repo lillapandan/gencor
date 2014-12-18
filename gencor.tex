@@ -205,7 +205,7 @@ The color of the square indicates the value of the genetic correlation.
 Blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
 The size of the colored squares indicates the magnitude of the $p$-value. 
 Larger squares correspond to lower $p$-values, and all genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
-Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction for 300 tests are given an asterisk. 
+Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction for the 300 tests in this figure are given an asterisk. 
 Note that this multiple testing correction is conservative, since many of the tests are non-independent.
 }}}
 \end{centering}
@@ -309,10 +309,10 @@ Our estimate of a negative genetic correlation between smoking and college is co
 The second row of table \ref{table:results} lists results that are, to the best of our knowledge, novel in both genetics and epidemiology.
 First, we find a positive genetic correlation between between anorexia nervosa and schizophrenia.
 Suggestive evidence for comorbidity between anorexia nervosa and schizophrenia has been reported previously \cite{striegel1999psychiatric,blinder2006psychiatric};
-however, our result is more statistically significant.
+however, our result passes a more rigorous statistical threshold.
 Second, we estimate a negative genetic correlation between ulcerative colitis and childhood obesity 
 %%% what to say here???
-\textbf{[waiting on advice from Mark Daly about what to say here]}.
+\textbf{[waiting on advice from Mark Daly and Ramnik Xavier about what to say here]}.
 Third, we estimate a positive genetic correlation between autism spectrum disorder (ASD) and educational attainment 
 (a proxy for cognitive function \cite{deary2007intelligence, calvin2010sex, rietveld2013gwas}, at least after controlling for socioeconomic status).
 The ASD summary statistics were generated using a case/pseudocontrol study design, so this result cannot be explained by diagnostic biases, such as the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. 
@@ -330,12 +330,12 @@ However, the observation from Andreassen, \emph{et. al.} \cite{andreassen2013imp
 rather than trait biology (Supplementary Table XXX).
 We estimate near-zero genetic correlations between Alzheimer's disease and five psychiatric disorders. 
 This is notable given the high genetic correlations among the five psychiatric disorders, 
-and suggests that the genetic basis of Alzheimer?s disease is distinct from these other conditions. 
+and suggests that the genetic basis of Alzheimer's disease is distinct from these other conditions. 
 
 Last, we estimate near zero genetic correlation between rheumatoid arthritis and both Crohn's disease and ulcerative colitis. Although these immune diseases share a large number of associated loci \cite{cotsapas2011pervasive,farh2014genetic}, 
 it is as often the case that an allele that is risk-increasing for one immune disease is protective for another as an allele is 
 risk-increasing for two \cite{cotsapas2011pervasive}, consistent near-zero genetic correlation overall.
-This is an example of pleiotropy without genetic correlation (see Methods for a discussion of the distinction).
+This is an example of pleiotropy without genetic correlation (Methods).
 %%% Getting # of overlapping gwsig loci w/ concordant and discordant effects from Mark 
 
 
@@ -349,7 +349,7 @@ We have described a new method for estimating genetic correlation from GWAS summ
 We applied our method to a large dataset of publicly available GWAS summary statistics, spanning 25 traits and more than 1.5 million phenotype-genotype pairs. 
 We replicated many previously-reported GWAS-based genetic correlations, and confirm observations of overlap among genome-wide significant SNPs, 
 Mendelian randomization results and known epidemiological associations, thus validating the utility of genetic correlation as an epidemiological tool.
-In addition, we report several novel results that merit further analysis, including a positive genetic correlation between educational attainment and ASD
+In addition, we report several novel results that merit further analysis, including a positive genetic correlation between educational attainment and autism spectrum disorder
 and a positive genetic correlation between anorexia nervosa and schizophrenia.
 
 % Importance of findings 
@@ -380,11 +380,11 @@ Extending genetic correlation to deal with multiple phenotypes (\emph{e.g.,} gen
 analogous to \cite{do2013common,burgess2014using}, possibly with extension to nonlinear models) is an important direction for future work.
 
 % Limitations of the Method
-We note several limitations of the LD Score regression method.
+We note several limitations of the LD Score regression estimator of genetic correlation.
 First, LD Score regression requires large sample sizes in order to give estimates with acceptable standard error 
 (as a rule of thumb, $Nh^2_g$ should be greater than 3000, where $h^2_g$ is on the observed scale for case/control studies).
 Constrained intercept LD Score regression gives lower standard errors, 
-but this estimator requires knowing the number of overlapping samples, which can often be difficult to determine for pairs of large meta-analyses.
+but this estimator requires knowing the number of overlapping samples.
 Methods such as REML that use individual genotypes are more statistically efficient.
 Second, LD Score regression assumes that all individuals in the GWAS were sampled from populations with similar LD Scores,
 and that these LD Scores can be estimated from sequenced reference data such as 1000 Genomes 
@@ -399,7 +399,6 @@ Developing methods that can make optimal use of both confidently associated larg
 Fifth, while LD Score regression is a consistent estimator of genetic correlation in ascertained case/control studies,
 the results may nonetheless be skewed by more subtle biases in ascertainment, such as misclassification of cases.
 
-We have developed a method that allows us to rapidly screen hundreds of pairs of phenotypes for associations without having to measure all phenotypes on all individuals.
 Our results show that the matrix of genetic correlations -- especially among metabolic traits -- is dense, and that 
 genome-wide genetic pleiotropy is the rule rather than the exception.
 This means that the non-pleiotropic SNPs required for classical Mendelian randomization
