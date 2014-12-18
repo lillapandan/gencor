@@ -57,8 +57,8 @@ A recent focus in statistical genetics has been combining genetic association re
 Here we describe a novel method for estimating genetic correlations between traits that requires only summary statistics from genome-wide association studies (GWAS) as input.
 We apply our method to 25 sets of publicly available GWAS summary statistics, which include more than 1.5 million genotype-phenotype pairs. 
 Our results replicate many known genetic and epidemiological associations, including correlations between psychiatric traits, anthropometric traits, and components of metabolic syndrome. 
-In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa (AN) and schizophrenia and a negative genetic correlation between AN and body mass. 
-These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for AN. 
+In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa  and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass. 
+These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for anorexia nervosa. 
 We provide open source software implementing these methods.
 
 \end{abstract}
@@ -104,8 +104,8 @@ Here, we introduce a computationally trivial method for estimating genetic corre
 We apply this method to data from 25 GWAS and report genetic correlations between 300 pairs of phenotypes. 
 Our results confirm many previously reported genetic overlaps and epidemiological associations, 
 thus validating the utility of genetic correlation as an epidemiological tool.
-In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa (AN) and schizophrenia and a negative genetic correlation between AN and BMI. 
-These results demonstrate the advantages of a polygenic modeling framework, since there are currently no SNPs associated with AN at genome-wide significance \cite{boraska2014genome}. 
+In addition, we report several novel results, including a positive genetic correlation between anorexia nervosa  and schizophrenia and a negative genetic correlation between anorexia nervosa and BMI. 
+These results demonstrate the advantages of a polygenic modeling framework, since there are currently no SNPs associated with anorexia nervosa at genome-wide significance \cite{boraska2014genome}. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}\label{Results}
@@ -126,7 +126,7 @@ where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance (de
 If study one and study two are the same study, then this reduces to the single-phenotype result from \cite{buliksullivan2014}, because the genetic covariance between a trait and itself is simply $h^2$, and $\chi^2 = z^2$.
 A similar relationship holds if one or both of the studies is an ascertained study of a binary phenotype (Supplementary Note), in which case the estimate of genetic covariance will be on the observed scale.
 As a consequence of equation \ref{reg_eqn}, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score. 
-This regression does not appear to be sensitive to modeling assumptions about genetic architecture (Methods)
+This regression does not appear to be sensitive to modeling assumptions about genetic architecture (Methods).
 This estimate will not be biased even if the two studies share samples, because sample overlap only 
 affects the intercept.	
 Intuitively, bias from sample overlap affects all SNPs equally, similar to cryptic relatedness in the one-trait case \cite{buliksullivan2014}, and therefore this bias is not correlated with LD Score.
@@ -147,9 +147,6 @@ For further validation, we replicated the estimates of genetic correlations betw
 individual genotypes and REML in the Psychiatric Genomics Consortium (PGC) Cross-Disorder Group paper \cite{pgccdg2013}, 
 using LD Score regression and the summary statistics from \cite{cross2013identification},
 downloaded from the PGC website (URLs).
-
-Including an intercept in the LD Score regression protects the results from QC issues such as population stratification (as described in \cite{buliksullivan2014})
-and sample overlap, but at the cost of larger standard errors.
 Since the summary statistics from \cite{cross2013identification} were generated after a careful QC process, and the 
 samples used for each disease were non-overlapping, we also estimated genetic correlation using LD Score regression with constrained intercept.
 
@@ -217,19 +214,17 @@ Note that this multiple testing correction is conservative, since many of the te
 
 % Results that are consistent with previously reported GWAS rg's
 
-Our estimates of genetic correlations among metabolic traits are generally consistent with the estimates obtained using REML in Vattikuti \emph{et. al.}
-\cite{vattikuti2012heritability} (Supplementary Table \ref{supp-vattikuti}). 
+Our estimates of genetic correlations among metabolic traits are consistent with the estimates obtained using REML in Vattikuti \emph{et. al.}
+\cite{vattikuti2012heritability} (Supplementary Table \ref{supp-vattikuti}), and are directionally consistent with the recent Mendelian randomization results from \cite{wuertz2014metabolic}.
 In addition, our estimate of 0.57 (0.074) for the genetic correlation between Crohn's disease and ulcerative colitis is consistent
 with the estimate of 0.62 (0.042) from Chen \emph{et. al.} \cite{chen2014estimation}.
 
 % Results that are consistent with top SNP results or MR analyses 
 For the majority of pairs of traits in Figure \ref{Fig:300 Gencors}, no GWAS-based genetic correlation estimate has been reported; 
-however, many associations have been described in an \emph{ad-hoc} manner based off the observation of overlap among genome-wide significant loci, 
-or, more formally, via Mendelian randomization analyses. 
+however, many associations have been described in an \emph{ad-hoc} manner based off the observation of overlap among genome-wide significant loci.
 Examples of genetic correlations that are consistent with overlap among top loci include the correlations between plasma lipids and cardiovascular disease \cite{do2013common}; age at onset of menarche and obesity \cite{perry2014parent}; type 2 diabetes, obesity, fasting glucose, plasma lipids and cardiovascular disease \cite{morris2012large}; birth weight, adult height and type 2 diabetes \cite{horikoshi2013new}; birth length, adult height and infant head circumference \cite{early2012genome, taal2012common}; and childhood obesity and adult obesity \cite{early2012genome}. 
 For many of these pairs of traits, we can reject the null hypothesis of zero genetic correlation with overwhelming statistical
 significance (\emph{e.g.,} $p=6\times10^{-24}$ for age at onset of menarche and obesity; $p=6\times10^{-52}$ for obesity and childhood obesity).
-Our results on metabolic traits are directionally consistent with the recent Mendelian randomization results from \cite{wuertz2014metabolic}.
 
 % Novel genetic results that are not novel epidemiological results
 
@@ -285,28 +280,33 @@ For completeness, we present some genetic correlations that are directionally co
 
 The first row of table \ref{table:results} lists genetic correlation results that are consistent with well-known epidemiological association, but, to the best of our knowledge, 
 have never been reported using genetic data.
-For example, our estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
-We estimate a statistically significant negative genetic correlation between educational attainment and Alzheimer's disease, 
-consistent with the epidemiological observation that low educational attainment is one of the largest risk factors for Alzheimer's
-\cite{barnes2011projected, norton2014potential}. 
-The positive genetic correlation between educational attainment and bipolar disorder is consistent with psychiatric literature showing that education and bipolar disorder status are positively correlated
-\cite{maccabe2010excellent, tiihonen2005premorbid}, 
+Our estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
 Our estimate of a negative genetic correlation between AN and obesity (and a similar genetic correlation with BMI) is intriguing given that the most striking feature of anorexia nervosa is a biologically perplexing ability to achieve and maintain dangerously low BMI \cite{american2013dsm} and suggests that similar genetic factors may influence normal variation in BMI as well as severely dysregulated BMI in psychiatric illness.
 This result is consistent with our observation that BMI GWAS findings appear to primarily implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
 \cite{finucane2014partitioning}.
-Our estimate of the genetic correlations between schizophrenia and inflammatory bowel disease (IBD -- Crohn's and UC) are not statistically significantly different from zero after correction
+Our estimate of the genetic correlations between schizophrenia and Crohn's disease and ulcerative colitis 
+are not statistically significantly different from zero after correction
 for multiple tests, but the direction of the genetic correlation (positive) is consistent with recent epidemiological work showing an increased risk for schizophrenia after IBD diagnosis
-\cite{benros2011autoimmune} and an increased risk for IBD after schizophrenia diagnosis \cite{benros2014nationwide}, 
-although we emphasize that the evidence for genetic correlation is not yet conclusive.
-The positive genetic correlation between smoking and obesity is in the opposite direction of the epidemiological association (smoking is associated with lower BMI, although smoking cessation 
-often leads to weight gain) and Mendelian randomization results using rs1051730 \cite{aasvold2014causal}.
+\cite{benros2011autoimmune} and an increased risk for IBD after schizophrenia diagnosis \cite{benros2014nationwide}.
+The positive genetic correlation between smoking and obesity is in the opposite direction of the epidemiological association (smoking is associated with lower BMI) and Mendelian randomization results using the nicotine-receptor SNP rs1051730 \cite{aasvold2014causal}.
 We propose that the resolution of this apparent discrepancy is an interesting direction for future research.
-Our estimate of a negative genetic correlation between smoking and educational attainment is consistent with the epidemiological result that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
-Last, the negative genetic correlation between height and coronary artery disease (possibly related to the negative genetic correlation between height and LDL, a known risk factor for coronary artery disease \cite{do2013common, burgess2014using}) is consistent with a replicated epidemiological association  \cite{wang2011associations,hebert1993height,rich1995height}.
+The negative genetic correlation between adult height and coronary artery disease agrees with a replicated epidemiological association  \cite{wang2011associations,hebert1993height,rich1995height}.
+
+We observe several significant associations with the educational attainment phenotypes from
+Rietveld \emph{et. al.} \cite{rietveld2013gwas}. 
+This study measured two phenotypes, years of education and college (yes/no). 
+Our estimate of the genetic correlation between these two phenotypes is one, so we present the genetic
+correlation results for the college phenotype only, since the results for years of education are identical.
+We estimate a statistically significant negative genetic correlation between college and Alzheimer's disease, 
+consistent with the epidemiological observation that low educational attainment is one of the largest risk factors for Alzheimer's
+\cite{barnes2011projected, norton2014potential}. 
+The positive genetic correlation between college and bipolar disorder is consistent with psychiatric literature showing that educational attainment and bipolar disorder status are positively correlated
+\cite{maccabe2010excellent, tiihonen2005premorbid}, 
+Our estimate of a negative genetic correlation between smoking and college is consistent with the epidemiological result that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
 
 % Novel results
 
-The second row of table \ref{table:results} lists results that are, to the best of our knowledge, novel.
+The second row of table \ref{table:results} lists results that are, to the best of our knowledge, novel in both genetics and epidemiology.
 First, we find a positive genetic correlation between between anorexia nervosa and schizophrenia.
 Suggestive evidence for comorbidity between anorexia nervosa and schizophrenia has been reported previously \cite{striegel1999psychiatric,blinder2006psychiatric};
 however, our result is more statistically significant.
