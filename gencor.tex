@@ -47,8 +47,8 @@
 \affil[2]{Stanley Center for Psychiatric Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}
 \affil[3]{Analytic and Translational Genetics Unit, Massachusetts General Hospital and Harvard Medical School, Boston, Massachusetts, USA.}
 \affil[4]{Department of Mathematics, Massachusetts Institute of Technology, Cambridge, MA, USA.}
-\affil[5]{Department of Epidemiology, Harvard School of Public Health, Boston, MA, USA.}
-\affil[6]{Department of Biostatistics, Harvard School of Public Health, Boston, MA, USA.}
+\affil[5]{Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, MA, USA.}
+\affil[6]{Department of Biostatistics, Harvard T.H. Chan School of Public Health, Boston, MA, USA.}
 \affil[7]{MRC Epidemiology Unit, University of Cambridge School of Clinical Medicine, Institute of Metabolic Science, Cambridge Biomedical Campus, Cambridge, CB2 0QQ, UK}
 \affil[8]{A list of members and affiliations appears in the Supplementary Note.}
 \date{}
@@ -115,7 +115,7 @@ We apply this method to data from 25 GWAS and report genetic correlations betwee
 
 Our method for estimating genetic correlation from summary statistics relies on the fact that the GWAS effect-size estimate for a given SNP incorporates the effects of all SNPs in LD with that SNP \cite{yang2011genomic,buliksullivan2014}. 
 For a polygenic trait, SNPs in regions with strong LD will have higher $\chi^2$-statistics on average than SNPs in regions with little LD \cite{buliksullivan2014}. 
-A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product of $Z$-scores from two different studies.
+A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product of $z$-scores from two different studies.
 
 More precisely, under a polygenic model \cite{yang2010,lee2012estimation}, the expected value of $z_{1j}z_{2j}$ is 
 \begin{equation}\label{reg_eqn}
@@ -402,60 +402,57 @@ need for measuring multiple traits on the same individuals or genome-wide signif
 \subsection*{Definition of Genetic Covariance and Correlation}
 
 Let $S$ denote a set of $M$ SNPs, 
-let $X$ denote the random $M$-vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
-and let $y_1$ and $y_2$ denote phenotypes $\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y, X\alpha\right]^2$,
-where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit).
-This is a projection, so uniqueness of $\beta$ is guaranteed as we remove SNPs that are linearly dependent (in the population). 
-Then $h^2_S$, the heritability accounted for by SNPs in $S$, is defined $h^2_S(y_1) := \sum_j \beta_j^2$, and the genetic covariance among SNPs in $S$ is defined
+let $X$ denote a vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
+and let $y_1$ and $y_2$ denote phenotypes. Define $\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]^2$,
+where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit). 
+Let $\gamma$ denote the corresponding vector for $y_2$.
+This is a projection, so $\beta$ is unique modulo SNPs in perfect LD. 
+Define $h^2_S$, the heritability explained by SNPs in $S$, as $h^2_S(y_1) := \sum_j \beta_j^2$, and the genetic covariance among SNPs in $S$ is defined
 $\rho_S(y_1,y_2) := \sum_{j\in S} \beta_j\gamma_j$.
-It is more common to instead report genetic correlation, $r_S(y_1,y_2) := \rho_S(y_1,y_2)/\sqrt{h^2_S(y_1)h^2_S(y_2)}$, which lies in the interval [-1,1]. 
+The genetic correlation among SNPs in $S$ is $r_S(y_1,y_2) := \rho_S(y_1,y_2)/\sqrt{h^2_S(y_1)h^2_S(y_2)}$, 
+which lies in [-1,1]. 
 Following \cite{yang2010}, we use subscript $g$ (as in $h^2_g,\rho_g,r_g$) when the set of SNPs is 
 genotyped and imputed SNPs in GWAS.
 
-SNP genetic correlation (\emph{i.e.,} $S$ equals genotyped SNPs) is different from family study genetic correlation.
+SNP genetic correlation ($r_g$) is different from family study genetic correlation.
 In a family study, the relationship matrix captures information about all genetic variation, 
-not just common SNPs, so family studies estimate the total narrow-sense genetic correlation (\emph{i.e.,} $S$ equals all variants).
-Unlike the relationship between SNP-heritability \cite{yang2010} and total narrow-sense heritability, 
-for which we have the inequality $h^2_g \leq h^2$, 
-no similar relationship holds between SNP genetic correlation and total narrow-sense genetic correlation.
-For example, if $\beta$ and $\gamma$ are strongly correlated among common variants, but only weakly correlated among rare
-variants, then the total narrow-sense genetic correlation will be less than the SNP genetic correlation.
-Choice of the set of SNPs $S$ is discussed in the Supplementary Note.
+not just common SNPs. 
+As a result, family studies estimate the total [narrow-sense] genetic correlation ($S$ equals all variants).
+Unlike the relationship between SNP-heritability \cite{yang2010} and total heritability, 
+for which $h^2_g \leq h^2$, 
+no similar relationship holds between SNP genetic correlation and total genetic correlation.
+If $\beta$ and $\gamma$ are more strongly correlated among common variants than rare variants, then the total genetic correlation will be less than the SNP genetic correlation.
 
 Genetic correlation is (asymptotically) proportional to Mendelian randomization estimates.
-Suppose we wish to estimate the effect $b$ of $y_1$ on $y_2$ using two-stage least squares (2SLS) \cite{angrist2008mostly} and a genetic instrument
- $g_i := \sum_{j\in S} X_{ij}\beta_j$, where $i$ indexes individuals
-and $S$ is a set of SNPs. 
-The 2SLS estimate is $\hat{b}_{2SLS}:=\T{g}y_2/\T{g}y_1$, and
+If we use a genetic instrument $g_i := \sum_{j\in S} X_{ij}\beta_j$ to estimate the effect $b_{12}$ of $y_1$ on $y_2$,
+the 2SLS estimate is $\hat{b}_{2SLS}:=\T{g}y_2/\T{g}y_1$ \cite{angrist2008mostly}.
+The expectations of the numerator and denominator are 
 $\E[\T{g}y_2]=\rho_S(y_1,y_2)$ and $\E[\T{g}y_1]=h^2_S(y_1)$.
 Thus, $\lim_{N\to\infty} \hat{b}_{2SLS} = r_S(y_2,y_1)\sqrt{h^2_S(y_1) / h^2_S(y_2)}$.
-If $S$ is the set of all SNPs, then this instrument has the (possibly undesirable) property of being symmetric in $y_1$ and $y_2$. This is discussed further in the Supplementary Note.
+If we use the same set $S$ of SNPs to estimate $b_{12}$ and $b_{21}$ (\emph{e.g.,} if $S$ is the set of all common SNPs, as in the genetic correlation analyses in this paper), then this procedure is symmetric in $y_1$ and $y_2$. 
 
 Genetic correlation is different from pleiotropy. 
-Two traits have a pleiotropic relationship if many genetic variants have nonzero effects on both traits.
+Two traits have a pleiotropic relationship if many variants affect both.
 Genetic correlation is a stronger condition than pleiotropy:
-to exhibit genetic correlation, it is not sufficient for two phenotypes to be influenced by overlapping sets of genetic variants, the directions of effects must also be consistently aligned across the genome.
-Both quantities are informative: if two phenotypes are influenced by variants at the same loci or in the same pathways, 
-this may indicate important shared biology, even if the direction of the effects do not align. 
+to exhibit genetic correlation, the directions of effect must also be consistently aligned.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Cross-Trait LD Score Regression} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We estimate genetic covariance (technically $\pf$, see Supplementary Note) by regressing $z_{1j}z_{2j}$ against $\ell_j\sqrt{N_{1j}N_{2j}}$,
+We estimate genetic covariance by regressing $z_{1j}z_{2j}$ against $\ell_j\sqrt{N_{1j}N_{2j}}$,
 (where $N_{ij}$ is the sample size for SNP $j$ in study $i$) 
-then multiplying the resulting slope by $M$, the number of SNPs in the reference panel with MAF between 5\% and 50\%.
+then multiplying the resulting slope by $M$, the number of SNPs in the reference panel with MAF between 5\% and 50\% 
+(technically, this is an estimate of $\pf$, see the Supplementary Note).
 
-If we know ahead of time that there is no sample overlap, we can constrain the intercept of this regression to zero (that is,
-regression through the origin), which gives lower standard error. This can be accomplished with the \texttt{--no-intercept}
+If we know ahead of time that there is no sample overlap, we can constrain the intercept of this regression to zero, which gives lower standard error. This can be accomplished with the \texttt{--no-intercept}
 flag in \texttt{ldsc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Regression Weights} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-For heritability estimation, we use the LD Score regression weights derived in the 
-Supplementary Note from \cite{buliksullivan2014}. 
+For heritability estimation, we use the regression weights from \cite{buliksullivan2014}. 
 If effect sizes for both phenotypes are drawn from a bivariate normal distribution, then
 the optimal regression weights for genetic covariance estimation are 
 \begin{equation}
@@ -471,43 +468,52 @@ the optimal regression weights for genetic covariance estimation are
 		\dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}}
 	\right)^2
 \end{equation}
-(Supplementary Note). This quantity depends on both heritabilities, 
-the genetic covariance and the number of overlapping samples,
+(Supplementary Note). This quantity depends on several parameters ($h^2_1,h^2_2,\rho_g,\rho,N_s$)
 which are not known a priori, so it is necessary to estimate them from the data.
-Linear regression with weights estimated from the data is called feasible generalized least squares (FGLS) \cite{angrist2008mostly}. 
-We run a first LD Score regression weighted with weights computed using the heritability estimates from the single-phenotype LD Score regressions,
-$N_s$ set to zero, and $\rho_g$ estimated with the aggregate estimator 
-$\hat{\rho}_{g, agg} := (\lbar\sqrt{N_1N_2})^{-1}\sum_j z_{1j}z_{2j},$
-where $\lbar$ denotes the mean LD Score among SNPs included in the regression.
-We then update the weights using the estimates of $\rho_g$ and $\rho N_s$ obtained from the first LD Score regression and use the updated weights for the second and final LD Score regression.
-In addition, we weight by $1/\ell_j$ (where $\ell_j$ here denotes LD Score with the sum taken over SNPs included in the regression) in order to downweight SNPs that are overcounted. 
-This is a heuristic: the optimal approach would be to weight by the inverse covariance matrix of $\chi^2$-statistics, but this matrix is difficult to compute.
+We compute the weights in two steps:
+\begin{enumerate}
+\item The first regression is weighted using heritabilities from the single-trait LD Score regressions,
+$\rho N_s=0$, and $\rho_g$ estimated as $\hat{\rho}_g := (\lbar\sqrt{N_1N_2})^{-1}\sum_j z_{1j}z_{2j}$.
+\item The second regression is weighted using the estimates of $\rho N_s$ and $\rho_g$ from step 1. 
+The genetic covariance estimate that we report is the estimate from the second regression.
+\end{enumerate}
+Linear regression with weights estimated from the data is called feasible generalized least squares (FGLS). 
+FGLS has the same limiting distribution as WLS with optimal weights, so WLS $p$-values are valid for FGLS \cite{angrist2008mostly}. 
+In addition, we weight by $1/\ell_j$ (where $\ell_j$ is LD Score with sum over regression SNPs) in order to downweight SNPs that are overcounted. 
+This is a heuristic: the optimal approach is to rotate the data so that it is de-correlated, 
+but this rotation matrix is difficult to compute.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Assessment of Statistical Significance via Block Jackknife}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Under a polygenic model, the $\chi^2$-statistics and $Z$-score products for SNPs in LD are correlated, so 
- the usual estimator of the regression standard error, which assumes that all data points are independent, will be biased downwards. 
-Therefore, we use a block jackknife over blocks of adjacent SNPs in order to obtain a correlation-robust standard error. 
-The default setting in \texttt{ldsc} is 200 blocks per genome, which can be adjusted with the \texttt{--num-blocks} flag.
+Summary statistics for SNPs in LD are correlated, so the OLS standard error will be biased downwards. 
+We estimate a heteroskedasticity-and-correlation-robust standard error with a block jackknife over blocks of adjacent SNPs.
 This is the same procedure used in \cite{buliksullivan2014}, and gives accurate standard errors in simulations (Table \ref{se_sim}).
-We also obtain a standard error for the genetic correlation by using a ratio block jackknife over SNPs.
+We obtain a standard error for the genetic correlation by using a ratio block jackknife over SNPs.
+The default setting in \texttt{ldsc} is 200 blocks per genome, which can be adjusted with the \texttt{--num-blocks} flag.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Computational Complexity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-If $N$ denotes sample size and $M$ denotes the number of SNPs, then LD Score regression takes
-$\mathscr{O}(MN)$ time for computing summary statistics and $\mathscr{O}(M)$ time for the regression. 
-Estimating LD Scores takes $\mathscr{O}(MN)$ time, though $N$ for estimating LD Scores does not need to as large as $N$
-for GWAS; for instance, we use $N=378$ Europeans from 1000 Genomes for estimating LD Score. 
-In addition, LD Scores only need to be computed once, and can then be applied to many pairs of phenotypes.
-For comparison, REML takes time $\mathscr{O}(MN^2)$ for computing the genetic relatedness matrix (GRM)
+Let $N$ denote sample size and $M$ the number of SNPs. 
+The computational complexity of the steps involved in LD Score regression are as follows:
+\begin{enumerate}
+\itemsep-0.1em
+\item Computing summary statistics takes $\mathscr{O}(MN)$ time.
+\item Computing LD Scores takes $\mathscr{O}(MN)$ time, though the $N$ for computing LD Scores need not be large. 
+We use the $N=378$ Europeans from 1000 Genomes.
+\item LD Score regression takes $\mathscr{O}(M)$ time and space.
+\end{enumerate}
+For a user who has already computed summary statistics and downloads LD Scores from our website (URLs), 
+the computational cost of LD Score regression is $\mathscr{O}(M)$ time and space.
+For comparison, REML takes time $\mathscr{O}(MN^2)$ for computing the GRM
 and $\mathscr{O}(N^3)$ time for maximizing the likelihood.
 
-Practically, estimating LD Scores takes about an hour parallelized over chromosomes, and
-LD Score regression takes about 15 seconds for each pair of phenotypes on a standard 2014 MacBook Air with 1.7 GhZ Intel Core i7 processor.
+Practically, estimating LD Scores takes roughly an hour parallelized over chromosomes, and
+LD Score regression takes about 15 seconds per pair of phenotypes on a 2014 MacBook Air with 1.7 GhZ Intel Core i7 processor.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Summary Statistic Datasets}\label{datasets}
@@ -517,30 +523,34 @@ We selected traits for inclusion in the main text via the following procedure:
 
 \begin{enumerate}
 \itemsep-0.1em
-\item Begin with all publicly available non-sex-stratified European-only summary statistics that provide signed summary statistics, are imputed to at least HapMap 2 and do not include heritable covariates.
-\item Remove all traits with heritability $Z$-score below 4, based on the observation that genetic correlations for traits with heritability $Z$-score below 4 are generally too noisy to interpret.
-\item Prune sets of highly correlated phenotypes (\emph{e.g.,} obesity classes 1-3, or the several glucose and insulin measures from the MAGIC consortium) by picking the trait from each cluster with the highest heritability heritability $Z$-score (traits pruned in this step are displayed in the supplementary figures).
-
+\item Begin with all publicly available non-sex-stratified European-only summary statistics.
+\item Remove studies that do not provide signed summary statistics.
+\item Remove studies not imputed to at least HapMap 2.
+\item Remove studies that include heritable covariates.
+\item Remove all traits with heritability $z$-score below 4. Genetic correlation estimates for traits with heritability $z$-score below 4 are generally too noisy to interpret.
+\item Prune clusters of correlated phenotypes (\emph{e.g.,} obesity classes 1-3) by picking the trait from each cluster with the highest heritability heritability $z$-score.
 \end{enumerate}
 
-We then applied the following filters (encoded in the script \texttt{sumstats\_to\_chisq.py} included with our \texttt{ldsc} software package) to the summary statistics:
+We then applied the following filters (implemented in the script \texttt{sumstats\_to\_chisq.py} included with \texttt{ldsc}):
 \begin{enumerate}
 \itemsep-0.1em
-\item For studies that provide a measure of imputation quality (\emph{e.g.,} INFO score), filter to INFO greater than 0.9.
+\item For studies that provide a measure of imputation quality, filter to INFO above 0.9.
 \item For studies that provide sample MAF, filter to sample MAF above 1\%.
-\item In order to restrict to well-imputed SNPs in studies that do not provide a measure of imputation quality, filter to HapMap3 \cite{international2010integrating} SNPs with HapMap3 MAF above 1\%, which tend to be well-imputed in most studies. This 
+\item In order to restrict to well-imputed SNPs in studies that do not provide a measure of imputation quality, filter to HapMap3 \cite{international2010integrating} SNPs with 1000 Genomes EUR MAF above 5\%, which tend to be well-imputed in most studies. This 
 step should be skipped if INFO scores are available for all studies.
-\item If sample size varies from SNP to SNP, remove SNPs with effective sample size less than two thirds of the the 90th percentile of sample size.
+\item If sample size varies from SNP to SNP, remove SNPs with effective sample size less than $0.67$ times the 90th percentile of sample size.
 \item Remove indels and structural variants.
 \item Remove strand-ambiguous SNPs.
-\item Remove SNPs whose alleles do not match the alleles reported in 1000 Genomes.
-\item Because the presence of outliers can increase the standard error of the LD Score regression estimates, we also removed
+\item Remove SNPs whose alleles do not match the alleles in 1000 Genomes.
+\item Because the presence of outliers can increase the regression standard error, we also removed
  SNPs with extremely large effect sizes ($\chi^2 > 80$, as in \cite{buliksullivan2014}).
 \end{enumerate}
 
-If the summary statistics have been GC corrected at any point in the data-generating process, then the heritability and genetic covariance estimates
-will be biased downwards. The bias in the numerator and denominator of genetic correlation will precisely cancel, so genetic correlation estimates are not affected by GC correction. 
-The majority of the datasets analyzed in this paper were GC corrected at least once, which is why we do not report genetic covariance and heritability.
+GC correction at any stage biases the heritability and genetic covariance estimates downwards (see the Supplementary Note of \cite{buliksullivan2014}.
+The biases in the numerator and denominator of genetic correlation cancel exactly, 
+so genetic correlation is not biased by GC correction. 
+A majority of the studies analyzed in this paper used GC correction, 
+so we do not report genetic covariance and heritability.
 
 Data on Alzheimer's disease were obtained from the following source:
 
@@ -627,10 +637,10 @@ We thank the International Genomics of Alzheimer's Project (IGAP) for providing 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-MJD provided reagents
-BMN and ALP provided reagents
+MJD provided reagents.
+BMN and ALP provided reagents.
 CL, ER, VA, JP and FD aided in the interpretation of results.
-JP and FD provided data.
+JP and FD provided data on age at onset of menarche.
 The caffeine molecule is responsible for all that is good about this manuscript.
 BBS and HKF are responsible for the rest.
 All authors revised and approved the final manuscript.
@@ -646,31 +656,27 @@ Unfortunately, we have no financial conflicts of interest to declare.
 \bibliographystyle{unsrt}
 \bibliography{gencor}
 \beginsupplement
+
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Supplementary Note}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\subsection*{Flavors of Genetic Correlation}
-
 \subsection*{Quantitative Traits}
 Suppose we sample two cohorts for two phenotypes,
 $y_1$ and $y_2$,
-with sample sizes $N_1$ and $N_2$,
-such that $N_s$ individuals are shared between cohorts and phenotyped for both traits.
-We model phenotypes as generated by the equations $y_1 = Y\beta + \delta$,
+with sample sizes $N_1$ and $N_2$.
+We model phenotypes as $y_1 = Y\beta + \delta$,
 and $y_2 = Z\gamma + \epsilon$,
 where $Y$ and $Z$ are matrices of genotypes normalized to mean zero and variance one\footnote{
 We ignore the distinction between normalizing and centering in the population and in the sample, 
 since this introduces only $\mathscr{O}(1/N)$ error.},
 with dimensions $N_1\times M$ and $N_2\times M$, respectively; 
-$\beta$ and $\gamma$ are $M\times 1$ vectors of per-normalized genotype effect sizes,
+$\beta$ and $\gamma$ are vectors of per-normalized genotype effect sizes,
 and $\delta$ and $\epsilon$ are vectors of environmental or non-additive genetic effects,
-with dimensions $N_1\times 1$ and $N_2\times 1$, respectively.
 In this model, $Y$ and $Z$ are unobserved matrices of all SNPs, including SNPs that are not genotyped.
 
-We model all of $Y, Z, \beta, \gamma, \delta $ and $\epsilon$ as random variables.
+We treat all of $Y, Z, \beta, \gamma, \delta $ and $\epsilon$ as random.
 Suppose that $(\beta, \gamma)$ has mean zero and covariance matrix\
 \begin{equation*} 
 	\var[(\beta, \gamma)] = \frac{1}{M}
@@ -687,24 +693,23 @@ and $(\delta, \epsilon)$ has mean zero and covariance matrix
 		\envcov I& (1-\hsqt) I
 	\end{array} \right).
 \end{equation*}
-Finally, suppose that there are $N_s$ individuals who appear in both $Y$ and $Z$, and that the 
-genotypes from all unique individuals are \emph{i.i.d.} draw from a distribution with covariance matrix $R$
-(\emph{i.e.,} $r$ is an LD matrix with $r_{jk} = \E[Y_{ij}Y_{ik}]$.
-Let $\rho := \gencov + \envcov$ denote the covariance between $y_1$ and $y_2$,
-which is also the correlation between $y_1$ and $y_2$, since both have variance one.
+Let $\rho := \gencov + \envcov$.
+Genotypes are \emph{i.i.d.} draw from a distribution with covariance matrix $R$
+(\emph{i.e.,} $r$ is an LD matrix with $r_{jk} = \E[Y_{ij}Y_{ik}]$).
+There are $N_s$ individuals included in both studies.
 
 The assumption that all $\beta$ is drawn with equal variance for all SNPs hides an implicit assumption that 
 rare SNPs have larger per-allele effect sizes than common SNPs. 
 As discussed in the simulations section of the main text and in our earlier work \cite{buliksullivan2014}, LD Score regression is robust to moderate violations of this assumption, though it may break down in extreme
-cases, for instance if all causal variants are rare.
-In situations where a different model for the variance of $\beta$ is more appropriate, all proofs in this note go through
+cases, \emph{e.g.,} if all causal variants are rare.
+In situations where a different model for $\var[\beta]$ is more appropriate, all proofs in this note go through
 with LD Score replaced by weighted LD Scores, $\ell_j = \sum_k \var[\beta_j]r^2_{jk}$.
 
-\begin{prop} Under this model, the expected genetic covariance between phenotypes is $\gencov$, justifying our use of the notation $\gencov$.
-\end{prop}
+\begin{lemma} Under this model, the expected genetic covariance between phenotypes is $\gencov$, justifying our use of the notation $\gencov$.
+\end{lemma}
 \begin{proof} Let $X$ denote an $1\times M$ vector of normalized, centered genotypes for an arbitrary individual. 
-Under the model, the additive genetic component of $y_1$ for this individual is $\sum_jX_{ij}\beta_j$,
-and the additive genetic component of $y_2$ for this individual is $\sum_jX_{ij}\gamma_j$.
+Under the model, the additive genetic component of $y_1$ for this individual is $\sum_jX_{j}\beta_j$,
+and the additive genetic component of $y_2$ for this individual is $\sum_jX_{j}\gamma_j$.
 Thus, the genetic covariance between $y_1$ and $y_2$ is 
 \begin{align*}
 	\cov\left[\sum_j X_j\beta_j,\sum_j X_j\gamma_j\right] &= 
@@ -717,8 +722,7 @@ Thus, the genetic covariance between $y_1$ and $y_2$ is
 \end{proof}
 
 \label{supp_condexp_qt}
-Suppose we directly genotype SNP $j$. 
-We compute $Z$-scores $z_{1j}:= \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}:= \T{Y}_jy_1/\sqrt{N_2}$  from linear regression.
+We compute linear regression $z$-scores $z_{1j}:= \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}:= \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$.
 \begin{prop} 
 Let $j$ denote a genotyped SNP. Under the model described above, 
 \begin{equation}
@@ -727,33 +731,36 @@ Let $j$ denote a genotyped SNP. Under the model described above,
 \end{prop}
 
 \begin{proof} By the law of total expectation, 
-$$\E[z_{1j}z_{2j}] = \E[ \E[z_{1j}z_{2j} \,|\, Y, Z ] ]$$
+\begin{equation}\label{totalexp}
+\E[z_{1j}z_{2j}] = \E[ \E[z_{1j}z_{2j} \,|\, Y, Z ] ]
+\end{equation}
 \noindent
-First,
-\begin{align*}
-	\E[z_{1j}z_{2j}\,|\,Y,Z] &= \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jy_1\T{y_2}Z_j]   \\
-       		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\E[{(Y\beta+\delta)}(Z\gamma+\epsilon)]Z_j\\
-        		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\left(Y\E[\beta\T{\gamma}]Z + \E[\T{\delta}\epsilon]\right)Z_j\\
-        		&= \frac{1}{\sqrt{N_1N_2}}\left( \frac{\gencov}{M} \T{Y}_jY\T{Z}_jZ  + \envcov\T{Y}_jZ_j  \right).
-\end{align*}
+First we compute the inner expectation from equation \ref{totalexp}, with $Z$ and $Y$ fixed.
+\begin{align}
+	\E[z_{1j}z_{2j}\,|\,Y,Z] &= \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jy_1\T{y_2}Z_j]  \nonumber \\
+       		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\E[{(Y\beta+\delta)}\T{(Z\gamma+\epsilon)}]Z_j\nonumber\\
+        		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\left(Y\E[\T{\beta}\gamma]Z + \E[\T{\delta} Z\gamma]+\E[\T{\beta}\T{Y}\epsilon]+ \E[\T{\delta}\epsilon]\right)Z_j\nonumber\\
+        		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\left(Y\E[\T{\beta}\gamma]Z + \E[\T{\delta}\epsilon]\right)Z_j\nonumber\\
+        		&= \frac{1}{\sqrt{N_1N_2}}\left( \frac{\gencov}{M} \T{Y}_jY\T{Z}_jZ  + \envcov\T{Y}_jZ_j  \right).\label{inner}
+\end{align}
 \noindent
-To remove the conditioning on $Y$ and $Z$, we compute 
-\begin{equation*}
+Next, we remove the conditioning on $Y$ and $Z$.
+\begin{equation}\label{inner_first}
 \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jZ_j ] = \frac{N_s}{\sqrt{N_1N_2}},
-\end{equation*}
+\end{equation}
 and 
-\begin{equation*}
+\begin{equation}\label{inner_second}
 \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jY\T{Z}_jZ] = \ell_j + \frac{MN_s}{\sqrt{N_1N_2}}.
-\end{equation*}
-Thus, 
-\begin{align*}
+\end{equation}
+Substituting equations \ref{inner_first} and \ref{inner_second} into equation \ref{inner},
+\begin{align}
 	\E[z_{1j}z_{2j}] 
 &= 
-	\frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\left(\rho_g + \rho_e\right)}{\sqrt{N_1N_2}}\\
+	\frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\left(\rho_g + \rho_e\right)}{\sqrt{N_1N_2}}\nonumber\\
 &=
-	\frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\rho}{\sqrt{N_1N_2}}.
-\end{align*}
-Note that if study 1 and study 2 are the same study, then $N_1=N_2=N_s$, $\rho_g=h^2_g$, and this 
+	\frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\rho}{\sqrt{N_1N_2}}.\label{qt_ldscore}
+\end{align}
+If study 1 and study 2 are the same study, then $N_1=N_2=N_s$, $\rho_g=h^2_g$ and $\rho=1$, so equation \ref{qt_ldscore}
 reduces to the LD Score regression equation for a single trait from \cite{buliksullivan2014}.
 \end{proof}
 
@@ -761,22 +768,19 @@ reduces to the LD Score regression equation for a single trait from \cite{buliks
 \subsection*{Regression Weights}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We can improve the efficiency of the LD Score regression by computing the conditional variance 
-$\var[\bhat\chat \,|\,\ell_j]$
-and weighting the regression by the reciprocal of this variance. 
-In order to compute this conditional variance, 
-we need an additional distributional assumption.
-Therefore we derive the conditional variance function for the case where 
- $Z$-scores follow a multivariate normal distribution\footnote{
-For instance, it is sufficient but not necessary to assume that $\beta$, $\gamma$, $\delta$ and $\epsilon$ are multivariate normal, 
-and that $N_1$ and $N_2$ are sufficiently large that we can invoke the central limit theorem. 
+We can improve the efficiency of LD Score regression weighting by the reciprocal of the conditional variance function (CVF),
+$\var[\bhat\chat \,|\,\ell_j]$.
+The CVF is not uniquely determined by the assumptions about first and second moments 
+from the previous section.
+Therefore we derive the CVF for the case where 
+ $z$-scores follow a multivariate normal distribution\footnote{
+For instance, it is sufficient but not necessary to assume that $\beta$, $\gamma$, $\delta$ and $\epsilon$ are multivariate normal.
 More generally, the phenotypes will be approximately normal if $\delta$ and $\epsilon$ are normal 
 and if $\beta$ and $\gamma$ are reasonably polygenic.
-If there are few casual SNPs, then the conditional variance may be larger.}.
+If there are few casual SNPs, then the CVF may be larger.}.
 
-If phenotypes are normally distributed, then by the central limit theorem,
-$\bhat$ and $\chat$ are approximately distributed as bivariate normal with expectation zero. 
-Then, from a standard formula for double second moments of the bivariate normal distribution
+If phenotypes are normally distributed, then $\bhat$ and $\chat$ follow a bivariate normal with expectation zero by a central limit theorem argument. 
+Fom a standard formula for double second moments of the bivariate normal, the CVF is
 \begin{align}
     \var[\bhat_j\chat_j\cond\ell_j] 
 &= 
@@ -802,39 +806,40 @@ Then, from a standard formula for double second moments of the bivariate normal 
 		\frac{\rho N_s}{N_1N_2} 
 	\right)^2.
 \end{align}
-
-Note that we only assume normality in order to compute regression weights.
-If (quantitative) phenotypes are not normally distributed,
-this will not affect the expectation of the LD Score regression estimates; however, in this case LD Score regression may be inefficient, because the regression weights will be suboptimal.
+In cases where the normality assumption does not hold, LD Score regression will remain unbiased, but may be inefficient, because the regression weights will be suboptimal.
 
 \subsection*{Liability Threshold Model}
 
-In the liability threshold model, binary traits are determined by an unobserved continuous liability $\psi$ generated following the usual model for quantitative traits: $\psi_i = \sum_j X_{ij}\beta_j + \epsilon_i$.
-The observed binary phenotype is then has population prevalence $K$, 
-and is generated from the unobserved liability via the liability threshold model: $y_i := \ind[\psi_i > \tau]$,
-where $\tau$ denotes the liability threshold.
-If $\psi$ is normally distributed, then setting $\tau:=\Phi^{-1}(1-K)$ (where $\Phi$ denotes the cdf of the standard normal distribution) yields a population prevalence of $K$.
+In the liability threshold (probit) model \cite{pearson1901inheritance}, 
+binary traits are determined by an unobserved continuous liability $\psi$.
+The observed trait is $y := \ind[\psi > \tau]$, where $\tau$ is the liability threshold.
+If $\psi$ is normally distributed, then setting $\tau:=\Phi^{-1}(1-K)$ (where $\Phi$ is the standard normal cdf) yields a population prevalence of $K$.
 
-For phenotypes generated according to the liability threshold model, we can estimate not only the heritability of the observed
-phenotype (genetic covariance between the observed phenotype and other phenotypes), but also the heritability of the 
-unobserved liability (genetic covariance between unobserved liability and other phenotypes).
-
-Note that the liability threshold construction is surprisingly general. 
-If $y$ is a binary phenotype, then we can define a normally distributed liability for $y$ by defining
+The liability threshold construction is surprisingly general. 
+If $y$ is an arbitrary binary phenotype, then we can define a normally distributed liability for $y$ by setting
 $\psi_i$ to be a random draw from a normal distribution truncated at the left by $\tau$ if $y_i=1$ and 
 truncated at the right by $\tau$ if $y_i=0$.
-Therefore, we prefer to think of liability scale heritability as a useful way to compare the heritabilities of binary phenotypes
-with different prevalences, rather than a quantity that is only meaningful if one is willing to make strong assumptions 
-about the data generating process.
+We prefer to think of liability scale heritability as a useful way to compare the heritabilities of binary phenotypes with different prevalences, rather than a quantity that is only meaningful if one is willing to make strong assumptions about the data generating process.
 
-In this section, we derive population case and control allele frequencies 
-$p_{cas,j} = \prob[G_{ij}=1\cond y_i=1]$ and $p_{con,j} = \prob[G_{ij}=1\cond y_i=0]$ in terms of the heritability of liability generated by a polygenic model,
-where $G_{ij}$ denotes an un-normalized genotype (note that since we are only modeling additive effects and we are willing 
-to assume Hardy-Weinberg equilibrium, we lose nothing and simplify notation by dealing with haploid genotypes).
+For phenotypes generated according to the liability threshold model, 
+we can estimate not only the heritability and genetic covariance of the observed phenotype, 
+but also the heritability and genetic covariance of the unobserved liability.
 
-\begin{prop}
+In the next lemma, we derive population case and control allele frequencies 
+in terms of the heritability of liability when liability is generated by a polygenic model.
+Since we are only modeling additive effects and are willing to assume Hardy-Weinberg equilibrium,
+we lose no generality and simplify notation considerably by stating the proofs in terms of haploid genotypes.
+
+We state this lemma in terms of marginal per-allele effect sizes, instead of the per-normalized-genotype effect sizes considered in the earlier results on quantitative traits.
+Here marginal means that these are the effect sizes obtained by univariate regression of phenotype against genotype in the infinite data limit. 
+Haploid normalized genotypes are defined $X_j := (G_j - p_j)/\sqrt{p_j(1-p_j)}$.
+If $\beta_j$ is the marginal per-normalized-genotype effect and $\zeta_j$ is the marginal per-allele effect, 
+we have $X_j\beta_j = G_j\zeta_j$. 
+Thus, setting $G_{ij}=1$ yields $\zeta_j = \beta_j\sqrt{(1-p_j)/p_j}$.
+
+\begin{lemma}
 Suppose unobserved liabilities $\psi, \varphi$ for traits $y_1,y_2$ with thresholds $\tau_1,\tau_2$ corresponding to prevalences $K_1,K_2$ are generated according to the usual polygenic model for quantitative traits, i.e.,
-$\psi_i=\sum_j X_{ij}\beta_j+\delta$, $\varphi_i=\sum_j X_{ij}\gamma_j+\epsilon$, with $X$ random with a given LD matrix,
+$\psi_i=\sum_j X_{ij}\beta_j+\delta$, $\varphi_i=\sum_j X_{ij}\gamma_j+\epsilon$, with
 \begin{equation*} 
 	\var[(\beta, \gamma)] = \frac{1}{M}
 		\left( \begin{array}{cc}
@@ -856,55 +861,56 @@ Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of $j$ on 
 	\E[p_{cas,2j}-p_{con,2j}] &= 0, \\
 	\var[p_{cas,1j}-p_{con,1j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2)}\ell_j, \\
 	\var[p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_2)^2h^2_2}{MK_2^2(1-K_2)^2}\ell_j,\\
-	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j.
+	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j,
 \end{align*}
-Note that these are different from the usual expressions for conversion from observed to liability scale, 
-because these expressions only account for the effect of transforming from a continuous liability to a binary observed phenotype
-and not for ascertainment. We account for ascertainment in the next section.
-\end{prop}
+where $\phi$ is the standard normal density.
+These results apply to population allele frequencies, not allele frequencies in a finite sample. 
+We deal with ascertained finite samples in the next section.
+\end{lemma}
 \begin{proof}
 This proof is accomplished in two steps.
 First, we compute allele frequencies conditional on the marginal effects on liability. 
 To do this, we reverse the conditional probability using Bayes' theorem, 
-which reduces the problem to a series of [Taylor approximations to] gaussian integrals. 
-Second, we remove the conditioning on the marginal effects on liability and use the results of the previous section (on quantitative traits) to express the expectations of the allele frequencies
-in terms of $h^2_1,h^2_2,\rho_g$ and $\ell_j$.
+which reduces the problem to a series of [Taylor approximations to] Gaussian integrals. 
+Second, we remove the conditioning on the marginal effects on liability in order to express the 
+allele frequencies in terms of $h^2_1,h^2_2,\rho_g$ and $\ell_j$.
+Since liability is just a quantitative trait, we need only apply the LD Score regression equation for quantitative traits.
 
-By Bayes' theorem, 
-\begin{align*}
+By Bayes' rule, 
+\begin{align}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]
 &=
-	\dfrac{\prob[y_{i1}=1\cond G_{ij}=1,\zeta_j]\prob[G_{ij}=1]}{\prob[y_{i1}=1]}\\
+	\dfrac{\prob[y_{i1}=1\cond G_{ij}=1,\zeta_j]\prob[G_{ij}=1]}{\prob[y_{i1}=1]}\nonumber\\
 &=
-	\dfrac{p_j}{K_1}\prob[y_{i1}=1\cond G_{ij}=1,\zeta_j]\\
+	\dfrac{p_j}{K_1}\prob[y_{i1}=1\cond G_{ij}=1,\zeta_j]\nonumber\\
 &=
-	\dfrac{p_j}{K_1}\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j].
-\end{align*}
+	\dfrac{p_j}{K_1}\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j].\label{bayesrule}
+\end{align}
 
 The distribution of $\psi$ is
 $\psi\cond G_{ij}=1,\zeta_j = N(\zeta_j, 1)$ (where the approximation that the variance equals one holds when the marginal heritability explained by $j$ is small, which is the typical case in GWAS).
 Thus $\prob[\psi_i>\tau_1\cond G_{ij}=1]$ is simply a Gaussian integral.
-Because we wish to obtain a closed-form expression for the variance of $\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j]$ over random $\zeta_j$, we approximate this probability with a first-order Taylor expansion around $\tau_1$:
-\begin{align*}
+We approximate this probability with a first-order Taylor expansion around $\tau_1$.
+\begin{align}
 	\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j]
 &=
-	1-\Phi(\tau_1-\zeta_j)\\
+	1-\Phi(\tau_1-\zeta_j)\nonumber\\
 &\approx
-	K_1 + \phi(\tau_1)\zeta_j,
-\end{align*}
-where $\Phi$ and $\phi$ denote the cdf and density of the standard normal distribution. Therefore,
-\begin{align}\label{condprob}
+	K_1 + \phi(\tau_1)\zeta_j\label{taylorexp},
+\end{align}
+Substituting equation \ref{taylorexp} into equation \ref{bayesrule},
+\begin{align}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]
 &=
-	\dfrac{p_j}{K}\left(K+\phi(\tau_1)\zeta_j\right).
+	\dfrac{p_j}{K}\left(K+\phi(\tau_1)\zeta_j\right)\label{case}.
 \end{align}
 A similar argument shows that 
-\begin{align}\label{condprob}
+\begin{align}
 	\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
 &=
-	\dfrac{p_j}{1-K_1}\left(1-K-\phi(\tau_1)\zeta_j\right),
+	\dfrac{p_j}{1-K_1}\left(1-K-\phi(\tau_1)\zeta_j\right)\label{control}.
 \end{align}
-so
+Subtracting equation \ref{case} from equation \ref{control},
 \begin{align}\label{condprob}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]-\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
 &=
@@ -914,9 +920,8 @@ Similar results hold for trait 2, replacing $\zeta$ with $\xi$ and subscript 1 w
 
 We have written the probabilities in question in terms of constants and marginal effects on liability.
 Since liability is simply a quantitative trait, the means, variances, and covariances of the marginal effects on liability
-are described by the LD Score regression equation from the section on quantitative traits.
-Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_kM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$ (note that $\zeta_j=\E[\psi \cond G_{ij}=1]$. Since $X_{i}=(G_{ij}-p_j)/\sqrt{p_j(1-p_j)}$), we have
-$X_j\beta_j=\xi_j$, which explains the factors of $(1-p_j)/p_j$).
+are described by the LD Score regression equation for quantitative traits.
+Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_kM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$.
 Thus it follows from equation \ref{condprob} that $\E[p_{cas,1j}-p_{con,1j}]=0$;
 \begin{align}
 	\var[p_{cas,1j}-p_{con,1j}]
@@ -925,7 +930,7 @@ Thus it follows from equation \ref{condprob} that $\E[p_{cas,1j}-p_{con,1j}]=0$;
 &=
 	\dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2}\ell_j,
 \end{align}
-(and similarly for trait two); and last
+(similarly for trait two) and 
 \begin{align}
 	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}]
 &=
@@ -1093,6 +1098,53 @@ between a trait and itself is simply observed scale heritability. To show that t
 \end{align}
 But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so equation \ref{cc-intercept} simplifies to 1.
 \end{proof}
+
+
+\subsection*{Flavors of Genetic Correlation}
+
+If we let $S$ denote the set of all SNPs in 1000 Genomes Europeans \cite{10002012integrated}, 
+and let $S'$ denote the set of SNPs with MAF$>5\%$, then
+\begin{equation}
+	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_j^2.
+\end{equation}
+We choose 5\% as the lower bound, because we can estimate LD Scores for 5\% SNPs reasonably well from the $N=387$ 
+samples in 1000 Genomes. 
+Technically, we should write $h^2_{5\myhyphen50\%,1kG}$ to indicate that we are only accounting for SNPs in 1000 Genomes,
+but 1000 Genomes has sufficiently good power to observe 5\% and higher SNPs that we feel justified in omitting 1kG from the subscript.
+With larger sample sizes in future sequenced reference panels, this lower bound can be pushed lower.
+
+There are two main distinctions between $h^2_{5\myhyphen50\%}$ and $h^2_g$,
+First, $h^2_g$ does not include the effects of common SNPs that are not tagged by the set of genotyped SNPs $g$.
+Second, the effects of causal 4\% SNPs are not counted towards $h^2_{5\myhyphen50\%}$.
+In practice, neither of these distinctions makes a large difference, since most GWAS arrays focus on common variation
+and manage to assay or tag almost all common variants.
+
+Estimating $h^2_{5\myhyphen50\%}$ involves only as simple modification of LD Score regression: the raw slope from the 
+regression divided by sample size yields an estimate of the average value of $\beta^2_j$. 
+If we multiply this number by $M$, the number of SNPs in 1000 Genomes, then technically we obtain an estimate of the 
+heritability explained by all 1000 Genomes SNPs; however, this interpretation amounts to assuming that 
+our estimate of heritability per SNP obtained from common SNP GWAS data also applies to rare variants.
+This is unreasonable, since GWAS data contains very little information about rare variants, 
+Therefore, we instead multiply the slope by $M_{5\myhyphen50\%}$, the number of 1000 Genomes SNPs with 
+MAF between 5\% and 50\%, in order to obtain an estimate of $h^2_{5\myhyphen50\%}$.
+The default option in \texttt{ldsc} is to estimate $h^2_{5\myhyphen50\%}$; this can be overridden with the 
+\texttt{--not-M-5-50} flag.
+
+The value of $h^2_{5\myhyphen50\%}$ will always be less than the total narrow-sense heritability, $h^2$, 
+since $h^2$ takes into account all forms of genetic variation 
+-- variants with MAF under 5\%, microsatellites, indels, copy number variants -- not just common SNPs.
+In addition, estimates of $h^2$ from family studies may 
+be biased upwards by non-additive genetic architectures \cite{zuk2012mystery}.
+
+The quantity $\rf$ is defined by replacing $S$ with $5\myhyphen50\%$ in equation \ref{EQN: rg}.
+As a practical matter, the difference between $r_g$ (the genetic correlation among genotyped SNPs)
+and $\rf$ will be quite small when $g$ contains a large proportion of all common SNPs.
+This is supported by the simulations described in Section \ref{Misspecified Sims} of the main text. 
+Technically, LD Score regression with HM3 LD Score is an estimator of $r_{HM3(5\myhyphen50\%)}$,
+the genetic correlation among SNPs in HM3 with MAF between 5 and 50\%, but the resulting estimates
+of genetic correlation were almost identical to the estimates of $r_{1kG(5\myhyphen50\%)}$ obtained with 1kG LD Scores
+(Supplementary Tables \ref{supp-parallel}, \ref{supp-antiparallel} and \ref{supp-depcor}), 
+which is why we do not emphasize this distinction in the main text.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1307,9 +1359,9 @@ near-zero genetic correlation between schizophrenia and TG estimated via LD Scor
 \section*{Collaborators}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+The members of the Schizophrenia Working Group of the Psychiatric Genetics Consortium are Stephan Ripke, Benjamin M. Neale, Aiden Corvin, James T.R. Walters, Kai-How Farh, Peter A. Holmans, Phil Lee, Brendan Bulik-Sullivan, David A. Collier, Hailiang Huang, Tune H. Pers, Ingrid Agartz, Esben Agerbo, Margot Albus, Madeline Alexander, Farooq Amin, Silviu A. Bacanu, Martin Begemann, Richard A. Belliveau, Jr., Judit Bene, Sarah E. Bergen, Elizabeth Bevilacqua, Tim B. Bigdeli, Donald W. Black, Anders D. Børglum, Richard Bruggeman, Nancy G. Buccola, Randy L. Buckner, William Byerley, Wiepke Cahn, Guiqing Cai, Dominique Campion, Rita M. Cantor, Vaughan J. Carr, Noa Carrera, Stanley V. Catts, Kimberly D. Chambert, Raymond C.K. Chan, Ronald Y.L. Chen, Eric Y.H. Chen, Wei Cheng, Eric F.C. Cheung, Siow Ann Chong, C. Robert Cloninger, David Cohen, Nadine Cohen, Paul Cormican, Nick Craddock, James J. Crowley, David Curtis, Michael Davidson, Kenneth L. Davis, Franziska Degenhardt, Jurgen Del Favero, Lynn E. DeLisi, Ditte Demontis, Dimitris Dikeos, Timothy Dinan, Srdjan Djurovic, Gary Donohoe, Elodie Drapeau, Jubao Duan, Frank Dudbridge, Naser Durmishi, Peter Eichhammer, Johan Eriksson, Valentina Escott-Price, Laurent Essioux, Ayman H. Fanous, Martilias S. Farrell, Josef Frank, Lude Franke, Robert Freedman, Nelson B. Freimer, Marion Friedl, Joseph I. Friedman, Menachem Fromer, Giulio Genovese, Lyudmila Georgieva, Elliot S. Gershon, Ina Giegling, Paola Giusti-Rodrguez, Stephanie Godard, Jacqueline I. Goldstein, Vera Golimbet, Srihari Gopal, Jacob Gratten, Jakob Grove, Lieuwe de Haan, Christian Hammer, Marian L. Hamshere, Mark Hansen, Thomas Hansen, Vahram Haroutunian, Annette M. Hartmann, Frans A. Henskens, Stefan Herms, Joel N. Hirschhorn, Per Hoffmann, Andrea Hofman, Mads V. Hollegaard, David M. Hougaard, Masashi Ikeda, Inge Joa, Antonio Julia, Rene S. Kahn, Luba Kalaydjieva, Sena Karachanak-Yankova, Juha Karjalainen, David Kavanagh, Matthew C. Keller, Brian J. Kelly, James L. Kennedy, Andrey Khrunin, Yunjung Kim, Janis Klovins, James A. Knowles, Bettina Konte, Vaidutis Kucinskas, Zita Ausrele Kucinskiene, Hana Kuzelova-Ptackova, Anna K. Kahler, Claudine Laurent, Jimmy Lee Chee Keong, S. Hong Lee, Sophie E. Legge, Bernard Lerer, Miaoxin Li, Tao Li, Kung-Yee Liang, Jeffrey Lieberman, Svetlana Limborska, Carmel M. Loughland, Jan Lubinski, Jouko Lnnqvist, Milan Macek, Jr., Patrik K.E. Magnusson, Brion S. Maher, Wolfgang Maier, Jacques Mallet, Sara Marsal, Manuel Mattheisen, Morten Mattingsdal, Robert W. McCarley, Colm McDonald, Andrew M. McIntosh, Sandra Meier, Carin J. Meijer, Bela Melegh, Ingrid Melle, Raquelle I. Mesholam-Gately, Andres Metspalu, Patricia T. Michie, Lili Milani, Vihra Milanova, Younes Mokrab, Derek W. Morris, Ole Mors, Preben B. Mortensen, Kieran C. Murphy, Robin M. Murray, Inez Myin-Germeys, Bertram Mller-Myhsok, Mari Nelis, Igor Nenadic, Deborah A. Nertney, Gerald Nestadt, Kristin K. Nicodemus, Liene Nikitina-Zake, Laura Nisenbaum, Annelie Nordin, Eadbhard O'Callaghan, Colm O'Dushlaine, F. Anthony O'Neill, Sang-Yun Oh, Ann Olincy, Line Olsen, Jim Van Os, Psychosis Endophenotypes International Consortium, Christos Pantelis, George N. Papadimitriou, Sergi Papiol, Elena Parkhomenko, Michele T. Pato, Tiina Paunio, Milica Pejovic-Milovancevic, Diana O. Perkins, Olli Pietilinen, Jonathan Pimm, Andrew J. Pocklington, John Powell, Alkes Price, Ann E. Pulver, Shaun M. Purcell, Digby Quested, Henrik B. Rasmussen, Abraham Reichenberg, Mark A. Reimers, Alexander L. Richards, Joshua L. Roffman, Panos Roussos, Douglas M. Ruderfer, Veikko Salomaa, Alan R. Sanders, Ulrich Schall, Christian R. Schubert, Thomas G. Schulze, Sibylle G. Schwab, Edward M. Scolnick, Rodney J. Scott, Larry J. Seidman, Jianxin Shi, Engilbert Sigurdsson, Teimuraz Silagadze, Jeremy M. Silverman, Kang Sim, Petr Slominsky, Jordan W. Smoller, Hon-Cheong So, Chris C.A. Spencer, Eli A. Stahl, Hreinn Stefansson, Stacy Steinberg, Elisabeth Stogmann, Richard E. Straub, Eric Strengman, Jana Strohmaier, T. Scott Stroup, Mythily Subramaniam, Jaana Suvisaari, Dragan M. Svrakic, Jin P. Szatkiewicz, Erik Sderman, Srinivas Thirumalai, Draga Toncheva, Paul A. Tooney, Sarah Tosato, Juha Veijola, John Waddington, Dermot Walsh, Dai Wang, Qiang Wang, Bradley T. Webb, Mark Weiser, Dieter B. Wildenauer, Nigel M. Williams, Stephanie Williams, Stephanie H. Witt, Aaron R. Wolen, Emily H.M. Wong, Brandon K. Wormley, Jing Qin Wu, Hualin Simon Xi, Clement C. Zai, Xuebin Zheng, Fritz Zimprich, Naomi R. Wray, Kari Stefansson, Peter M. Visscher, Wellcome Trust Case Control Consortium, Rolf Adolfsson, Ole A. Andreassen, Douglas H.R. Blackwood, Elvira Bramon, Joseph D. Buxbaum, Anders D. Brglum, Sven Cichon, Ariel Darvasi, Enrico Domenici, Hannelore Ehrenreich, Tonu Esko, Pablo V. Gejman, Michael Gill, Hugh Gurling, Christina M. Hultman, Nakao Iwata, Assen V. Jablensky, Erik G. Jonsson, Kenneth S. Kendler, George Kirov, Jo Knight, Todd Lencz, Douglas F. Levinson, Qingqin S. Li, Jianjun Liu, Anil K. Malhotra, Steven A. McCarroll, Andrew McQuillin, Jennifer L. Moran, Preben B. Mortensen, Bryan J. Mowry, Markus M. Nthen, Roel A. Ophoff, Michael J. Owen, Aarno Palotie, Carlos N. Pato, Tracey L. Petryshen, Danielle Posthuma, Marcella Rietschel, Brien P. Riley, Dan Rujescu, Pak C. Sham, Pamela Sklar, David St. Clair, Daniel R. Weinberger, Jens R. Wendland, Thomas Werge, Mark J. Daly, Patrick F. Sullivan, and Michael C. O'Donovan.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Supplementary References}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The members of the Genetic Consortium for Anorexia Nervosa (GCAN) areV Boraska, C S Franklin, J A B Floyd, L M Thornton, L M Huckins, L Southam, N William Rayner, I Tachmazidou, K L Klump, J Treasure, C M Lewis, U Schmidt, F Tozzi, K Kiezebrink, J Hebebrand, P Gorwood, R A H Adan, M J H Kas, A Favaro, P Santonastaso, F Fernández-Aranda, M Gratacos, F Rybakowski, M Dmitrzak-Weglarz, J Kaprio, A Keski-Rahkonen, A Raevuori, E F Van Furth, M C T Slof-Op t Landt, J I Hudson, T Reichborn-Kjennerud, G P S Knudsen, P Monteleone, A S Kaplan, A Karwautz, H Hakonarson, W H Berrettini, Y Guo, D Li, N J Schork, G Komaki, T Ando, H Inoko, T Esko, K Fischer, K Männik, A Metspalu, J H Baker, R D Cone, J Dackor, J E DeSocio, C E Hilliard, J K O'Toole, J Pantel, J P Szatkiewicz, C Taico, S Zerwas, S E Trace, O S P Davis, S Helder, K Bühren, R Burghardt, M de Zwaan, K Egberts, S Ehrlich, B Herpertz-Dahlmann, W Herzog, H Imgart, A Scherag, S Scherag, S Zipfel, C Boni, N Ramoz, A Versini, M K Brandys, U N Danner, C de Kove, J Hendriks, B P C Koeleman, R A Ophoff, E Strengman, A A van Elburg, A Bruson, M Clementi, D Degortes, M Forzan, E Tenconi, E Docampo, G Escaramís, S Jiménez-Murcia, J Lissowska, A Rajewski, N Szeszenia-Dabrowska, A Slopien, J Hauser, L Karhunen, I Meulenbelt, P E Slagboom, A Tortorella, M Maj, G Dedoussis, D Dikeos, F Gonidakis, K Tziouvas, A Tsitsika, H Papezova, L Slachtova, D Martaskova, J L Kennedy, R D Levitan, Z Yilmaz, J Huemer, D Koubek, E Merl, G Wagner, P Lichtenstein, G Breen, S Cohen-Woods, A Farmer, P McGuffin, S Cichon, I Giegling, S Herms, D Rujescu, S Schreiber, H-E Wichmann, C Dina, R Sladek, G Gambaro, N Soranzo, A Julia, S Marsal, R a Rabionet, V Gaborieau, D M Dick, A Palotie, S Ripatti, E Widén, O A Andreassen, T Espeseth, A Lundervold, I Reinvang, V M Steen, S Le Hellard, M Mattingsda, I Ntalla, V Bencko, L Foretova, V Janout, M Navratilova, S Gallinger, D Pinto, S W Scherer, H Aschauer, L Carlberg, A Schosser, L Alfredsson, B Ding, L Klareskog, L Padyukov, C Finan, G Kalsi, M Roberts, D W Logan, L Peltonen, G R S Ritchie, P Courtet, S Guillame, I Jaussent, J C Barrett, X Estivill, A Hinney, P F Sullivan, D A Collier, E Zeggini, and C M Bulik.The members of the Wellcome Trust Case Control Consortium 3 (WTCCC3) areC A Anderson, J C Barrett, J A B Floyd, C S Franklin, R McGinnis, N Soranzo, E Zeggini, J Sambrook, J Stephens, W H Ouwehand, W L McArdle, S M Ring, D P Strachan, G Alexander, C M Bulik, D A Collier, P J Conlon, A Dominiczak, A Duncanson, A Hill, C Langford, G Lord, A P Maxwell, L Morgan, L Peltonen, R N Sandford, N Sheerin, N Soranzo, F O Vannberg, J C Barrett, D N A Genotyping, H Blackburn, W-M Chen, S Edkins, M Gillman, E Gray, S E Hunt, C Langford, a Nengut-Gumuscu, S Potter, S S Rich, D Simpkin, and Pa Whittaker.
 
+The members of the Reprogen consortium are John RB Perry, Felix Day, Cathy E Elks, Patrick Sulem, Deborah J Thompson, Teresa Ferreira, Chunyan He, Daniel I Chasman, Tõnu Esko, Gudmar Thorleifsson, Eva Albrecht, Wei Q Ang, Tanguy Corre, Diana L Cousminer, Bjarke Feenstra, Nora Franceschini, Andrea Ganna, Andrew D Johnson, Sanela Kjellqvist, Kathryn L Lunetta, George McMahon, Ilja M Nolte, Lavinia Paternoster, Eleonora Porcu, Albert V Smith, Lisette Stolk, Alexander Teumer, Natalia T¨ernikova, Emmi Tikkanen, Sheila Ulivi, Erin K Wagner, Najaf Amin, Laura J Bierut, Enda M Byrne, JoukeJan Hottenga, Daniel L Koller, Massimo Mangino, Tune H Pers, Laura M YergesArmstrong, Jing Hua Zhao, Irene L Andrulis, Hoda AntonCulver, Femke Atsma, Stefania Bandinelli, Matthias W Beckmann, Javier Benitez, Carl Blomqvist, Stig E Bojesen, Manjeet K Bolla, Bernardo Bonanni, Hiltrud Brauch, Hermann Brenner, Julie E Buring, Jenny ChangClaude, Stephen Chanock, Jinhui Chen, Georgia ChenevixTrench, J. Margriet Collée, Fergus J Couch, David Couper, Andrea D Coveillo, Angela Cox, Kamila Czene, Adamo Pio D'adamo, George Davey Smith, Immaculata De Vivo, Ellen W Demerath, Joe Dennis, Peter Devilee, Aida K Dieffenbach, Alison M Dunning, Gudny Eiriksdottir, Johan G Eriksson, Peter A Fasching, Luigi Ferrucci, Dieter FleschJanys, Henrik Flyger, Tatiana Foroud, Lude Franke, Melissa E Garcia, Montserrat GarcíaClosas, Frank Geller, Eco EJ de Geus, Graham G Giles, Daniel F Gudbjartsson, Vilmundur Gudnason, Pascal Guénel, Suiqun Guo, Per Hall, Ute Hamann, Robin Haring, Catharina A Hartman, Andrew C Heath, Albert Hofman, Maartje J Hooning, John L Hopper, Frank B Hu, David J Hunter, David Karasik, Douglas P Kiel, Julia A Knight, VeliMatti Kosma, Zoltan Kutalik, Sandra Lai, Diether Lambrechts, Annika Lindblom, Reedik Mägi, Patrik K Magnusson, Arto Mannermaa, Nicholas G Martin, Gisli Masson, Patrick F McArdle, Wendy L McArdle, Mads Melbye Kyriaki Michailidou, Evelin Mihailov, Lili Milani, Roger L Milne, Heli Nevanlinna, Patrick Neven, Ellen A Nohr, Albertine J Oldehinkel, Ben A Oostra, Aarno Palotie,, Munro Peacock, Nancy L Pedersen, Paolo Peterlongo, Julian Peto, Paul DP Pharoah, Dirkje S Postma, Anneli Pouta, Katri Pylkäs, Paolo Radice, Susan Ring, Fernando Rivadeneira, Antonietta Robino, Lynda M Rose, Anja Rudolph, Veikko Salomaa, Serena Sanna, David Schlessinger, Marjanka K Schmidt, Mellissa C Southey, Ulla Sovio Meir J Stampfer, Doris Stöckl Anna M Storniolo, Nicholas J Timpson Jonathan Tyrer, Jenny A Visser, Peter Vollenweider, Henry Völzke, Gerard Waeber, Melanie Waldenberger, Henri Wallaschofski, Qin Wang, Gonneke Willemsen, Robert Winqvist, Bruce HR Wolffenbuttel, Margaret J Wright, Australian Ovarian Cancer Study The GENICA Network, kConFab, The LifeLines Cohort Study, The InterAct Consortium, Early Growth Genetics (EGG) Consortium, Dorret I Boomsma, Michael J Econs, KayTee Khaw, Ruth JF Loos, Mark I McCarthy, Grant W Montgomery, John P Rice, Elizabeth A Streeten, Unnur Thorsteinsdottir, Cornelia M van Duijn, Behrooz Z Alizadeh, Sven Bergmann, Eric Boerwinkle, Heather A Boyd, Laura Crisponi, Paolo Gasparini, Christian Gieger, Tamara B Harris, Erik Ingelsson, MarjoRiitta Järvelin, Peter Kraft, Debbie Lawlor, Andres Metspalu, Craig E Pennell, Paul M Ridker, Harold Snieder, Thorkild IA Sørensen, Tim D Spector, David P Strachan, André G Uitterlinden, Nicholas J Wareham, Elisabeth Widen, Marek Zygmunt, Anna Murray, Douglas F Easton, Kari Stefansson, Joanne M Murabito, Ken K Ong.
 \end{document}
