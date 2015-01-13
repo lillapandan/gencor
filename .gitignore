@@ -13,3 +13,6 @@
 # python
 *.pyc
 
+#word
+*.doc
+*.docx
