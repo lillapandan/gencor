@@ -594,7 +594,7 @@ We only used stage 1 data for LD Score regression.
 	\item DIAGRAM (T2D) summary statistics:\\
 		\texttt{www.diagram-consortium.org}
 		
-	\item Rheumatoid Arthritis summary statistics:\\
+	\item Rheumatoid arthritis summary statistics:\\
 		\texttt{www.broadinstitute.org/ftp/pub/rheumatoid\_arthritis/Stahl\_etal\_2010NG/}
 	
 	\item IGAP (Alzheimers) summary statistics:\\
@@ -604,10 +604,10 @@ We only used stage 1 data for LD Score regression.
 		\texttt{www.ibdgenetics.org/downloads.html}\\
 		We used a newer version of these data with 1000 Genomes imputation.
 
-	\item Plasma Lipid summary statistics:\\
+	\item Plasma lipid summary statistics:\\
 		\texttt{www.broadinstitute.org/mpg/pubs/lipids2010/}
 	
-	\item Educational Attainment summary statistics:\\
+	\item SSGAC (educational attainment) summary statistics:\\
 		\texttt{www.ssgac.org/}
 	
 	\item Beans:\\
@@ -922,7 +922,7 @@ We have written the probabilities in question in terms of constants and marginal
 Since liability is simply a quantitative trait, the means, variances, and covariances of the marginal effects on liability
 are described by the LD Score regression equation for quantitative traits.
 Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_kM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$.
-Thus it follows from equation \ref{condprob} that $\E[p_{cas,1j}-p_{con,1j}]=0$;
+If we combine these results with equation \ref{condprob}, we find that $\E[p_{cas,1j}-p_{con,1j}]=0$;
 \begin{align}
 	\var[p_{cas,1j}-p_{con,1j}]
 &=
@@ -943,112 +943,96 @@ Thus it follows from equation \ref{condprob} that $\E[p_{cas,1j}-p_{con,1j}]=0$;
 
 \subsection*{Ascertained Studies of Liability Threshold Traits}
 
-In this section, we derive an analogous LD Score regression equation for ascertained case/control studies.
-We keep the same notation from the previous section, except here $y_1$ and $y_2$ are binary phenotypes. 
-In addition, let $P_i$ denote the sample prevalence of $y_i$ in study $i$ for $i=1,2$, and $K_i$ denote the population prevalence.
+In the next proposition, we derive an LD Score regression equation for ascertained case/control studies.
 
+Let $P_i$ denote the sample prevalence of $y_i$ in study $i$ for $i=1,2$.
 We compute $z$-scores
-$z_j := 
-\frac
-	{\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} 
-	{\sqrt{\hat{p}_j(1-\hat{p}_j)}},
-$
+$$z_j :=\frac {\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} {\sqrt{\hat{p}_j(1-\hat{p}_j)}},$$
 where $\hat{p}_j$ denotes allele frequency in the entire sample\footnote{
-If $j$ has nonzero effect size, the expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$.},
-$\hat{p}_{cas}$ denotes allele frequency among cases in the sample
-and $\hat{p}_{con}$ denotes allele frequency among controls in the sample.
-\begin{prop}
+The expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$ or $j$ has zero marginal effect.},
+$\hat{p}_{cas}$ denotes sample case allele frequency
+and $\hat{p}_{con}$ denotes sample control allele frequency.
+\begin{prop}\label{binary_prop}
 Under a polygenic model, 
 \begin{align}
 	\E[z_{1j}z_{2j}]
 &\approx
 	\dfrac{\sqrt{N_1N_2}\rho_{g,obs}}{M}\ell_j+
-	c\sqrt{N_1N_2}\left(
-	\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
+	\sqrt{N_1N_2P_1(1-P_1)P_2(1-P_2)}\left(
+	\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\mathbf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
 \end{align}
 where 
 \[
-\rho_{obs} := \dfrac{\rho_g\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}
+\rho_{g,obs} := \rho_g\left(\dfrac{\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
 \]
-denotes observed scale genetic covariance, and $N_{a,b}$ for $a,b\in\{cas,con\}$ denote the number of individuals with phenotype $a$ in study 1 and $b$ in study two (e.g., $N_{cas,con}$ is the number of individuals who are cases in study 1 and controls in study 2).
+denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2).
 \end{prop}
 \begin{proof}
 The full form of $z_{1j}z_{2j}$ is 
-\begin{equation}\label{zz}
+\begin{equation*}
 	z_{1j}z_{2j} = \dfrac{
-	{c\sqrt{N_1N_2}(\hat{p}_{cas,1j} - \hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})}}
+	{\sqrt{cN_1N_2}(\hat{p}_{cas,1j} - \hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})}}
 	{\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}},
-\end{equation}
-where $c:=\sqrt{P_1(1-P_1)P_2(1-P_2)}$.
+\end{equation*}
+where $c:=P_1(1-P_1)P_2(1-P_2)$.
 Our strategy for obtaining the expectation is
 \begin{align}
 	\E[z_{1j}z_{2j}]
 &\approx
-	c\sqrt{N_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
-	{\E[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\\
+	\sqrt{cN_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
+	{\E[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\label{ratio}\\
 &\approx
-	c\sqrt{N_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
-	{\sqrt{\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\\
+	\sqrt{cN_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
+	{\sqrt{\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\label{sqrts}\\
 &=
-	c\sqrt{N_1N_2}\dfrac{\E\left[\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})\cond \zeta_j,\xi_j]\right]}
-	{\sqrt{\E\left[\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})\cond \zeta_j,\xi_j]\right]}},
+	\sqrt{cN_1N_2}\dfrac{\E\left[\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})\cond \zeta_j,\xi_j]\right]}
+	{\sqrt{\E\left[\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})\cond \zeta_j,\xi_j]\right]}}\label{zz_condexp},
 \end{align}
-where $\zeta_j$ and $\xi_j$ denote the marginal effects of $j$.
-The first approximation follows from the fact that we incur only $\mathscr{O}(1/N)$ error by moving from the expectation of a ratio to a ratio of expectations.
-The second approximation follows from the fact that we incur only $\mathscr{O}(1/N)$ error by moving from the expectation of a square root to a square root of expectations.
-The equality in the third line follows from application of the law of total expectation to both the numerator and denominator.
-
-This differs from the proof strategy used to derive the LD Score regression equation for non-ascertained studies in that here we 
-first condition on $\zeta_j$ and $\xi_j$ instead of conditioning on the genotype matrices $X$ and $Y$. 
-This is because $X$ and $Y$ depend on $\beta$ and $\gamma$ in an ascertained study: oversampling cases increases
-the sample allele frequencies of risk alleles.
-
-The technical essence of the proof is deriving $\E[\hat{p}_{cas,1j} -\hat{p}_{con,1j}]$ and showing that 
-$\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}\cond\zeta_j,\xi_j]\approx\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}]$.
+where $\zeta_j$ and $\xi_j$ denote the marginal per-allele effects of $j$.
+Approximation \ref{ratio} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a ratio to a ratio of expectations.
+Approximation \ref{sqrts} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a square root to a square root of expectations.
+Equality \ref{zz_condexp} follows from applying of the law of total expectation to the numerator and denominator.
 
 First, we compute the numerator.
-We begin by taking $\zeta_j$ and $\xi_j$ as fixed, so the allele frequencies $\prob[G_{ij}=1\cond y_{i1}=1,y_{i2}=1]$, etc are fixed.
-In this case, the only variance in the sample allele frequencies $\hat{p}_{cas,1},\hat{p}_{con,1},\hat{p}_{cas,2},\hat{p}_{con,2}$ comes from finite sampling error. 
-However, if study 1 and study 2 share samples, then the sampling error in study 1 may be correlated to the sampling error in study 2.
-By linearity of expectation, we have
-\begin{align*}
+By linearity of expectation, 
+\begin{align}
 	\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]\cond \zeta_j,\xi_j]
 &=
 	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}] 
-	+ 
-	\E[\hat{p}_{cas,1j}\hat{p}_{con,2j}]\\
-	&+
+	- 
+	\E[\hat{p}_{cas,1j}\hat{p}_{con,2j}]\nonumber\\
+	&-
 	\E[\hat{p}_{con,1j}\hat{p}_{cas,2j}]
 	+
-	\E[\hat{p}_{con,1j}\hat{p}_{con,2j}]
-\end{align*}
-We can write $\hat{p}_{cas,1j}\hat{p}_{cas,2j} = (p_{cas,1j}+\eta)(p_{cas,2j}+\nu)$, where $\eta$ and $\nu$ denote sampling
-error. 
-By the [bivariate] central limit theorem,
-\begin{align*}
+	\E[\hat{p}_{con,1j}\hat{p}_{con,2j}]\label{fourmoreterms}
+\end{align}
+After conditioning on the marginal effects $\zeta_j$ and $\xi_j$,
+the only source of variance in the sample allele frequencies $\hat{p}_{cas,1},\hat{p}_{con,1},\hat{p}_{cas,2},\hat{p}_{con,2}$ is sampling error. 
+Write $\hat{p}_{cas,1j}\hat{p}_{cas,2j} = (p_{cas,1j}+\eta)(p_{cas,2j}+\nu)$, 
+where $\eta$ and $\nu$ denote sampling error. 
+If study 1 and study 2 share samples, 
+$\nu$ and $\eta$ will be correlated:
+\begin{align}
 	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}\cond \zeta_j,\xi_j] 
 &= 
-	p_{cas,1j}p_{cas,2j} + \E[\eta\nu]\\
-&=
-	p_{cas,1j}p_{cas,2j} + \dfrac{N_{cas,cas}\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}}{N_{cas,1}N_{cas,2}}\\
+	p_{cas,1j}p_{cas,2j} + \E[\eta\nu]\nonumber\\
 &\approx
-	p_{cas,1j}p_{cas,2j}\left(1+ \dfrac{N_{cas,cas}}{N_{cas,1}N_{cas,2}}\right),
-\end{align*}
-where the approximation comes from ignoring the difference between $\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}$ and $p_j(1-p_j)$. 
-This step is justified in the derivation of the denominator, below.
-A similar relationship holds for other combinations of phenotypes, except we need to flip the sign when the phenotype in study 1
-and the phenotype in study 2 disagree.
+	p_{cas,1j}p_{cas,2j} + \dfrac{N_{cas,cas}\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}}{N_{cas,1}N_{cas,2}}\label{biv_clt}\\
+&\approx
+	p_{cas,1j}p_{cas,2j}\left(1+ \dfrac{N_{cas,cas}}{N_{cas,1}N_{cas,2}}\right)\label{ignore},
+\end{align}
+where approximation \ref{biv_clt} is the (bivariate) central limit theorem, 
+and approximation \ref{ignore} comes from ignoring the difference between $\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}$ and $p_j(1-p_j)$. 
+This step is justified in the derivation of the denominator.
+Similar relationships hold for the other terms in equation \ref{fourmoreterms}.
 
-Next, we remove the conditioning on $\zeta_j$ and $\xi_j$ using results on the liability threshold model from the previous section.
-It follows directly from equation \ref{cov} that 
-\begin{align*}
+We can remove the conditioning on $\zeta_j$ and $\xi_j$ using equation \ref{cov}. 
+\begin{align}
 	\E[(p_{cas,1j} -p_{con,1j})(p_{cas,2j} - p_{con,2j})]
 &=
-	\dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j.
-\end{align*}
-
-
-Therefore, we approximate the expectation of the numerator as
+	\dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j\label{remove_cond}.
+\end{align}
+If we combine equations \ref{ignore} and \ref{remove_cond}, we obtain
 \begin{align}\label{numerator}
 \E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]
 \approx
@@ -1060,35 +1044,34 @@ p_j(1-p_j)\left(
 where $c':=K_1(1-K_1)K_2(1-K_2)$.
 
 Next, we derive the expectation of the denominator.
-Conditional on $\beta$, $\hat{p}_{1j}(1-\hat{p}_{1j})$ is $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ plus $\mathscr{O}(1/N)$ sampling 
+Conditional on $\zeta_j$ and $\xi_j$, $\hat{p}_{1j}(1-\hat{p}_{1j})$ is $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ plus $\mathscr{O}(1/N)$ sampling 
 variance. If studies 1 and 2 share samples, the $\mathscr{O}(1/N)$ sampling variance in $\hat{p}_{1j}(1-\hat{p}_{1j})$ and 
 $\hat{p}_{2j}(1-\hat{p}_{2j})$ will be correlated, but this still only amounts to $\mathscr{O}(N_s/N_1N_s)$ error.
-If we now view $\beta$ as random, then as derived above, $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ is equal to $p_j(1-p_j)$ plus
-$\mathscr{O}(h^2_{1,obs}\ell_j/M)$ error from uncertainty in $\beta$.
-The correlation between uncertainty in $\beta$ and uncertainty in $\gamma$ is governed by $\rho_{g,obs}$, so the expectation of the denominator is $\E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] = p_j(1-p_j) 
-+ \mathscr{O}(N_s/N_1N_2) + \mathscr{O}(\rho_{g,obs}\ell_j/M)$. 
-Since we aim to apply LD Score regression to common variants, a lower bound on $p_j(1-p_j)$ is around $10^{-2}$ if $p_j=0.01$, which is roughly the lowest MAF for which we can estimate LD Score with any degree of precision.
+If we remove the conditioning on $\zeta_j$ and $\xi_j$, then $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ is equal to $p_j(1-p_j)$ plus $\mathscr{O}(h^2_{1,obs}\ell_j/M)$ error from uncertainty in $\zeta_j$.
+The covariance between uncertainty in $\zeta_j$ and uncertainty in $\xi_j$ is driven by $\rho_{g,obs}$, so the expectation of the denominator is $\E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] = p_j(1-p_j)\left(1
++ \mathscr{O}(N_s/N_1N_2) + \mathscr{O}(\rho_{g,obs}\ell_j/M)\right)$.
+We make the approximation\footnote{
 For $\ell_j=100$ (roughly the median 1kG LD Score), $M=10^7$ and $\rho_{g,obs}=1$, we get $\rho_{g,obs}\ell_j/M=10^{-5}$.
-A worst-case value for $N_s/N_1N_2$ might be $N_s=N_1=N_2=10^4$, in which case $N_s/N_1N_2=10^{-4}$.
-Thus, in typical scenarios, both $\rho_{g,obs}\ell_j/M$ and $N_s/N_1N_2$ will be at least 2-3 orders of magnitude smaller than $p_j(1-p_j)$.
-Therefore, we make the approximation that 
+A worst-case value for $N_s/N_1N_2$ might be $N_s=N_1=N_2=10^3$, in which case $N_s/N_1N_2=10^{-3}$.
+Thus, $\rho_{g,obs}\ell_j/M$ and $N_s/N_1N_2$ will generally be at least 3 orders of magnitude smaller than 1.} that 
 \begin{equation}\label{denominator}
 \E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] \approx p_j(1-p_j).
 \end{equation}
-We obtain the desired result by dividing equation $c\sqrt{N_1N_2}$ times equation \ref{numerator} by equation \ref{denominator}.
+We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times equation \ref{numerator} by equation \ref{denominator}.
 \end{proof}
 \begin{cor}
-For a single liability threshold model trait, we have the LD Score regression equation
+For a single binary trait, 
 \begin{equation}
 	\E[\chi^2_j] = \dfrac{Nh^2_{obs}}{M}\ell_j + 1,
 \end{equation}
 where $h^2_{obs}=h^2\phi(\tau)^2P(1-P)/K^2(1-K)^2$.
 \end{cor}
 \begin{proof}
-This follows from the previous proposition with study 1 equal to study 2 and noting that the observed scale genetic covariance
-between a trait and itself is simply observed scale heritability. To show that the intercept is one, observe that if study 1 and study 2 are the same, then 
+This follows from proposition \ref{binary_prop} if we set study 1 equal to study 2 and note that the observed scale genetic covariance
+between a trait and itself is observed scale heritability. 
+To show that the intercept is one, observe that if study 1 and study 2 are the same, then 
 \begin{align}
-	c\sqrt{N_1N_2}\left(\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
+	\sqrt{cN_1N_2}\left(\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
 &=
 	NP(1-P)\left(\dfrac{1}{N_{cas}}+\dfrac{1}{N_{con}}\right)\nonumber\\
 &=
@@ -1099,52 +1082,53 @@ between a trait and itself is simply observed scale heritability. To show that t
 But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so equation \ref{cc-intercept} simplifies to 1.
 \end{proof}
 
+Finally, observe that  $\rho_{g,obs} / \sqrt{h^2_{1,obs}h^2_{2,obs}} = \rho_g/\sqrt{\hsqo\hsqt}=r_g.$ 
+Put another way, the 
+natural definition for ``observed scale genetic correlation'' turns out to be the same as regular genetic correlation. This is convenient: we can compute genetic correlations for binary traits on a sensible
+scale without having to worry about sample and population prevalences.
 
-\subsection*{Flavors of Genetic Correlation}
+\subsection*{Flavors of Heritability and Genetic Correlation}
 
-If we let $S$ denote the set of all SNPs in 1000 Genomes Europeans \cite{10002012integrated}, 
-and let $S'$ denote the set of SNPs with MAF$>5\%$, then
+The heritability parameter estimated by \texttt{ldsc} is subtly different than the heritability parameter $h^2_g$
+estimated by GCTA. 
+If $g$ denotes the set of all genotyped SNPs in some GWAS, define 
+$\beta_{GCTA} := \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]^2$,
+where $X_g$ is a random vector of genotypes for SNPs in $g$.
+Then the heritability parameter estimated by GCTA is defined 
+$$h^2_{g}:=\sum_{j\in g} \beta_{GCTA,j}^2.$$
+Let $S$ denote the set of SNPs used to compute LD Scores (\emph{i.e.,} $\ell_j = \sum_{k\in S} r^2_{jk}$),
+and let $\beta_{S} := \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
+Then define
+$$h^2_{S}:=\sum_{j\in S} \beta_{S,j}^2.$$
+Let $S'$ denote the set of SNPs in $S$ with MAF above 5\%. Define
 \begin{equation}
-	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_j^2.
+	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_{S,j}^2.
 \end{equation}
-We choose 5\% as the lower bound, because we can estimate LD Scores for 5\% SNPs reasonably well from the $N=387$ 
-samples in 1000 Genomes. 
-Technically, we should write $h^2_{5\myhyphen50\%,1kG}$ to indicate that we are only accounting for SNPs in 1000 Genomes,
-but 1000 Genomes has sufficiently good power to observe 5\% and higher SNPs that we feel justified in omitting 1kG from the subscript.
-With larger sample sizes in future sequenced reference panels, this lower bound can be pushed lower.
+The default setting in \texttt{ldsc} is to report $h^2_{5\myhyphen50\%}$, estimated as the slope 
+from LD Score regression times $M_{5\myhyphen50\%}$, the number of SNPs with MAF above 5\%.
+
+The reason for this is the following: suppose that $h^2$ per SNP is not constant as a function of MAF. 
+Then the slope of LD Score regression will represent some sort of weighted average of the values of $h^2$ per SNP, with more weight given to classes of SNPs that are well-represented among the regression SNPs. 
+In a typical GWAS setting, the regression SNPs are predominately common SNPs, so multiplying the slope from LD Score regression by $M$ (which includes rare SNPs) amounts to extrapolating that $h^2$ per SNP
+among common variants is the same as $h^2$ per SNP among rare variants.
+This is a particularly risk form of extrapolation, because there are many more rare SNPs than common SNPs.
+
+It is probably reasonable to treat $h^2$ per SNP as a roughly constant function of MAF for SNPs with MAF above 5\%, but we have very little information about $h^2$ per SNP for SNPs with MAF below 5\%.
+Therefore we report $h^2_{5\myhyphen50\%}$ to avoid excessive extrapolation error.
+This lower bound can be pushed lower with larger sample sizes and better rare variant coverage, either
+from sequencing or imputation.
 
 There are two main distinctions between $h^2_{5\myhyphen50\%}$ and $h^2_g$,
 First, $h^2_g$ does not include the effects of common SNPs that are not tagged by the set of genotyped SNPs $g$.
 Second, the effects of causal 4\% SNPs are not counted towards $h^2_{5\myhyphen50\%}$.
-In practice, neither of these distinctions makes a large difference, since most GWAS arrays focus on common variation
-and manage to assay or tag almost all common variants.
+In practice, neither of these distinctions makes a large difference, since most GWAS arrays focus on common variation and manage to assay or tag almost all common variants, which is why 
+we do not emphasize this distinction in the main text.
 
-Estimating $h^2_{5\myhyphen50\%}$ involves only as simple modification of LD Score regression: the raw slope from the 
-regression divided by sample size yields an estimate of the average value of $\beta^2_j$. 
-If we multiply this number by $M$, the number of SNPs in 1000 Genomes, then technically we obtain an estimate of the 
-heritability explained by all 1000 Genomes SNPs; however, this interpretation amounts to assuming that 
-our estimate of heritability per SNP obtained from common SNP GWAS data also applies to rare variants.
-This is unreasonable, since GWAS data contains very little information about rare variants, 
-Therefore, we instead multiply the slope by $M_{5\myhyphen50\%}$, the number of 1000 Genomes SNPs with 
-MAF between 5\% and 50\%, in order to obtain an estimate of $h^2_{5\myhyphen50\%}$.
-The default option in \texttt{ldsc} is to estimate $h^2_{5\myhyphen50\%}$; this can be overridden with the 
-\texttt{--not-M-5-50} flag.
-
-The value of $h^2_{5\myhyphen50\%}$ will always be less than the total narrow-sense heritability, $h^2$, 
-since $h^2$ takes into account all forms of genetic variation 
--- variants with MAF under 5\%, microsatellites, indels, copy number variants -- not just common SNPs.
-In addition, estimates of $h^2$ from family studies may 
-be biased upwards by non-additive genetic architectures \cite{zuk2012mystery}.
-
-The quantity $\rf$ is defined by replacing $S$ with $5\myhyphen50\%$ in equation \ref{EQN: rg}.
-As a practical matter, the difference between $r_g$ (the genetic correlation among genotyped SNPs)
-and $\rf$ will be quite small when $g$ contains a large proportion of all common SNPs.
-This is supported by the simulations described in Section \ref{Misspecified Sims} of the main text. 
-Technically, LD Score regression with HM3 LD Score is an estimator of $r_{HM3(5\myhyphen50\%)}$,
-the genetic correlation among SNPs in HM3 with MAF between 5 and 50\%, but the resulting estimates
-of genetic correlation were almost identical to the estimates of $r_{1kG(5\myhyphen50\%)}$ obtained with 1kG LD Scores
-(Supplementary Tables \ref{supp-parallel}, \ref{supp-antiparallel} and \ref{supp-depcor}), 
-which is why we do not emphasize this distinction in the main text.
+The relationship between the genetic covariance parameter estimated by LD Score regression and the
+genetic covariance parameter estimated by GCTA is similar to the relationship between 
+$h^2_{5\myhyphen50\%}$ and $h^2_g$.
+The choice of $M$ is not important for genetic correlation, because the factors of $M$ in the numerator and 
+denominator cancel.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
