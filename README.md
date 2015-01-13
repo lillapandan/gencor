@@ -1,5 +1,5 @@
-Working title: Estimation of Genetic Correlation from GWAS Summary Statistics
+An Atlas of Genetic Correlations across Human Diseases and Traits
 
-Brendan Bulik-Sullivan and Hilary Finucane*
+Brendan Bulik-Sullivan*, Hilary Finucane*, et al
 
 \* (author order decided by coin flip)
