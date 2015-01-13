@@ -850,16 +850,17 @@ and
 		\envcov I& (1-\hsqt) I
 	\end{array} \right).
 \end{equation*}
-Let $\zeta_j$ and $\xi_j$ denote the marginal effect size of $j$ on $\psi$ and $\varphi$, and let $p_{cas,kj}:=\prob[G_{ij}=1\cond y_{ik}=1]$ for $k=1,2$. Then
+Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of $j$ on $\psi$ and $\varphi$, and let $p_{cas,kj}:=\prob[G_{ij}=1\cond y_{ik}=1]$ for $k=1,2$. Then
 \begin{align*}
-	\E[p_{cas,1j}] = p_j,\\
-	\E[p_{cas,2j}] = p_j, \\
-	\var[p_{cas,1j}] = \dfrac{p_j^2\phi(\tau_1)^2h^2_1}{MK_1^2}\ell_j, \\
-	\var[p_{cas,2j}] = \dfrac{p_j^2\phi(\tau_2)^2h^2_2}{MK_2^2}\ell_j,\\
-	\cov[p_{cas,1j},p_{cas,j}] = \dfrac{p_j^2\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1K_2}\ell_j.
+	\E[p_{cas,1j}-p_{con,1j}] &= 0,\\
+	\E[p_{cas,2j}-p_{con,2j}] &= 0, \\
+	\var[p_{cas,1j}-p_{con,1j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2)}\ell_j, \\
+	\var[p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_2)^2h^2_2}{MK_2^2(1-K_2)^2}\ell_j,\\
+	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j.
 \end{align*}
-Note that these terms are different from the usual expressions for conversion from observed to liability scale, because we have not
-yet accounted for ascertainment. We account for ascertainment in the next section.
+Note that these are different from the usual expressions for conversion from observed to liability scale, 
+because these expressions only account for the effect of transforming from a continuous liability to a binary observed phenotype
+and not for ascertainment. We account for ascertainment in the next section.
 \end{prop}
 \begin{proof}
 This proof is accomplished in two steps.
@@ -869,7 +870,6 @@ which reduces the problem to a series of [Taylor approximations to] gaussian int
 Second, we remove the conditioning on the marginal effects on liability and use the results of the previous section (on quantitative traits) to express the expectations of the allele frequencies
 in terms of $h^2_1,h^2_2,\rho_g$ and $\ell_j$.
 
-To begin, assume that the marginal effects $\zeta_j$ and $\xi_j$ are fixed.
 By Bayes' theorem, 
 \begin{align*}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]
@@ -881,8 +881,8 @@ By Bayes' theorem,
 	\dfrac{p_j}{K_1}\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j].
 \end{align*}
 
-The distribution of $\psi$ conditional on $\zeta_j$ and $G_{ij}=1$ is 
-$\psi\cond\zeta_j,G_{ij}=1 = N(\zeta_j, 1-\zeta_j^2)\approx N(\zeta_j, 1)$ (where the approximation holds when $\zeta_j^2$ is small, \emph{i.e.,} when the marginal heritability explained by $j$ is small, which is the typical case in GWAS).
+The distribution of $\psi$ is
+$\psi\cond G_{ij}=1,\zeta_j = N(\zeta_j, 1)$ (where the approximation that the variance equals one holds when the marginal heritability explained by $j$ is small, which is the typical case in GWAS).
 Thus $\prob[\psi_i>\tau_1\cond G_{ij}=1]$ is simply a Gaussian integral.
 Because we wish to obtain a closed-form expression for the variance of $\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j]$ over random $\zeta_j$, we approximate this probability with a first-order Taylor expansion around $\tau_1$:
 \begin{align*}
@@ -892,52 +892,58 @@ Because we wish to obtain a closed-form expression for the variance of $\prob[\p
 &\approx
 	K_1 + \phi(\tau_1)\zeta_j,
 \end{align*}
-where $\Phi,\phi$ denote the cdf and density of the standard normal distribution. Thus,
+where $\Phi$ and $\phi$ denote the cdf and density of the standard normal distribution. Therefore,
 \begin{align}\label{condprob}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]
 &=
-	p_j\left(1+\dfrac{\phi(\tau_1)\zeta_j}{K_1}\right).
+	\dfrac{p_j}{K}\left(K+\phi(\tau_1)\zeta_j\right).
 \end{align}
-An similar result holds for trait 2, replacing $\zeta$ with $\xi$ and subscript 1 with subscript 2.
+A similar argument shows that 
+\begin{align}\label{condprob}
+	\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
+&=
+	\dfrac{p_j}{1-K_1}\left(1-K-\phi(\tau_1)\zeta_j\right),
+\end{align}
+so
+\begin{align}\label{condprob}
+	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]-\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
+&=
+	p_j\dfrac{\phi(\tau_1)\zeta_j}{K_1(1-K_1)}.
+\end{align}
+Similar results hold for trait 2, replacing $\zeta$ with $\xi$ and subscript 1 with subscript 2.
 
 We have written the probabilities in question in terms of constants and marginal effects on liability.
 Since liability is simply a quantitative trait, the means, variances, and covariances of the marginal effects on liability
 are described by the LD Score regression equation from the section on quantitative traits.
-Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=\hsqo\ell_j/M$, $\var[\zeta_j]=\hsqt\ell_j/M$ and $\cov[\zeta_j,\xi_j]=\rho_g\ell_j/M$.
-Thus it follows from equation \ref{condprob} that first, $\E[p_{cas,1j}]=\E[p_{cas,2j}]=p_j$, second
-\begin{align*}
-	\var[p_{cas,1j}]
+Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_kM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$ (note that $\zeta_j=\E[\psi \cond G_{ij}=1]$. Since $X_{i}=(G_{ij}-p_j)/\sqrt{p_j(1-p_j)}$), we have
+$X_j\beta_j=\xi_j$, which explains the factors of $(1-p_j)/p_j$).
+Thus it follows from equation \ref{condprob} that $\E[p_{cas,1j}-p_{con,1j}]=0$;
+\begin{align}
+	\var[p_{cas,1j}-p_{con,1j}]
 &=
-	\var[p_j + p_j\phi(\tau_1)\zeta_j/K_1]\\
+	\var\left[\dfrac{p_j\phi(\tau_1)\zeta_j}{K_1(1-K_1)}\right]\nonumber\\
 &=
-	\dfrac{p_j^2\phi(\tau_1)^2h^2_1}{MK_1^2}\ell_j,
-\end{align*}
+	\dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2}\ell_j,
+\end{align}
 (and similarly for trait two); and last
-\begin{align*}
-	\cov[p_{cas,1j},p_{cas,2j}]
+\begin{align}
+	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}]
 &=
-	\cov[p_j + p_j\phi(\tau_1)\zeta_j/K_1,p_j + p_j\phi(\tau_2)\xi_j/K_2]\\
+	\cov\left[\dfrac{p_j\phi(\tau_1)\zeta_j}{K_1(1-K_1)},\dfrac{p_j\phi(\tau_2)\xi_j}{K_2(1-K_2)}\right]\nonumber\\
 &=
-	\dfrac{p_j^2\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1K_2}\ell_j.
-\end{align*} 
+	\dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j.\label{cov}
+\end{align} 
 \end{proof}
 
 
 \subsection*{Ascertained Studies of Liability Threshold Traits}
 
 In this section, we derive an analogous LD Score regression equation for ascertained case/control studies.
-The key elements of this derivation are (1) deriving the relationship between observed and liability scale heritability and genetic
-covariance and (2) showing that out-of-sample LD from a non-ascertained reference panel is still a good approximation to
-LD in an ascertained sample, even though oversampling of cases induces long-range LD between risk alleles.
-The definitions of heritability and genetic covariance provided in the main text apply to binary traits, though we also 
-discuss a new parameter, the liability scale heritability, which is a convenient scale for comparing the heritabilities of binary traits 
-with different prevalences.
-
 We keep the same notation from the previous section, except here $y_1$ and $y_2$ are binary phenotypes. 
 In addition, let $P_i$ denote the sample prevalence of $y_i$ in study $i$ for $i=1,2$, and $K_i$ denote the population prevalence.
 
 We compute $z$-scores
-$Z_j := 
+$z_j := 
 \frac
 	{\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} 
 	{\sqrt{\hat{p}_j(1-\hat{p}_j)}},
@@ -948,53 +954,60 @@ $\hat{p}_{cas}$ denotes allele frequency among cases in the sample
 and $\hat{p}_{con}$ denotes allele frequency among controls in the sample.
 \begin{prop}
 Under a polygenic model, 
-$$\E[z_{ij}z_{2j}] = \dfrac{\sqrt{N_1N_2}\rho_{g,obs}}{M}\ell_j
-+
-\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}}{N_{a,1}N_{b,2}}
-$$
-where $\rho_{obs} = \rho_g(P_1(1-P_1)P_2(1-P_2))^{1/2}(K_1(1-K_1)K_2(1-K_2))^{-1}$ denotes observed scale genetic covariance and $N_{a,b}$ for $a,b\in\{cas,con\}$ denote the number of individuals with phenotype $a$ in study 1 and $b$ in study two (\emph{e.g.,} $N_{cas,con}$ is the number of individuals who are cases in study 1 and controls in study 2).
+\begin{align}
+	\E[z_{1j}z_{2j}]
+&\approx
+	\dfrac{\sqrt{N_1N_2}\rho_{g,obs}}{M}\ell_j+
+	c\sqrt{N_1N_2}\left(
+	\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
+\end{align}
+where 
+\[
+\rho_{obs} := \dfrac{\rho_g\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}
+\]
+denotes observed scale genetic covariance, and $N_{a,b}$ for $a,b\in\{cas,con\}$ denote the number of individuals with phenotype $a$ in study 1 and $b$ in study two (e.g., $N_{cas,con}$ is the number of individuals who are cases in study 1 and controls in study 2).
 \end{prop}
 \begin{proof}
 The full form of $z_{1j}z_{2j}$ is 
 \begin{equation}\label{zz}
 	z_{1j}z_{2j} = \dfrac{
-	{c(\hat{p}_{cas,1j} - \hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})}}
+	{c\sqrt{N_1N_2}(\hat{p}_{cas,1j} - \hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})}}
 	{\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}},
 \end{equation}
-where $c:=\sqrt{N_1N_2P_1P_2(1-P_1)(1-P_2)}$.
+where $c:=\sqrt{P_1(1-P_1)P_2(1-P_2)}$.
 Our strategy for obtaining the expectation is
 \begin{align}
 	\E[z_{1j}z_{2j}]
 &\approx
-	c\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
+	c\sqrt{N_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
 	{\E[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\\
 &\approx
-	c\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
+	c\sqrt{N_1N_2}\dfrac{\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]}
 	{\sqrt{\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})]}}\\
 &=
-	c\dfrac{\E\left[\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})\cond \beta_{loc},\gamma_{loc}]\right]}
-	{\sqrt{\E\left[\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})\cond \beta_{loc},\gamma_{loc}]\right]}},
+	c\sqrt{N_1N_2}\dfrac{\E\left[\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})\cond \zeta_j,\xi_j]\right]}
+	{\sqrt{\E\left[\E[\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})\cond \zeta_j,\xi_j]\right]}},
 \end{align}
-where $\beta_{loc}$ and $\gamma_{loc}$ denote the entries of $\beta$ and $\gamma$ corresponding to SNPs in LD with $j$ ($loc$ stands for local).
+where $\zeta_j$ and $\xi_j$ denote the marginal effects of $j$.
 The first approximation follows from the fact that we incur only $\mathscr{O}(1/N)$ error by moving from the expectation of a ratio to a ratio of expectations.
 The second approximation follows from the fact that we incur only $\mathscr{O}(1/N)$ error by moving from the expectation of a square root to a square root of expectations.
-The third equality is the law of total expectation.
+The equality in the third line follows from application of the law of total expectation to both the numerator and denominator.
 
 This differs from the proof strategy used to derive the LD Score regression equation for non-ascertained studies in that here we 
-first condition on $\beta$ and $\gamma$ instead of conditioning on the genotype matrices $X$ and $Y$. 
+first condition on $\zeta_j$ and $\xi_j$ instead of conditioning on the genotype matrices $X$ and $Y$. 
 This is because $X$ and $Y$ depend on $\beta$ and $\gamma$ in an ascertained study: oversampling cases increases
-the sample allele frequencies of risk alleles and induces long-range LD between risk alleles.
+the sample allele frequencies of risk alleles.
 
 The technical essence of the proof is deriving $\E[\hat{p}_{cas,1j} -\hat{p}_{con,1j}]$ and showing that 
-$\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}\cond\beta_{loc},\gamma_{loc}]\approx\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}]$.
+$\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}\cond\zeta_j,\xi_j]\approx\var[\hat{p}_{cas,1j} -\hat{p}_{con,1j}]$.
 
 First, we compute the numerator.
-We begin by taking $\beta_{loc}$ and $\gamma_{loc}$ as fixed, so the allele frequencies $\prob[G_{ij}=1\cond y_{i1}=1,y_{i2}=1]$, etc are fixed.
+We begin by taking $\zeta_j$ and $\xi_j$ as fixed, so the allele frequencies $\prob[G_{ij}=1\cond y_{i1}=1,y_{i2}=1]$, etc are fixed.
 In this case, the only variance in the sample allele frequencies $\hat{p}_{cas,1},\hat{p}_{con,1},\hat{p}_{cas,2},\hat{p}_{con,2}$ comes from finite sampling error. 
 However, if study 1 and study 2 share samples, then the sampling error in study 1 may be correlated to the sampling error in study 2.
 By linearity of expectation, we have
 \begin{align*}
-	\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]\cond \beta_{loc},\gamma_{loc}]
+	\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]\cond \zeta_j,\xi_j]
 &=
 	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}] 
 	+ 
@@ -1004,31 +1017,42 @@ By linearity of expectation, we have
 	+
 	\E[\hat{p}_{con,1j}\hat{p}_{con,2j}]
 \end{align*}
-We give an explicit computation for $\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}]$ only; the other three terms follow from a symmetry argument.
 We can write $\hat{p}_{cas,1j}\hat{p}_{cas,2j} = (p_{cas,1j}+\eta)(p_{cas,2j}+\nu)$, where $\eta$ and $\nu$ denote sampling
 error. 
 By the [bivariate] central limit theorem,
 \begin{align*}
-	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}\cond \beta_{loc},\gamma_{loc}] 
+	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}\cond \zeta_j,\xi_j] 
 &= 
 	p_{cas,1j}p_{cas,2j} + \E[\eta\nu]\\
 &=
-	p_{cas,1j}p_{cas,2j} + \dfrac{N_{cas,cas}\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}}{N_{cas,1}N_{cas,2}}.
+	p_{cas,1j}p_{cas,2j} + \dfrac{N_{cas,cas}\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}}{N_{cas,1}N_{cas,2}}\\
+&\approx
+	p_{cas,1j}p_{cas,2j}\left(1+ \dfrac{N_{cas,cas}}{N_{cas,1}N_{cas,2}}\right),
 \end{align*}
+where the approximation comes from ignoring the difference between $\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}$ and $p_j(1-p_j)$. 
+This step is justified in the derivation of the denominator, below.
+A similar relationship holds for other combinations of phenotypes, except we need to flip the sign when the phenotype in study 1
+and the phenotype in study 2 disagree.
 
-Now remove the conditioning on $\beta_{loc}$ and $\gamma_{loc}$ using results on the liability threshold model from the previous section.
-
+Next, we remove the conditioning on $\zeta_j$ and $\xi_j$ using results on the liability threshold model from the previous section.
+It follows directly from equation \ref{cov} that 
+\begin{align*}
+	\E[(p_{cas,1j} -p_{con,1j})(p_{cas,2j} - p_{con,2j})]
+&=
+	\dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j.
+\end{align*}
 
 
 Therefore, we approximate the expectation of the numerator as
 \begin{align}\label{numerator}
-\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j}]
+\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]
 \approx
 p_j(1-p_j)\left(
-\dfrac{\sqrt{N_1N_2}\rho_{g,obs}}{M}\ell_j
+\dfrac{\phi(\tau_1)\phi(\tau_2)\rho_g}{c'M}\ell_j
 +
-\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}}{N_{a,1}N_{b,2}}\right)
+\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right),
 \end{align}
+where $c':=K_1(1-K_1)K_2(1-K_2)$.
 
 Next, we derive the expectation of the denominator.
 Conditional on $\beta$, $\hat{p}_{1j}(1-\hat{p}_{1j})$ is $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ plus $\mathscr{O}(1/N)$ sampling 
@@ -1046,33 +1070,29 @@ Therefore, we make the approximation that
 \begin{equation}\label{denominator}
 \E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] \approx p_j(1-p_j).
 \end{equation}
-
-Combining equations \ref{numerator} and \ref{denominator}, we obtain
-\begin{align}
-	\E[z_{1j}z_{2j}]
-&\approx
-	c\dfrac
-	{a}
-	{p_j(1-p_j)}\\
-&=
-	asdf.
-\end{align}
-
+We obtain the desired result by dividing equation $c\sqrt{N_1N_2}$ times equation \ref{numerator} by equation \ref{denominator}.
 \end{proof}
 \begin{cor}
 For a single liability threshold model trait, we have the LD Score regression equation
 \begin{equation}
-	\E[\chi^2_j\cond\ell_j] = \dfrac{Nh^2_{obs}}{M}\ell_j + 1
+	\E[\chi^2_j] = \dfrac{Nh^2_{obs}}{M}\ell_j + 1,
 \end{equation}
+where $h^2_{obs}=h^2\phi(\tau)^2P(1-P)/K^2(1-K)^2$.
 \end{cor}
 \begin{proof}
 This follows from the previous proposition with study 1 equal to study 2 and noting that the observed scale genetic covariance
-between a trait and itself is simply observed scale heritability.
+between a trait and itself is simply observed scale heritability. To show that the intercept is one, observe that if study 1 and study 2 are the same, then 
+\begin{align}
+	c\sqrt{N_1N_2}\left(\sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right)
+&=
+	NP(1-P)\left(\dfrac{1}{N_{cas}}+\dfrac{1}{N_{con}}\right)\nonumber\\
+&=
+	\dfrac{NP(1-P)(N_{cas}+N_{con}))}{N_{cas}N_{con}}\nonumber\\
+&=
+	\dfrac{N^2P(1-P)}{N_{cas}N_{con}}.\label{cc-intercept}
+\end{align}
+But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so equation \ref{cc-intercept} simplifies to 1.
 \end{proof}
-
- 
-
-
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
