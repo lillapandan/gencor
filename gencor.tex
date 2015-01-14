@@ -721,9 +721,8 @@ Thus, the genetic covariance between $y_1$ and $y_2$ is
 \end{align*}
 \end{proof}
 
-\label{supp_condexp_qt}
 We compute linear regression $z$-scores $z_{1j}:= \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}:= \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$.
-\begin{prop} 
+\begin{prop}\label{supp_condexp_qt}
 Let $j$ denote a genotyped SNP. Under the model described above, 
 \begin{equation}
 	\E[z_{1j}z_{2j}] = \frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\rho}{\sqrt{N_1N_2}}.
@@ -769,42 +768,34 @@ reduces to the LD Score regression equation for a single trait from \cite{buliks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 We can improve the efficiency of LD Score regression weighting by the reciprocal of the conditional variance function (CVF),
-$\var[\bhat\chat \,|\,\ell_j]$.
-The CVF is not uniquely determined by the assumptions about first and second moments 
-from the previous section.
+$\var[z_{1j}z_{2j} \,|\, \ell_j ]$.
+The CVF is not uniquely determined by the assumptions about the first and second moments of $\beta$ and $\gamma$ used to derive proposition \ref{supp_condexp_qt}.
 Therefore we derive the CVF for the case where 
- $z$-scores follow a multivariate normal distribution\footnote{
+ $z_{1j}$ and $z_{2j}$ are jointly distributed as bivariate normal\footnote{
 For instance, it is sufficient but not necessary to assume that $\beta$, $\gamma$, $\delta$ and $\epsilon$ are multivariate normal.
-More generally, the phenotypes will be approximately normal if $\delta$ and $\epsilon$ are normal 
-and if $\beta$ and $\gamma$ are reasonably polygenic.
-If there are few casual SNPs, then the CVF may be larger.}.
+More generally, the $z$-scores will be approximately normal if $\beta$ and $\gamma$ are reasonably polygenic.
+If the distribution of effect sizes is heavy-tailed, \emph{e.g.,} if there are few casual SNPs, then the CVF may be larger.}.
 
-If phenotypes are normally distributed, then $\bhat$ and $\chat$ follow a bivariate normal with expectation zero by a central limit theorem argument. 
 Fom a standard formula for double second moments of the bivariate normal, the CVF is
 \begin{align}
-    \var[\bhat_j\chat_j\cond\ell_j] 
+	\var[z_{1j}z_{2j} \,|\, \ell_j ] 
 &= 
-	\E[\bhat^2\chat^2]\nonumber\\
+	\E[z_{1j}^2z_{2j}^2]\nonumber\\
 &=  
-	\var[\bhat]\var[\chat]
+	\var[z_{1j}]\var[z_{2j}]
 	+
-	2\E[\bhat\chat]^2\nonumber\\
-&= 
+	2\E[z_{1j}z_{2j}]^2\nonumber\\
+&\propto 
 	\left( 
-		\frac{\hsqo\ell_j}{M} 
-		+ 
-		\frac{1}{N_1} 
-	\right) \left(  
-		\frac{\hsqt\ell_j}{M} 
-		+ 
-		\frac{1}{N_2}
+		\frac{N_1\hsqo\ell_j}{M} + 1
+	\right) 
+	\left(  
+		\frac{N_2\hsqt\ell_j}{M} + 1
 	\right) 
 	+ 					
 	2\left( 
-		\frac{\gencov\ell_j}{M} 
-		+ 
-		\frac{\rho N_s}{N_1N_2} 
-	\right)^2.
+		\dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}}
+	\right)^2
 \end{align}
 In cases where the normality assumption does not hold, LD Score regression will remain unbiased, but may be inefficient, because the regression weights will be suboptimal.
 
@@ -955,13 +946,13 @@ and $\hat{p}_{con}$ denotes sample control allele frequency.
 
 We emphasize one subtlety before stating the main proposition. 
 The results in this section allow for study $i$ to select samples based on $y_j$ only if $i=j$.
-If study 1 ascertains on $y_2$, for example, if all cases in study $1$ have $y_1=y_2=1$ , then 
+If study 1 ascertains on $y_2$ -- for example, if all cases in study $1$ have $y_1=y_2=1$ -- then 
 $\hat{p}_{cas,1j}$ will not be an unbiased estimate of $p_{cas,1j}$.
 Indeed, in this example, $\E[\hat{p}_{cas,1j}]=\prob[G_{ij}=1\cond y_1=y_2=1]$, 
 which will not equal $p_{cas,1j}=\prob[G_{ij}=1\cond y_1=1]$ unless $\rho=1$ or $\rho=0$.
 This follows from the fact that the conditionals and marginals of a bivariate normal are equal iff $\rho=0$ or $\rho=1$.
 We do not derive formulae describing the bias, except to note that the most
-common scenario -- where cases are sampled independently but all controls are double controls -- is probably nothing to worry about.
+common scenario, the ``healthy controls'' model -- cases are sampled independently but all controls are controls for both traits -- is probably nothing to worry about.
 This is because for binary traits where cases are rare, 
 $\prob[G_{ij}=1\cond y_1=0]\approx\prob[G_{ij}=1\cond y_1=y_2=0]$.
 Conditioning on $y_2=0$ hardly changes the probability, because $y_2=0$ most of the time, anyway.
@@ -1105,11 +1096,11 @@ scale without having to worry about sample and population prevalences.
 \subsection*{Flavors of Heritability and Genetic Correlation}
 
 The heritability parameter estimated by \texttt{ldsc} is subtly different than the heritability parameter $h^2_g$
-estimated by GCTA. 
+estimated by \texttt{GCTA}. 
 If $g$ denotes the set of all genotyped SNPs in some GWAS, define 
 $\beta_{GCTA} := \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]^2$,
 where $X_g$ is a random vector of genotypes for SNPs in $g$.
-Then the heritability parameter estimated by GCTA is defined 
+Then the heritability parameter estimated by \texttt{GCTA} is defined 
 $$h^2_{g}:=\sum_{j\in g} \beta_{GCTA,j}^2.$$
 Let $S$ denote the set of SNPs used to compute LD Scores (\emph{i.e.,} $\ell_j = \sum_{k\in S} r^2_{jk}$),
 and let $\beta_{S} := \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
@@ -1124,23 +1115,23 @@ from LD Score regression times $M_{5\myhyphen50\%}$, the number of SNPs with MAF
 
 The reason for this is the following: suppose that $h^2$ per SNP is not constant as a function of MAF. 
 Then the slope of LD Score regression will represent some sort of weighted average of the values of $h^2$ per SNP, with more weight given to classes of SNPs that are well-represented among the regression SNPs. 
-In a typical GWAS setting, the regression SNPs are predominately common SNPs, so multiplying the slope from LD Score regression by $M$ (which includes rare SNPs) amounts to extrapolating that $h^2$ per SNP
+In a typical GWAS setting, the regression SNPs are mostly common SNPs, so multiplying the slope from LD Score regression by $M$ (which includes rare SNPs) amounts to extrapolating that $h^2$ per SNP
 among common variants is the same as $h^2$ per SNP among rare variants.
-This is a particularly risk form of extrapolation, because there are many more rare SNPs than common SNPs.
+This extrapolation is particularly risky, because there are many more rare SNPs than common SNPs.
 
-It is probably reasonable to treat $h^2$ per SNP as a roughly constant function of MAF for SNPs with MAF above 5\%, but we have very little information about $h^2$ per SNP for SNPs with MAF below 5\%.
-Therefore we report $h^2_{5\myhyphen50\%}$ to avoid excessive extrapolation error.
+It is probably reasonable to treat $h^2$ per SNP as a constant function of MAF for SNPs with MAF above 5\%, but we have very little information about $h^2$ per SNP for SNPs with MAF below 5\%.
+Therefore we report $h^2_{5\myhyphen50\%}$ instead of $h^2_S$ to avoid excessive extrapolation error.
 This lower bound can be pushed lower with larger sample sizes and better rare variant coverage, either
 from sequencing or imputation.
 
-There are two main distinctions between $h^2_{5\myhyphen50\%}$ and $h^2_g$,
+There are two main distinctions between $h^2_{5\myhyphen50\%}$ and $h^2_g$.
 First, $h^2_g$ does not include the effects of common SNPs that are not tagged by the set of genotyped SNPs $g$.
 Second, the effects of causal 4\% SNPs are not counted towards $h^2_{5\myhyphen50\%}$.
 In practice, neither of these distinctions makes a large difference, since most GWAS arrays focus on common variation and manage to assay or tag almost all common variants, which is why 
 we do not emphasize this distinction in the main text.
 
 The relationship between the genetic covariance parameter estimated by LD Score regression and the
-genetic covariance parameter estimated by GCTA is similar to the relationship between 
+genetic covariance parameter estimated by \texttt{GCTA} is similar to the relationship between 
 $h^2_{5\myhyphen50\%}$ and $h^2_g$.
 The choice of $M$ is not important for genetic correlation, because the factors of $M$ in the numerator and 
 denominator cancel.
