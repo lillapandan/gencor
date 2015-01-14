@@ -1,5 +1,4 @@
-	\documentclass[11pt]{article}
-
+\documentclass[11pt]{article}
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{verbatim}
 \usepackage{fullpage}
@@ -8,6 +7,7 @@
 \usepackage{authblk}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{cite}
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage[nottoc,notlof,notlot,numbib]{tocbibind}
@@ -56,13 +56,7 @@
 \maketitle
 
 \begin{abstract}
-A recent focus in statistical genetics has been combining genetic association results from multiple phenotypes in order understand the relationships among traits.
-In this paper, 
-we estimate 300 genetic correlations among 25 traits, totaling more than 1.5 million unique phenotype measurements.
-To enable this analysis, we introduce a statistical method based on LD Score regression for estimating genetic correlation using only GWAS summary statistics.
-Our results include a positive genetic correlation between anorexia nervosa and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass index, as well as a large number of replications and positive controls. 
-These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for anorexia nervosa. 
- 
+The major challenges preventing estimation of genetic correlation from GWAS data are the lack of availability of individual genotype data and widespread sample overlap.We circumvent these difficulties by introducing a technique for estimating genetic correlation that requires only GWAS summary statistics and is not biased by sample overlap.We use our method to estimate 300 genetic correlations among 25 traits, totaling more than 1.5 million unique phenotype measurements.Our results include a positive genetic correlation between anorexia nervosa and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass index, as well as a large number of replications and positive controls. These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for anorexia nervosa.  
 \end{abstract}
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,41 +65,42 @@ These results highlight the power of a polygenic modeling framework, since there
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Discovering correlations between phenotypes is a fundamental goal of epidemiology, 
-with applications to classification and treatment of disease, as well as to development of pharmaceutical drugs.  
-One classical strategy in epidemiology is to search for correlations between phenotypes via cross-sectional or longitudinal observational studies; 
-however, the interpretation of results from these studies can be confounded and are vulnerable to reverse causation  \cite{smith2003mendelian, smith2014mendelian}. 
-An alternative strategy that is effective for heritable traits and is more robust to confounding is to search instead for pairs of phenotypes with shared genetic etiology. 
+with applications to classification and treatment of disease, as well as development of pharmaceutical drugs.  
+One classical strategy in epidemiology is to search for correlations between phenotypes via observational studies; 
+however, these studies can be biased by confounding and reverse causation  \cite{smith2003mendelian, smith2014mendelian}. 
+For heritable traits, an alternative strategy that is more robust to confounding is to scan for pairs of phenotypes with shared genetic etiology. 
 
-The earliest methods for searching for traits with genetic overlap were twin and family studies \cite{vandenberg1965multivariate, 
+The first methods for testing for genetic overlap were family studies \cite{vandenberg1965multivariate, 
 kempthorne1961interpretation,
 loehlin1966genetic,
 neale1992methodology,
-lichtenstein2009common},
-which have been applied to a wide spectrum of traits.
-However, family methods have the disadvantage of requiring measurements of different traits on the same individuals.
-Genome-wide association studies (GWAS) produce effect-size estimates for specific genetic variants, so it is possible to test for shared genetic
-etiology using these effect-size estimates, circumventing the requirement to measure multiple traits per individual.
-This can substantially reduce the cost and difficulty of epidemiological studies for uncommon diseases and traits that are expensive to assay.
+lichtenstein2009common}.
+The disadvantage of these methods is the requirement to measure all traits on the same individuals,
+which scales poorly to studies of multiple traits, 
+especially traits that are difficult or costly to measure (\emph{e.g.,} low-prevalence diseases).
+Genome-wide association studies (GWAS) produce effect-size estimates for specific genetic variants, 
+so it is possible to test for shared genetics by looking for correlations in effect-sizes across traits, 
+which does not require measuring multiple traits per individual.
 
-One widely-used technique for testing relationships between phenotypes using GWAS data is Mendelian randomization  
+A widely-used technique for testing for relationships between phenotypes using GWAS data is Mendelian randomization (MR)
 \cite{smith2003mendelian, smith2014mendelian}, which is the specialization to genetics of instrumental variables \cite{angrist2008mostly}.
-Mendelian randomization has proved effective for traits for which large-effect genetic variants have been identified \cite{voight2012plasma,do2013common};
-however for many complex traits, the heritability is distributed over thousands of variants with small effects \cite{visscher2012five},
-in which case Mendelian randomization using genome-wide significant SNPs suffers from low power and weak instrument bias \cite{angrist2008mostly}.
+MR is effective for traits that are influenced by large-effect common variants \cite{voight2012plasma,do2013common};
+however, for many complex traits, heritability is distributed over thousands of variants with small effects \cite{visscher2012five}.
+For these traits, MR suffers from low power and weak instrument bias \cite{angrist2008mostly,burgess2011avoiding}.
 
-In this paper, our goal is to estimate genetic correlation, a quantity whose definition includes the effects of all SNPs, including those that do not reach genome-wide significance (Methods).
-In cases where two phenotypes are suspected of having a cause-effect relationship,
-genetic correlation can be interpreted as a re-scaling of the instrumental variables estimate obtained from an instrument constructed using all SNPs (Methods);
-however, unlike instrumental variables, genetic correlation is also meaningful for pairs of diseases, and can be interpreted as a genetic analogue of comorbidity.
+In this paper, our goal is to estimate genetic correlation, a quantity that includes the effects of all SNPs,
+including those that do not reach genome-wide significance (Methods).
+In cases where two phenotypes have a cause-effect relationship,
+genetic correlation can be interpreted as a re-scaling of the MR estimate from a hypothetical instrument built using all SNPs (Methods).
+Genetic correlation is also meaningful for pairs of diseases, in which case it can be interpreted as the genetic analogue of comorbidity.
 The two main existing techniques for estimating genetic correlation from GWAS data are restricted maximum likelihood (REML) \cite{yang2010, yang2011gcta, lee2012estimation, pgccdg2013, vattikuti2012heritability, chen2014estimation}
 and polygenic scores \cite{purcell2009common, dudbridge2013power}.
-These methods have only been applied to a small number of traits so far, 
-because they require individual genotypes, 
-which are often difficult to obtain due to privacy considerations and informed consent limitations. 
+These methods have only been applied to a few traits, 
+because they require individual genotype data, 
+which are difficult to obtain due to informed consent limitations. 
 
-Here, we introduce a computationally fast method based on LD Score regression \cite{buliksullivan2014} for estimating genetic correlation.
-This method requires only GWAS summary statistics and is not biased by sample overlap.
-We apply this method to data from 25 GWAS and report genetic correlations between 300 pairs of phenotypes. 
+We introduce a computationally fast technique based on LD Score regression \cite{buliksullivan2014} for estimating genetic correlation using only GWAS summary statistics.
+We apply this method to data from 25 GWAS and report genetic correlations for 300 pairs of phenotypes. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Results}\label{Results}
@@ -113,87 +108,64 @@ We apply this method to data from 25 GWAS and report genetic correlations betwee
 
 \subsection*{Overview of Methods}
 
-Our method for estimating genetic correlation from summary statistics relies on the fact that the GWAS effect-size estimate for a given SNP incorporates the effects of all SNPs in LD with that SNP \cite{yang2011genomic,buliksullivan2014}. 
-For a polygenic trait, SNPs in regions with strong LD will have higher $\chi^2$-statistics on average than SNPs in regions with little LD \cite{buliksullivan2014}. 
-A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product of $z$-scores from two different studies.
-
-More precisely, under a polygenic model \cite{yang2010,lee2012estimation}, the expected value of $z_{1j}z_{2j}$ is 
+Our method for estimating genetic correlation from summary statistics relies on the fact that the GWAS effect-size estimate for a given SNP incorporates the effects of all SNPs in linkage disequilibrium (LD) with that SNP \cite{yang2011genomic,buliksullivan2014}. 
+For a polygenic trait, SNPs with high LD will have higher $\chi^2$-statistics on average than SNPs with low LD \cite{buliksullivan2014}. 
+A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product of $z$-scores from two studies. Precisely, under a polygenic model \cite{yang2010,lee2012estimation}, the expected value of $z_{1j}z_{2j}$ is 
 \begin{equation}\label{reg_eqn}
 	\E[z_{1j}z_{2j}] = \dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}},
 \end{equation}
-where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance (defined in Methods), $\ell_j$ is LD Score \cite{buliksullivan2014}, $N_s$ is the number of samples shared between study 1 and study 2, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples (Supplementary Note).
-If study 1 and study 2 are the same study, then this reduces to the single-phenotype result from \cite{buliksullivan2014}, because the genetic covariance between a trait and itself is the same as heritability, and $\chi^2 = z^2$.
-As a consequence of equation 1, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score, which is computationally very fast (see Methods). 
-If we normalize genetic covariance to lie in the interval $[-1,1]$, we obtain genetic correlation: 
-$r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability from study $i$ \cite{yang2010}. 
-Theory and extensive simulations confirm that our method produces robust estimates of genetic correlation, even when summary statistics are affected by population stratification \cite{buliksullivan2014} or sample overlap (Supplementary Note).
-
+where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance (defined in Methods), $\ell_j$ is LD Score \cite{buliksullivan2014}, $N_s$ is the number of individuals included in both studies, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples.
+We derive this equation in the Supplementary Note.
+If study 1 and study 2 are the same study, then equation \ref{reg_eqn} reduces to the single-trait result from \cite{buliksullivan2014}, because genetic covariance between a trait and itself is heritability, and $\chi^2 = z^2$.
+A similar result holds if one or both studies is a case/control study, in which case genetic covariance
+is on the observed scale.
+As a consequence of equation 1, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score, which is computationally very fast (Methods). 
+Normalizing genetic covariance to lie in $[-1,1]$ yields genetic correlation: 
+$r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$. 
+Theory and simulation confirm that our method produces robust estimates of genetic correlation, even when summary statistics are affected by population stratification \cite{buliksullivan2014} or sample overlap.
 
 \subsection*{Simulations}\label{Simulations}
 We performed a series of simulations to evaluate the robustness of the model to potential confounders such as sample overlap
-and misspecified models of genetic architecture, as well as to determine whether the inference procedure produces appropriate type I error, 
+and model misspecification, and to verify the accuracy of the standard error estimates.
+Details of our simulation setup are provided in the methods.
+Table XXX shows LD Score regression estimates and standard errors from 1000 simulations of quantitative traits with complete sample overlap.
+These simulations confirm that LD Score regression is not biased by sample overlap and that the block jackknife 
+standard errors give correct inference (Methods).
+Table SN shows results from simulations with one quantitative trait and one ascertained binary trait, 
+and table SN+1 shows results from simulations with two ascertained binary traits.
+These simulations confirm the derivations in the Supplementary Note and demonstrate that LD Score regression is not biased by oversampling of cases.
 
-Estimates of heritability and genetic covariance can be biased if the underlying model of genetic architecture is misspecified
-\cite{speed2012improved}; however,
-estimates of genetic correlation are more robust to model misspecification biases than estimates of 
-heritability or genetic covariance. 
-Since genetic correlation is estimated as a ratio,
-model misspecification biases that affect the numerator and the denominator in the same direction will tend to cancel. 
-In situations where MAF- or LD-dependent genetic architectures are a particular concern, it is possible to correct for such biases 
-with LD Score regression using a MAF or LD binning approach (see \cite{finucane2014partitioning} and Online Methods)
-similar to that taken by Lee, \emph{et al.} with REML \cite{lee2013estimation}. 
-
-To quantify the bias introduced by MAF- or LD-dependent genetic architectures, we simulated a variety of different LD Scores and genetic architectures.
-In realistic scenarios, only a subset of causal SNPs are directly genotyped or successfully imputed, 
-so we used a densely imputed panel of 1000 Genomes (1kG) SNPs \cite{10002012integrated} in order to generate phenotypes
-and estimate LD Scores, 
-but computed summary statistics only for the 16\% of 1kG SNPs that are also in HapMap3 (HM3) \cite{international2010integrating} with MAF above 5\%.
-Results from these simulations are displayed in Supplementary Tables 
-\ref{parallel}, \ref{antiparallel} and \ref{depcor}.
-
-We found that the partitioned LD Scores were not biased by MAF- and LD-dependent genetic architectures
-when estimating heritability and genetic covariance, but gave substantially higher standard errors than non-partitioned LD Scores.
-The estimates of genetic correlation from the simpler non-partitioned LD Scores were approximately unbiased in simulations 
-where both heritability and genetic covariance depended on LD, and only minimally biased in simulations where genetic 
-correlation also depended on LD. In addition, the non-partitioned LD Scores gave substantially lower standard errors than the
-more complex partitioned LD Score models.
-Thus for the remainder of this paper, we use non-partitioned LD Scores for estimating $r_g$, since these LD Scores had minimal
-bias and the lowest variance in simulations.
-
-In all of the simulations described in this section, 
-there was full sample overlap, which confirms that the LD Score regression with unconstrained intercept is not biased by sample overlap.
-
+Estimates of heritability and genetic covariance can be biased if the underlying model of genetic architecture is misspecified, \emph{e.g.,} if variance explained is correlated with LD Score or MAF \cite{speed2012improved, buliksullivan2014}.
+Because genetic correlation is estimated as a ratio, it is more robust:
+biases that affect the numerator and the denominator in the same direction tend to cancel. 
+We obtain approximately correct estimates of genetic correlation even in simulations with models of genetic architecture where our estimates of heritability and genetic covariance are biased (Tables \ref{parallel}).
 
 \subsection*{Replication of Pyschiatric Cross-Disorder Results}\label{PGCCDG}
-
-For additional validation, we replicated the estimates of genetic correlations between psychiatric disorders obtained with
-individual genotypes and REML by the Psychiatric Genomics Consortium (PGC) \cite{pgccdg2013}, 
-by applying LD Score regression to summary statistics generated from the same data \cite{cross2013identification}.
+As technical validation, we replicated the estimates of genetic correlations among psychiatric disorders obtained with individual genotypes and REML in \cite{pgccdg2013}, 
+by applying LD Score regression to summary statistics from the same data \cite{cross2013identification}.
 Since these summary statistics were generated from non-overlapping samples, 
 we applied LD Score regression using both unconstrained and constrained intercepts (Methods).
-Results from these analyses are displayed in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
-As expected, the genetic correlation estimates from LD Score regression were similar to the results from REML.
-LD Score regression with constrained intercept gave standard errors that were only slightly larger than REML,
-while the standard errors from LD Score regression with intercept were larger, especially for traits with small sample sizes
-(\emph{e.g.,} ADD, ASD).
-
+Results from these analyses are shown in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
+As expected, the results from LD Score regression were similar to the results from REML.
+LD Score regression with constrained intercept gave standard errors that were only slightly larger than those from REML,
+while the standard errors from LD Score regression with intercept were substantially larger, 
+especially for traits with small sample sizes (\emph{e.g.,} ADD, ASD).
 
 % Figure 1 -- replication of PGC-CDG results
 \begin{figure}[!ht]
 \begin{centering}
 \includegraphics[scale=0.9]{figs/ldsc_vs_gcta.pdf}
 \end{centering}
-\caption{\label{Fig:Replication of PGC Cross-Disorder Results}\small{\textit{Replication of PGC Cross-Disorder Results.
-This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} (which were generated from approximately the same data as \cite{pgccdg2013}) to 
-estimates obtained from REML in \cite{pgccdg2013}.
-The horizontal axis indicates pairs of phenotypes, and the vertical axis indicates genetic correlation.
-The error bars show standard errors.
-Colors indicate different estimation procedures. Green is REML,
-orange is LD Score with intercept and white is LD Score with constrained intercept.
-The estimates of genetic correlation between psychiatric phenotypes in figure \ref{Fig:300 Gencors} use larger sample sizes;
-this plot is intended primarily as a technical validation.
+\caption{\label{Fig:Replication of PGC Cross-Disorder Results}\small{\textit{Replication of Psychiatric Cross-Disorder Results.
+This plot compares LD Score regression estimates of genetic correlation using the summary statistics from \cite{cross2013identification} to estimates obtained from REML with the same data \cite{pgccdg2013}.
+The horizontal axis indicates pairs of phenotypes, 
+and the vertical axis indicates genetic correlation.
+Error bars are standard errors.
+Green is REML; orange is LD Score with intercept and white is LD Score with constrained intercept.
+The estimates of genetic correlation among psychiatric phenotypes in figure \ref{Fig:300 Gencors} use larger sample sizes;
+this analysis is intended as a technical validation.
 Abbreviations: 
-ADD = attention deficit hyperactivity disorder;
+ADD = attention deficit disorder;
 ASD = autism spectrum disorder;
 BPD = bipolar disorder;
 MDD = major depressive disorder;
@@ -202,13 +174,13 @@ SCZ = schizophrenia.}}}
 
 \subsection*{Application to Summary Statistics From 25 Phenotypes}
 
-We used LD Score regression to estimate genetic correlations among 25 phenotypes (URLs, Methods).
-Genetic correlation estimates for all 300 pairwise combinations of the 25 traits are displayed in Figure \ref{Fig:300 Gencors}.
+We used cross-trait LD Score regression to estimate genetic correlations among 25 phenotypes (URLs, Methods).
+Genetic correlation estimates for all 300 pairwise combinations of the 25 traits are shown in Figure \ref{Fig:300 Gencors}.
 For clarity of presentation, 
-the 25 phenotypes were restricted to contain only one phenotype from each cluster of highly correlated phenotypes (Methods).
-Highly correlated educational, anthropometric, smoking, and insulin-related phenotypes that were excluded from Figure \ref{Fig:300 Gencors}
-are displayed in Table \ref{edu} and Figures \ref{giant}, \ref{smoking} and \ref{insulin}, respectively.
-References and sample sizes are displayed in Table \ref{N}.
+the 25 phenotypes were restricted to contain only one phenotype from each cluster of closely related phenotypes (Methods).
+Genetic correlations among the educational, anthropometric, smoking, and insulin-related phenotypes that were excluded from Figure \ref{Fig:300 Gencors}
+are shown in Table \ref{edu} and Figures \ref{giant}, \ref{smoking} and \ref{insulin}, respectively.
+References and sample sizes are shown in Table \ref{N}.
 
 % Figure 2 -- Genetic correlation heatmap with 25 traits
 \begin{figure}[!ht]
@@ -217,19 +189,20 @@ References and sample sizes are displayed in Table \ref{N}.
 
 \caption{         
 \label{Fig:300 Gencors}
-\small{\textit{Genetic Correlations among 25 Published GWAS.
-Blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
+\small{\textit{Genetic Correlations among 25 GWAS.
+Blue represents positive genetic correlations; red represents negative. 
 Larger squares correspond to more significant $p$-values.
-Genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
-Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction for the 300 tests in this figure are given an asterisk. 
-We display results that do not pass multiple testing correction as smaller squares in order to avoid the confusion that would result from whiting our positive controls that do not pass multiple testing correction because of small sample size.
+Genetic correlations that are different from zero at 1\% FDR are shown as full-sized squares. 
+Genetic correlations that are significantly different from zero after Bonferroni correction for the 300 tests in this figure have an asterisk. 
+We show results that do not pass multiple testing correction as smaller squares in order to avoid whiting out positive controls 
+where the estimate points in the expected direction, but does not achieve statistical significance due to small sample size.
 This multiple testing correction is conservative, since the tests are not independent.}}}
 \end{centering}
 \end{figure}
 
 % Results that are consistent with top SNP results or MR analyses 
 For the majority of pairs of traits in Figure \ref{Fig:300 Gencors}, no GWAS-based genetic correlation estimate has been reported; 
-however, many associations have been described in an \emph{ad-hoc} manner based off the observation of overlap among genome-wide significant loci.
+however, many associations have been described informally based on the observation of overlap among genome-wide significant loci.
 Examples of genetic correlations that are consistent with overlap among top loci include the correlations between plasma lipids and cardiovascular disease \cite{do2013common}; age at onset of menarche and obesity \cite{perry2014parent}; type 2 diabetes, obesity, fasting glucose, plasma lipids and cardiovascular disease \cite{morris2012large}; birth weight, adult height and type 2 diabetes \cite{horikoshi2013new}; birth length, adult height and infant head circumference \cite{early2012genome, taal2012common}; and childhood obesity and adult obesity \cite{early2012genome}. 
 For many of these pairs of traits, we can reject the null hypothesis of zero genetic correlation with overwhelming statistical
 significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity).
@@ -255,12 +228,12 @@ significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity
 & Ever/Never Smoker & College (Yes/No) & -0.39 (0.07) & $1\times10^{-9\ **}$ \\
 & Ever/Never Smoker & Obesity (Adult) & 0.22 (0.05) & $7\times10^{-5\ **}$ \\
 \hline
-\multirow{3}{*}{Novel/Nonzero} 
+\multirow{3}{*}{New/Nonzero} 
 & Autism Spectrum Disorder & College (Yes/No) & 0.28 (0.08) & $5\times10^{-4\ *}$\\
 & Ulcerative Colitis & Childhood Obesity & -0.33 (0.08) & $3.9\times10^{-5\ **}$\\
 & Anorexia Nervosa & Schizophrenia & 0.19 (0.04)  & $1.5\times10^{-5\ **}$ \\
 \hline
-\multirow{8}{*}{Novel/Zero} 
+\multirow{8}{*}{New/Zero} 
 & Schizophrenia &Alzheimer's &  0.05 (0.05) & 0.58 \\
 & Schizophrenia & Ever/Never Smoker & 0.03 (0.06) & 0.26 \\
 & Schizophrenia & Triglycerides & -0.05 (0.04) & 0.21 \\
@@ -272,64 +245,61 @@ significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity
 \end{tabular}
 \caption{
 \small{\textit{\label{table:results}Genetic correlation estimates, standard errors and $p$-values for selected pairs of traits. Results are grouped into
- genetic correlations that are novel genetic results, but are consistent with established epidemiological associations (``Epidemiological''), novel genetic correlations (``Novel/Nonzero'') and interesting null results (``Novel/Zero''). 
- The $p$-values displayed are uncorrected $p$-values.
-Results that pass multiple testing correction for the 300 tests in Figure \ref{Fig:300 Gencors} at 1\% FDR are given a single asterisk; results that pass Bonferroni correction at significance level 0.05 are given two asterisks.
-For completeness, we present some genetic correlations that are directionally consistent with epidemiological associations but that do not pass multiple testing correction in our data. }}}
+ genetic correlations that are new genetic results, but are consistent with established epidemiological associations (``Epidemiological''), genetic correlations that are new both to genetics and epidemiology (``New/Nonzero'') and interesting null results (``New/Zero''). 
+The $p$-values are uncorrected $p$-values.
+Results that pass multiple testing correction for the 300 tests in Figure \ref{Fig:300 Gencors} at 1\% FDR have a single asterisk; results that pass Bonferroni correction have two asterisks.
+We present some genetic correlations that agree with epidemiological associations but that do not pass multiple testing correction in our data. }}}
 \end{table}
 
 % Novel genetic results that are not novel epidemiological results
-The first section of table \ref{table:results} lists genetic correlation results that are consistent with well-known epidemiological associations, 
+The first section of table \ref{table:results} lists genetic correlation results that are consistent with epidemiological associations, 
 but, as far as we are aware, have not previously been reported using genetic data.
 Our estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
-Our estimate of a negative genetic correlation between AN and obesity (and a similar genetic correlation with BMI) is intriguing given that the most striking feature of anorexia nervosa is the ability to maintain dangerously low BMI \cite{american2013dsm} and suggests that similar genetic factors may influence normal variation in BMI as well as severely dysregulated BMI in psychiatric illness.
-This result is consistent with our observation that BMI GWAS findings appear to primarily implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
+Our estimate of a negative genetic correlation between anorexia nervosa and obesity (and a similar genetic correlation with BMI) suggests that the same genetic factors influence normal variation in BMI as well as dysregulated BMI in psychiatric illness.
+This result is consistent with our observation that BMI GWAS findings implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
 \cite{finucane2014partitioning}.
 The negative genetic correlation between adult height and coronary artery disease agrees with a replicated epidemiological association  \cite{wang2011associations,hebert1993height,rich1995height}.
 We observe several significant associations with the educational attainment phenotypes from
-Rietveld \emph{et al.} \cite{rietveld2013gwas}.
-We estimate a statistically significant negative genetic correlation between college and Alzheimer's disease, 
-consistent with the epidemiological observation that low educational attainment is one of the largest risk factors for Alzheimer's
-\cite{barnes2011projected, norton2014potential}. 
-The positive genetic correlation between college and bipolar disorder is consistent with psychiatric literature showing that educational attainment and bipolar disorder status are positively correlated
-\cite{maccabe2010excellent, tiihonen2005premorbid}, 
-Our estimate of a negative genetic correlation between smoking and college is consistent with the epidemiological result that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
-Finally, our estimates of genetic correlations among metabolic traits are consistent with the estimates obtained using REML in Vattikuti \emph{et al.}
-\cite{vattikuti2012heritability} (Supplementary Table \ref{vattikuti}), and are directionally consistent with the recent Mendelian randomization results from Wuertz \emph{et al.} \cite{wuertz2014metabolic}.
-In addition, our estimate of 0.57 (0.074) for the genetic correlation between Crohn's disease and ulcerative colitis is consistent
-with the estimate of 0.62 (0.042) from Chen \emph{et al.} \cite{chen2014estimation}.
-
+Rietveld \emph{et al.} \cite{rietveld2013gwas}:
+we estimate a statistically significant negative genetic correlation between college and Alzheimer's disease, 
+which agrees with epidemiological results \cite{barnes2011projected, norton2014potential}. 
+The positive genetic correlation between college and bipolar disorder is consistent with the psychiatric literature\cite{maccabe2010excellent, tiihonen2005premorbid}.
+Our estimate of a negative genetic correlation between smoking and college is consistent with the fact that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
 
 % Novel results
-The second section of table \ref{table:results} lists results that are, to the best of our knowledge, new both to genetics and epidemiology.
-First, we find a positive genetic correlation between anorexia nervosa and schizophrenia.
-Comorbidity between eating and psychotic disorders has not been thoroughly investigated in the psychiatric literature \cite{striegel1999psychiatric,blinder2006psychiatric}, and our results raise the intriguing possibility of fundamental similarity between these classes of disease.
-Second, we estimate a negative genetic correlation between ulcerative colitis and childhood obesity.
-The relationship between premorbid BMI and ulcerative colitis is at present not well-understood,
-and our results suggest that exploring this relationship may be a fruitful direction for further investigation. 
-Third, we estimate a positive genetic correlation between autism spectrum disorder (ASD) and educational attainment,
+The second section of table \ref{table:results} lists three results that are, to the best of our knowledge, new both to genetics and epidemiology.
+One, we find a positive genetic correlation between anorexia nervosa and schizophrenia.
+Comorbidity between eating and psychotic disorders has not been thoroughly investigated in the psychiatric literature \cite{striegel1999psychiatric,blinder2006psychiatric}, and this result raises the possibility of  similarity between these classes of disease.
+Two, we estimate a negative genetic correlation between ulcerative colitis (UC) and childhood obesity.
+The relationship between premorbid BMI and ulcerative colitis is not well-understood; exploring this relationship may be a fruitful direction for further investigation. 
+Three, we estimate a positive genetic correlation between autism spectrum disorder (ASD) and educational attainment,
 which itself has very high genetic correlation with IQ \cite{deary2007intelligence, calvin2010sex, rietveld2013gwas}.
-The ASD summary statistics were generated using a case-pseudocontrol study design, so this result cannot be explained by diagnostic biases, such as the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. 
-The distribution of IQ among individuals with ASD has lower mean than the general population, but with heavy tails \cite{robinson2014autism} (\emph{i.e.,} an excess of individuals with extremely low and extremely high IQ).
-In addition, there is evidence that the genetic architectures of high IQ and low IQ ASD are dissimilar \cite{samocha2014framework}.
-We are unable to offer an explanation for this result, but propose that further exploration of this genetic correlation is an interesting direction for future research.
+The ASD summary statistics were generated using a case-pseudocontrol study design, so this result cannot be explained by the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. 
+The distribution of IQ among individuals with ASD has lower mean than the general population, but with heavy tails \cite{robinson2014autism} (\emph{i.e.,} an excess of individuals with low and high IQ).
+There is evidence that the genetic architectures of high IQ and low IQ ASD are dissimilar \cite{samocha2014framework}.
+We are unable to offer an explanation for this result, but propose that further exploration of this genetic correlation may be an important direction for future research.
 
 % Interesting null results
-The third section of table \ref{table:results} lists several instances where the genetic correlation is close to zero with small standard error, in contrast to previous reports of epidemiological correlation or pleiotropy.
-We estimate genetic correlations close to zero between schizophrenia and rheumatoid arthritis, schizophrenia and smoking, and schizophrenia and plasma lipids. The lack of genetic correlation between schizophrenia and rheumatoid arthritis is interesting because schizophrenia has been observed to be protective for rheumatoid arthritis \cite{silman2002epidemiology}.
+The third section of table \ref{table:results} lists interesting examples where the genetic correlation is close to zero with small standard error.
+The lack of genetic correlation between schizophrenia and rheumatoid arthritis is interesting because schizophrenia has been observed to be protective for rheumatoid arthritis \cite{silman2002epidemiology}.
 The absence of genetic correlation between schizophrenia and smoking is notable because of the high prevalence of smoking among individuals with schizophrenia \cite{de2005meta}. 
-Our estimate of zero genetic correlation between schizophrenia and plasma lipid levels or cardiovascular disease contrasts with earlier reports of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}. 
-However, the observation from Andreassen, \emph{et al.} \cite{andreassen2013improved2} could potentially be explained the sensitivity of the method used in the original report to the properties of a few regions with high linkage disequilibrium, 
-rather than trait biology (Table \ref{qq_tg}).
+The absence of genetic correlation between schizophrenia and plasma lipid levels contrasts with a previous report of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}. 
+However, this observation from Andreassen, \emph{et al.} \cite{andreassen2013improved2} could be explained the sensitivity of the method used to the properties of a few regions with strong LD, rather than trait biology (Table \ref{qq_tg}).
 We estimate near-zero genetic correlation between Alzheimer's disease and schizophrenia. 
-The genetic correlations between Alzheimers disease and the other four psychiatric traits (anorexia nervosa, bipolar, major depression, ASD) are also
+The genetic correlations between Alzheimers disease and the other psychiatric traits (anorexia nervosa, bipolar, major depression, ASD) are also
 close to zero, but with larger standard errors, due to smaller sample sizes.
 This suggests that the genetic basis of Alzheimer's disease is distinct from psychiatric conditions. 
-Last, we estimate near zero genetic correlation between rheumatoid arthritis and both Crohn's disease and ulcerative colitis. Although these immune diseases share a large number of associated loci \cite{cotsapas2011pervasive,farh2014genetic}, 
-it is as often the case that an allele that is risk-increasing for one immune disease is protective for another as an allele is 
-risk-increasing for two \cite{cotsapas2011pervasive}, consistent near-zero genetic correlation overall.
+Last, we estimate near zero genetic correlation between rheumatoid arthritis (RA) and both Crohn's disease (CD) and UC. 
+Although these diseases share many associated loci \cite{cotsapas2011pervasive,farh2014genetic}, 
+there appears to be no directional trend. 
+Some RA risk alleles are also risk alleles for UC and CD, 
+but many RA risk alleles are protective for UC and CD \cite{cotsapas2011pervasive}, 
+yielding near-zero genetic correlation.
 This is an example of pleiotropy without genetic correlation (Methods).
-%%% Getting # of overlapping gwsig loci w/ concordant and discordant effects from Mark D
+
+Finally, our estimates of genetic correlations among metabolic traits are consistent with the estimates obtained using REML in Vattikuti \emph{et al.}
+\cite{vattikuti2012heritability} (Supplementary Table \ref{vattikuti}), and are directionally consistent with the recent Mendelian randomization results from Wuertz \emph{et al.} \cite{wuertz2014metabolic}.
+Our estimate of 0.57 (0.074) for the genetic correlation between CD and UC is consistent with the estimate of 0.62 (0.042) from Chen \emph{et al.} \cite{chen2014estimation}.
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -338,61 +308,53 @@ This is an example of pleiotropy without genetic correlation (Methods).
 
 
 % Summary of major findings
-We have described a new method for estimating genetic correlation from GWAS summary statistics.
-We applied our method to a large dataset of publicly available GWAS summary statistics, spanning 25 traits and more than 1.5 million phenotype-genotype pairs. 
-We replicated many previously-reported GWAS-based genetic correlations, and confirm observations of overlap among genome-wide significant SNPs, 
-Mendelian randomization results and known epidemiological associations, thus validating the utility of genetic correlation as an epidemiological tool.
-In addition, we report several novel results that merit further analysis, including a positive genetic correlation between educational attainment and autism spectrum disorder
+We have described a new method for estimating genetic correlation from GWAS summary statistics, which
+we applied to a dataset of GWAS summary statistics consisting of 25 traits and more than 1.5 million unique phenotype measurements.
+We reported several new findings that would have been difficult or impossible to obtain with existing methods, 
+including a positive genetic correlation between educational attainment and autism spectrum disorder
 and a positive genetic correlation between anorexia nervosa and schizophrenia.
+Our method replicated many previously-reported GWAS-based genetic correlations, 
+and confirmed observations of overlap among genome-wide significant SNPs, 
+MR results and epidemiological associations.
 
 % Importance of findings 
 This method is an advance for several reasons: 
-it does not require individual genotypes, genome-wide significant SNPs or measuring all traits on all individuals;
-it is not biased by sample overlap; 
-and it is computationally trivial.  
-Although it may be possible to extend existing methods such as LD-pruned polygenic scores to work on pairs of summary statistics, 
-such methods would be biased by sample overlap, and would suffer from the disadvantage that LD-pruning results in loss of information.
-These advantages allow estimation of genetic correlations between a much large set of pairs of phenotypes than was previously possible.
+it does not require individual genotypes, 
+genome-wide significant SNPs or
+LD-pruning (which loses information if causal SNPs are in LD).
+Our method is not biased by sample overlap and is computationally fast.  
+Furthermore, our approach does not require measuring multiple traits on the same individuals, 
+so it scales easily to studies of thousands of pairs of traits. 
+These advantages allow us to estimate genetic correlation for many more pairs of phenotypes than was possible with existing methods.
 
 % Limitations of Genetic Correlation
-In general, the difficulties in interpreting genetic correlation are similar to the difficulties in interpretation of Mendelian randomization.
-Although genetic correlation is immune to environmental confounding, 
-genetic correlation is still subject to genetic confounding, 
-which is similar to the idea of confounding by pleiotropy from the Mendelian randomization literature (Methods).
-This is best illustrated with an example. 
-% Alkes suggested moving this example to the supplement in order to obtain a shorter discussion. I think it is a very important
-% point, and prefer to leave it in the main text. Ben also seems keen to leave it in.
-The negative genetic correlation between HDL and CAD in Figure \ref{Fig:300 Gencors} could result from a direct causal effect $\mathrm{HDL}\rightarrow\mathrm{CAD}$,
-but could also result from non-causal shared genetic etiology, 
-perhaps mediated by the genetic correlation of -0.55 between HDL and triglycerides (TG),
-which is the explanation offered in \cite{do2013common, burgess2014using}. 
-This scenario can be represented graphically as 
+The challenges in interpreting genetic correlation are similar to the challenges in MR.
+We highlight two difficulties. First,
+genetic correlation is immune to environmental confounding, but is subject to genetic confounding, 
+analogous to confounding by pleiotropy in MR.
+For example, the genetic correlation between HDL and CAD in Figure \ref{Fig:300 Gencors} could result from a causal effect $\mathrm{HDL}\rightarrow\mathrm{CAD}$,
+but could also be mediated by triglycerides (TG) \cite{do2013common, burgess2014using}, 
+represented graphically \cite{greenland1999causal} as 
 $\mathrm{HDL}\leftarrow\mathrm{G}\rightarrow\mathrm{TG}\rightarrow\mathrm{CAD}$, 
 where $\mathrm{G}$ is the set of genetic variants with effects on both HDL and TG.
-This diagram would result in a genetic correlation between HDL and CAD, because there is an unblocked path from HDL to CAD \cite{greenland1999causal}.
-Extending genetic correlation to deal with multiple phenotypes that share causal loci 
-(\emph{e.g.,} genetic correlation between HDL and CAD controlling for TG, 
-analogous to \cite{do2013common,burgess2014using}) is an important direction for future work.
+Extending genetic correlation to multiple genetically correlated phenotypes is an important direction for future work.
+Second, although genetic correlation estimates are not biased by oversampling of cases,
+they are affected by other forms of selection bias, such as misclassification \cite{pgccdg2013}.
 
 % Limitations of the Method
-We note several limitations of the LD Score regression estimator of genetic correlation.
-First, LD Score regression requires larger sample sizes than methods such as REML that use individual genotypes
-in order to give estimates with acceptable standard error.
-Second, LD Score regression is only currently applicable to studies that sample individuals from non-admixed populations
-for which a sequenced reference panel (such as 1000 Genomes \cite{10002012integrated}) is available \cite{buliksullivan2014}.
-Third, LD Score regression performs optimally when applied to traits with highly polygenic genetic architectures, such as 
-psychiatric traits. 
-At very large sample size and for less-polygenic traits,
-analyzing only the significantly associated SNPs can sometimes be a more powerful strategy.
-Developing methods that can make optimal use of both confidently associated large-effect SNPs and diffuse polygenic signal from thousands of small-effect SNPs is a direction for future research.
-Fifth, although LD Score regression is not biased by oversampling of cases in case-control studies,
-the results may nonetheless be biased by more subtle biases in ascertainment, such as misclassification of cases \cite{pgccdg2013}.
+We note several limitations of LD Score regression as an estimator estimator of genetic correlation.
+First, LD Score regression requires larger sample sizes than methods that use individual genotypes
+in order to achieve acceptable standard error.
+Second, LD Score regression is not currently applicable to samples from recently-admixed populations.
+Third, methods built from polygenic models, such as LD Score regression and REML,
+are most effective when applied to traits with polygenic genetic architectures. 
+For traits where significant SNPs account for a sizable proportion of heritability, 
+analyzing only these SNPs can be more powerful.
+Developing methods that make optimal use of both large-effect SNPs and diffuse polygenic signal is a direction for future research.
 
 Despite these limitations, we believe that the LD Score regression estimator of genetic correlation will be a useful addition
 to the epidemiological toolbox, since it allows for rapid screening for correlations among a diverse set of traits, without the 
 need for measuring multiple traits on the same individuals or genome-wide significant SNPs.
-
-%%% INSERT CONCLUSION HERE
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -401,13 +363,14 @@ need for measuring multiple traits on the same individuals or genome-wide signif
 
 \subsection*{Definition of Genetic Covariance and Correlation}
 
+All definitions refer to narrow-sense heritabilities and genetic covariances.
 Let $S$ denote a set of $M$ SNPs, 
 let $X$ denote a vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
 and let $y_1$ and $y_2$ denote phenotypes. Define $\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]^2$,
 where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit). 
 Let $\gamma$ denote the corresponding vector for $y_2$.
 This is a projection, so $\beta$ is unique modulo SNPs in perfect LD. 
-Define $h^2_S$, the heritability explained by SNPs in $S$, as $h^2_S(y_1) := \sum_j \beta_j^2$, and the genetic covariance among SNPs in $S$ is defined
+Define $h^2_S$, the heritability explained by SNPs in $S$, as $h^2_S(y_1) := \sum_j \beta_j^2$ and $\rho_S(y_1,y_2)$, the genetic covariance among SNPs in $S$, as
 $\rho_S(y_1,y_2) := \sum_{j\in S} \beta_j\gamma_j$.
 The genetic correlation among SNPs in $S$ is $r_S(y_1,y_2) := \rho_S(y_1,y_2)/\sqrt{h^2_S(y_1)h^2_S(y_2)}$, 
 which lies in [-1,1]. 
@@ -417,7 +380,7 @@ genotyped and imputed SNPs in GWAS.
 SNP genetic correlation ($r_g$) is different from family study genetic correlation.
 In a family study, the relationship matrix captures information about all genetic variation, 
 not just common SNPs. 
-As a result, family studies estimate the total [narrow-sense] genetic correlation ($S$ equals all variants).
+As a result, family studies estimate the total genetic correlation ($S$ equals all variants).
 Unlike the relationship between SNP-heritability \cite{yang2010} and total heritability, 
 for which $h^2_g \leq h^2$, 
 no similar relationship holds between SNP genetic correlation and total genetic correlation.
@@ -428,7 +391,7 @@ If we use a genetic instrument $g_i := \sum_{j\in S} X_{ij}\beta_j$ to estimate 
 the 2SLS estimate is $\hat{b}_{2SLS}:=\T{g}y_2/\T{g}y_1$ \cite{angrist2008mostly}.
 The expectations of the numerator and denominator are 
 $\E[\T{g}y_2]=\rho_S(y_1,y_2)$ and $\E[\T{g}y_1]=h^2_S(y_1)$.
-Thus, $\lim_{N\to\infty} \hat{b}_{2SLS} = r_S(y_2,y_1)\sqrt{h^2_S(y_1) / h^2_S(y_2)}$.
+Thus, $\mathrm{plim}_{N\to\infty} \hat{b}_{2SLS} = r_S(y_2,y_1)\sqrt{h^2_S(y_1) / h^2_S(y_2)}$.
 If we use the same set $S$ of SNPs to estimate $b_{12}$ and $b_{21}$ (\emph{e.g.,} if $S$ is the set of all common SNPs, as in the genetic correlation analyses in this paper), then this procedure is symmetric in $y_1$ and $y_2$. 
 
 Genetic correlation is different from pleiotropy. 
@@ -445,8 +408,7 @@ We estimate genetic covariance by regressing $z_{1j}z_{2j}$ against $\ell_j\sqrt
 then multiplying the resulting slope by $M$, the number of SNPs in the reference panel with MAF between 5\% and 50\% 
 (technically, this is an estimate of $\pf$, see the Supplementary Note).
 
-If we know ahead of time that there is no sample overlap, we can constrain the intercept of this regression to zero, which gives lower standard error. This can be accomplished with the \texttt{--no-intercept}
-flag in \texttt{ldsc}.
+If we know the amount of sample overlap ahead of time, we can reduce the standard error by constraining the intercept with the \texttt{--constrain-intercept} flag in \texttt{ldsc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Regression Weights} 
@@ -456,7 +418,7 @@ For heritability estimation, we use the regression weights from \cite{buliksulli
 If effect sizes for both phenotypes are drawn from a bivariate normal distribution, then
 the optimal regression weights for genetic covariance estimation are 
 \begin{equation}
-\var[z_{1j}z_{2j} \,|\, \ell_j ] \propto
+\var[z_{1j}z_{2j} \,|\, \ell_j ] =
 	\left( 
 		\frac{N_1\hsqo\ell_j}{M} + 1
 	\right) 
@@ -479,7 +441,7 @@ The genetic covariance estimate that we report is the estimate from the second r
 \end{enumerate}
 Linear regression with weights estimated from the data is called feasible generalized least squares (FGLS). 
 FGLS has the same limiting distribution as WLS with optimal weights, so WLS $p$-values are valid for FGLS \cite{angrist2008mostly}. 
-In addition, we weight by $1/\ell_j$ (where $\ell_j$ is LD Score with sum over regression SNPs) in order to downweight SNPs that are overcounted. 
+We multiply the heteroskedasticity weights by $1/\ell_j$ (where $\ell_j$ is LD Score with sum over regression SNPs) in order to downweight SNPs that are overcounted. 
 This is a heuristic: the optimal approach is to rotate the data so that it is de-correlated, 
 but this rotation matrix is difficult to compute.
 
@@ -516,6 +478,12 @@ Practically, estimating LD Scores takes roughly an hour parallelized over chromo
 LD Score regression takes about 15 seconds per pair of phenotypes on a 2014 MacBook Air with 1.7 GhZ Intel Core i7 processor.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Simulations}\label{simulations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Summary Statistic Datasets}\label{datasets}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -546,7 +514,7 @@ step should be skipped if INFO scores are available for all studies.
  SNPs with extremely large effect sizes ($\chi^2 > 80$, as in \cite{buliksullivan2014}).
 \end{enumerate}
 
-GC correction at any stage biases the heritability and genetic covariance estimates downwards (see the Supplementary Note of \cite{buliksullivan2014}.
+Genomic control (GC) correction at any stage biases the heritability and genetic covariance estimates downwards (see the Supplementary Note of \cite{buliksullivan2014}.
 The biases in the numerator and denominator of genetic correlation cancel exactly, 
 so genetic correlation is not biased by GC correction. 
 A majority of the studies analyzed in this paper used GC correction, 
@@ -673,11 +641,17 @@ We ignore the distinction between normalizing and centering in the population an
 since this introduces only $\mathscr{O}(1/N)$ error.},
 with dimensions $N_1\times M$ and $N_2\times M$, respectively; 
 $\beta$ and $\gamma$ are vectors of per-normalized genotype effect sizes,
-and $\delta$ and $\epsilon$ are vectors of environmental or non-additive genetic effects,
+and $\delta$ and $\epsilon$ are vectors of residuals, representing environmental effects and non-additive genetic effects.
 In this model, $Y$ and $Z$ are unobserved matrices of all SNPs, including SNPs that are not genotyped.
 
 We treat all of $Y, Z, \beta, \gamma, \delta $ and $\epsilon$ as random.
-Suppose that $(\beta, \gamma)$ has mean zero and covariance matrix\
+Suppose that $(\beta, \gamma)$ has mean zero and covariance matrix\footnote{The assumption that all $\beta$ is drawn with equal variance for all SNPs hides an implicit assumption that 
+rare SNPs have larger per-allele effect sizes than common SNPs. 
+As discussed in the simulations section of the main text and in our earlier work \cite{buliksullivan2014}, LD Score regression is robust to moderate violations of this assumption, though it may break down in extreme
+cases, \emph{e.g.,} if all causal variants are rare.
+In situations where a different model for $\var[\beta]$ is more appropriate, all proofs in this note go through
+with LD Score replaced by weighted LD Scores, $\ell_j = \sum_k \var[\beta_j]r^2_{jk}$.
+}
 \begin{equation*} 
 	\var[(\beta, \gamma)] = \frac{1}{M}
 		\left( \begin{array}{cc}
@@ -697,13 +671,6 @@ Let $\rho := \gencov + \envcov$.
 Genotypes are \emph{i.i.d.} draw from a distribution with covariance matrix $R$
 (\emph{i.e.,} $r$ is an LD matrix with $r_{jk} = \E[Y_{ij}Y_{ik}]$).
 There are $N_s$ individuals included in both studies.
-
-The assumption that all $\beta$ is drawn with equal variance for all SNPs hides an implicit assumption that 
-rare SNPs have larger per-allele effect sizes than common SNPs. 
-As discussed in the simulations section of the main text and in our earlier work \cite{buliksullivan2014}, LD Score regression is robust to moderate violations of this assumption, though it may break down in extreme
-cases, \emph{e.g.,} if all causal variants are rare.
-In situations where a different model for $\var[\beta]$ is more appropriate, all proofs in this note go through
-with LD Score replaced by weighted LD Scores, $\ell_j = \sum_k \var[\beta_j]r^2_{jk}$.
 
 \begin{lemma} Under this model, the expected genetic covariance between phenotypes is $\gencov$, justifying our use of the notation $\gencov$.
 \end{lemma}
@@ -785,7 +752,7 @@ Fom a standard formula for double second moments of the bivariate normal, the CV
 	\var[z_{1j}]\var[z_{2j}]
 	+
 	2\E[z_{1j}z_{2j}]^2\nonumber\\
-&\propto 
+&= 
 	\left( 
 		\frac{N_1\hsqo\ell_j}{M} + 1
 	\right) 
@@ -828,7 +795,7 @@ If $\beta_j$ is the marginal per-normalized-genotype effect and $\zeta_j$ is the
 we have $X_j\beta_j = G_j\zeta_j$. 
 Thus, setting $G_{ij}=1$ yields $\zeta_j = \beta_j\sqrt{(1-p_j)/p_j}$.
 
-\begin{lemma}
+\begin{lemma}\label{probit_model}
 Suppose unobserved liabilities $\psi, \varphi$ for traits $y_1,y_2$ with thresholds $\tau_1,\tau_2$ corresponding to prevalences $K_1,K_2$ are generated according to the usual polygenic model for quantitative traits, i.e.,
 $\psi_i=\sum_j X_{ij}\beta_j+\delta$, $\varphi_i=\sum_j X_{ij}\gamma_j+\epsilon$, with
 \begin{equation*} 
@@ -953,12 +920,12 @@ which will not equal $p_{cas,1j}=\prob[G_{ij}=1\cond y_1=1]$ unless $\rho=1$ or 
 This follows from the fact that the conditionals and marginals of a bivariate normal are equal iff $\rho=0$ or $\rho=1$.
 We do not derive formulae describing the bias, except to note that the most
 common scenario, the ``healthy controls'' model -- cases are sampled independently but all controls are controls for both traits -- is probably nothing to worry about.
-This is because for binary traits where cases are rare, 
+If cases are rare, 
 $\prob[G_{ij}=1\cond y_1=0]\approx\prob[G_{ij}=1\cond y_1=y_2=0]$.
-Conditioning on $y_2=0$ hardly changes the probability, because $y_2=0$ most of the time, anyway.
+Conditioning on $y_2=0$ hardly changes the distribution, because $y_2=0$ most of the time, anyway.
 
 \begin{prop}\label{binary_prop}
-Under a polygenic model, 
+Under the polygenic liability threshold model from lemma \ref{probit_model},
 \begin{align}
 	\E[z_{1j}z_{2j}]
 &\approx
@@ -970,7 +937,8 @@ where
 \[
 \rho_{g,obs} := \rho_g\left(\dfrac{\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
 \]
-denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2).
+denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2), $N_i$ denotes total sample size in study $i$ and 
+$N_{a,i}$ for $a\in\{cas,con\}$ and $i=1,2$ denotes the number of individuals with phenotype $a$ in study $i$.
 \end{prop}
 \begin{proof}
 The full form of $z_{1j}z_{2j}$ is 
@@ -1104,7 +1072,8 @@ Then the heritability parameter estimated by \texttt{GCTA} is defined
 $$h^2_{g}:=\sum_{j\in g} \beta_{GCTA,j}^2.$$
 Let $S$ denote the set of SNPs used to compute LD Scores (\emph{i.e.,} $\ell_j = \sum_{k\in S} r^2_{jk}$),
 and let $\beta_{S} := \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
-Then define
+Generally $\beta_{S,j}\neq\beta_{GCTA,j}$ unless all SNPs in $S\setminus g$ are not in LD with SNPs in $g$.
+Define
 $$h^2_{S}:=\sum_{j\in S} \beta_{S,j}^2.$$
 Let $S'$ denote the set of SNPs in $S$ with MAF above 5\%. Define
 \begin{equation}
@@ -1133,7 +1102,7 @@ we do not emphasize this distinction in the main text.
 The relationship between the genetic covariance parameter estimated by LD Score regression and the
 genetic covariance parameter estimated by \texttt{GCTA} is similar to the relationship between 
 $h^2_{5\myhyphen50\%}$ and $h^2_g$.
-The choice of $M$ is not important for genetic correlation, because the factors of $M$ in the numerator and 
+Choice of $M$ is not important for genetic correlation, because the factors of $M$ in the numerator and 
 denominator cancel.
 
 \newpage
@@ -1141,7 +1110,7 @@ denominator cancel.
 \section*{Supplementary Tables}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection*{Sample Sizes}
+\subsection*{Sample Sizes and References}
 \begin{table}[ht]
 \centering
 \begin{tabular}{lll}
@@ -1177,7 +1146,7 @@ Rheumatoid Arthritis & Stahl, \textit{et al.,} \textit{Nat Genet,} 2010 \cite{st
 \end{table}
 
 \newpage
-\subsection*{Simulations with Parallel LD- and MAF-Dependence}
+\subsection*{Simulations with MAF- and LD-Dependent Genetic Architecture}
 \begin{table}[ht]
 \centering
 \begin{tabular}{llll}
@@ -1191,80 +1160,25 @@ Truth & 0.83 & 0.42 & 0.5 \\
   60 Bins & 0.81 (0.12) & 0.41 (0.09) & 0.51 (0.09) \\ 
    \hline
 \end{tabular}
-\caption{\label{parallel}\small{\textit{This table displays simulations with MAF- and LD-dependent genetic architecture where the MAF- and LD- dependence was the same for both phenotypes and genetic correlation did not vary with MAF or LD. Precisely, effect sizes were drawn from a normal distribution so that the magnitude of per-allele effect sizes were uncorrelated with MAF and variants with LD Score below 100 were $4\times$ enriched for heritability.
-In all simulations, the sample size was 2062 individuals with full sample overlap between studies; the causal SNPs were best-guess imputed 1000 Genomes SNPs on chromosome 2, and the SNPs retained for the LD Score regression were HapMap 3 SNPs. 
-Estimates are averages across 100 simulations. Standard deviations (in parentheses) are calculated as the empirical standard deviation across 100 simulations.
+\caption{\label{parallel}\small{\textit{Simulations with MAF- and LD-dependent genetic architecture.
+Effect sizes were drawn from normal distributions such that the variance of per-allele effect sizes was uncorrelated with MAF,
+and variants with LD Score below 100 were fourfold enriched for heritability.
+Sample size was 2062 with complete overlap between studies; 
+causal SNPs were about 600,000 best-guess imputed 1kG SNPs on chr 2, 
+and the SNPs retained for the LD Score regression were the subset of about 100,000 of these SNPs that were included in HM3. 
+True parameter values are shown in the top line of the table.
+Estimates are averages across 100 simulations. 
+Standard deviations (in parentheses) are standard deviations across 100 simulations.
 LD Scores were estimated using in-sample LD and a 1cM window. 
-HM3 LD Score is $\sum r^2$ with the sum taken over SNPs in HapMap 3. 
-The PNG LD Score is $\sum r^2$ with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. The 30 bins LD Score is a per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. The 60 bins LD Score is a per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300
-These simulations demonstrate that naive LD Score regression can give accurate genetic correlation estimates even in situations where the heritability and genetic covariance estimates are badly biased, so long as genetic correlation does not depend on MAF or LD. In addition, these simulations demonstrate that MAF- and LD-binned LD Score regression can give accurate estimates of heritability and genetic covariance even for genetic architectures with MAF- and LD-dependence.}}}
-\end{table}
-\newpage
-
-\subsection*{Simulations with Antiparallel LD- and MAF-Dependence}
-\begin{table}[ht]
-\centering
-\begin{tabular}{lllll}
-  \hline
-LD Score & $h^2_1(5\myhyphen50\%)$ & $h^2_2(5\myhyphen50\%)$ & $\rho_g(5\myhyphen50\%)$ & $r_g(5\myhyphen50\%)$ \\ 
-  \hline
-Truth & 0.83 & 0.89 & 0.33 & 0.38 \\ 
-  HM3 & 0.54 (0.09) & 1.38 (0.1) & 0.4 (0.08) & 0.47 (0.08) \\ 
-  PNG & 0.36 (0.08) & 1.13 (0.08) & 0.32 (0.07) & 0.5 (0.09) \\ 
-  30 Bins & 0.8 (0.14) & 0.93 (0.12) & 0.34 (0.11) & 0.39 (0.1) \\ 
-  60 Bins & 0.79 (0.14) & 0.93 (0.12) & 0.33 (0.11) & 0.39 (0.1) \\ 
-   \hline
-\end{tabular}
-\caption{\label{antiparallel}\small{\textit{This table displays simulations with MAF- and LD-dependent genetic architecture where the MAF- and LD- dependence was in opposite directions for each phenotype, and genetic correlation did not vary with MAF or LD. Precisely, per-allele effect sizes for the first phenotype were drawn from a normal distribution so that the variance of per-allele effect sizes were uncorrelated with MAF, and variants with LD Score below 100 were $4\times$ enriched for heritability. Per-allele effect sizes for the second phenotype were drawn from a normal distribution so that the variance of per-allele effect size followed $\sqrt{p(1-p)}$, where $p$ is MAF, and variants with LD Score above 100 were $4\times$ enriched for heritability. Otherwise, the parameters of these simulations were the same as in \ref{parallel}
-These simulations demonstrate that naive LD Score regression can give approximately accurate genetic correlation estimates even in situations where the heritability and genetic covariance estimates are badly biased, so long as genetic correlation does not depend on MAF or LD. In addition, these simulations demonstrate that MAF- and LD-binned LD Score regression can give accurate estimates of heritability and genetic covariance even for genetic architectures with MAF- and LD-dependence.
-}}}
+HM3 means LD Score with sum taken over SNPs in HM3. 
+PNG (per-normalized-genotype) means LD Score with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. 
+30 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. 
+60 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300,
+These simulations demonstrate that naive (HM3, PNG) LD Score regression gives correct genetic correlation estimates even when heritability and genetic covariance estimates are biased, so long as genetic correlation does not depend on LD.}}}
 \end{table}
 
 \newpage
-\subsection*{Simulations with LD- and MAF-Dependent Genetic Correlation}
-\begin{table}[ht]
-\centering
-\begin{tabular}{lllll}
-  \hline
-LD Score & $h^2_1(5\myhyphen50\%)$ & $h^2_2(5\myhyphen50\%)$ & $\rho_g(5\myhyphen50\%)$ & $r_g(5\myhyphen50\%)$ \\ 
-  \hline
-Truth & 0.78 & 0.72 & 0.48 & 0.53 \\ 
-  HM3 & 0.91 (0.1) & 0.93 (0.09) & 0.46 (0.08) & 0.5 (0.06) \\ 
-  PNG & 0.77 (0.08) & 0.83 (0.08) & 0.4 (0.07) & 0.5 (0.06) \\ 
-  30 Bins & 0.8 (0.14) & 0.69 (0.12) & 0.4 (0.11) & 0.54 (0.09) \\ 
-  60 Bins & 0.79 (0.14) & 0.68 (0.13) & 0.4 (0.11) & 0.54 (0.09) \\ 
-   \hline
-\end{tabular}
-\caption{\label{depcor}\small{\textit{In these simulations, effect sizes for the first phenotype were drawn from a normal distribution with mean zero and variance
-$(pq)^{0.6}(1+\mathrm{log}(\ell_j)/50)^2$, 
-effect sizes for the second phenotype were drawn form a normal distribution with mean zero and variance
-$(pq)^{0.3}(1-\mathrm{log}(\ell_j)/50)^2$,
-then noise following a normal distribution with mean zero and variance 
-$ 1+(7-1)\ell_j/700$,
-was added to the effect sizes for the second phenotype, so that genetic correlation was roughly 0.35 for low LD SNPs and 
-0.65 for high LD SNPs.   
-}}}
-\end{table}
-
-\newpage
-\subsection*{Comparison of Standard Error Estimates to Empirical Standard Deviation across Simulations}
-\begin{table}[ht]
-\centering
-\begin{tabular}{llrlrlr}
-  \hline
-LD Score & $\widehat{se}(\hat{h}^2)$ & $sd(\hat{h}^2)$ & $\widehat{se}(\hat{\rho}_g)$ & $sd(\hat{\rho}_g)$ & $\widehat{se}(\hat{r}_g)$ & $sd(\hat{r}_g)$ \\ 
-  \hline
-HM3 & 0.1 (0.01) & 0.08 & 0.08 (0) & 0.07 & 0.09 (0.02) & 0.10 \\ 
-  PNG & 0.1 (0.01) & 0.08 & 0.08 (0) & 0.06 & 0.09 (0.03) & 0.13 \\ 
-  30 Bins & 0.1 (0.01) & 0.12 & 0.08 (0.01) & 0.08 & 0.09 (0.01) & 0.09 \\ 
-  60 Bins & 0.1 (0.01) & 0.12 & 0.08 (0.01) & 0.09 & 0.09 (0.01) & 0.09 \\ 
-   \hline
-\end{tabular}
-\caption{\label{se_sim}\small{\textit{This table compares the block jackknife standard errors from ldsc (denoted $\widehat{se}$, which represents the mean standard error estimate across 100 simulation replicates) in the simulations from \ref{parallel} to the empirical standard deviations of the parameter estimates (denoted $sd$) across 100 simulation replicates. The block jackknife standard errors closely match the empirical standard deviations. This confirms that block jackknife standard error estimates are approximately unbiased even with locally correlated error terms, so long as the block size is sufficiently large.}}}
-\end{table}
-
-\newpage
-\subsection*{Educational Attainment}
+\subsection*{Genetic Correlation between Educational Attainment Phenotypes}
 \begin{table}[ht]
 \centering
 \begin{tabular}{llll}
@@ -1274,7 +1188,7 @@ Phenotype 1 & Phenotype 2 & $r_g$ & $se$\\
   College (Yes/No) & Years of Education & 1.00 & 0.014\\
   \hline
 \end{tabular}
-\caption{\label{edu}\small{\textit{Genetic correlation between the two educational attainment phenotypes studied by Rietveld, et al. \cite{rietveld2013gwas}.}}}
+\caption{\label{edu}\small{\textit{Genetic correlation between the two educational attainment phenotypes from Rietveld, et al. \cite{rietveld2013gwas}.}}}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1286,10 +1200,10 @@ Phenotype 1 & Phenotype 2 & $r_g$ & $se$\\
 \begin{figure}[!ht]
 \begin{centering}
 \includegraphics[scale=0.8]{figs/giant_supp.pdf}
-\caption{\label{giant}\small{\textit{Genetic correlations among highly correlated anthropometric traits from studies by the GIANT and EGG consortia. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
+\caption{\label{giant}\small{\textit{Genetic correlations among anthropometric traits from studies by the GIANT and EGG consortia. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
 blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
 Larger squares correspond to more significant $p$-values.
-Genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
+Genetic correlations that are different from zero at 1\% FDR are shown as full-sized squares. 
 Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction are given an asterisk.}}}
 \end{centering}
 \end{figure}
@@ -1299,10 +1213,10 @@ Genetic correlations that are significantly different from zero at significance 
 \begin{figure}[!ht]
 \begin{centering}
 \includegraphics[scale=0.8]{figs/tag_supp.pdf}
-\caption{\label{smoking}\small{\textit{Genetic correlations among highly correlated smoking-related traits from the Tobacco and Genetics (TAG) consortium. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
+\caption{\label{smoking}\small{\textit{Genetic correlations among smoking traits from the Tobacco and Genetics (TAG) consortium. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
 blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
 Larger squares correspond to more significant $p$-values.
-Genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
+Genetic correlations that are different from zero at 1\% FDR are shown as full-sized squares. 
 Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction are given an asterisk.}}}
 \end{centering}
 \end{figure}
@@ -1312,22 +1226,22 @@ Genetic correlations that are significantly different from zero at significance 
 \begin{figure}[!ht]
 \begin{centering}
 \includegraphics[scale=0.8]{figs/magic_supp.pdf}
-\caption{\label{insulin}\small{\textit{Genetic correlations among highly correlated insulin-related traits from studies by the MAGIC consortium. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
+\caption{\label{insulin}\small{\textit{Genetic correlations among insulin-related traits from studies by the MAGIC consortium. The structure of the figure is the same as Figure \ref{Fig:300 Gencors} in the main text: 
 blue corresponds to positive genetic correlations; red corresponds to negative genetic correlation. 
 Larger squares correspond to more significant $p$-values.
-Genetic correlations that are different from zero at 1\% FDR are displayed as full-sized squares. 
+Genetic correlations that are different from zero at 1\% FDR are shown as full-sized squares. 
 Genetic correlations that are significantly different from zero at significance level 0.05 after Bonferroni correction are given an asterisk.}}}
 \end{centering}
 \end{figure}
 \newpage
 
 
-\subsection*{Comparison of Metabolic Genetic Correlations from LDSC to Results from Vattikuti, et al}
+\subsection*{Metabolic Genetic Correlations from Vattikuti, et al. and LD Score}
 \begin{figure}[!ht]
 \begin{centering}
 \includegraphics[scale=0.8]{figs/vattikuti.pdf}
-\caption{\label{vattikuti}\small{\textit{This figure compares the estimates of genetic correlations between metabolic traits from table 3 of Vattikuti, et al. \cite{vattikuti2012heritability}
-to the results obtained using LD Score regression (with much larger sample sizes) in this paper.}}}
+\caption{\label{vattikuti}\small{\textit{This figure compares estimates of genetic correlations among metabolic traits from table 3 of Vattikuti et al. \cite{vattikuti2012heritability}
+to the estimates from LD Score regression (and larger sample sizes). Error bars are standard errors.}}}
 \end{centering}
 \end{figure}
 \newpage
@@ -1337,10 +1251,10 @@ to the results obtained using LD Score regression (with much larger sample sizes
 \begin{centering}
 \includegraphics[scale=0.9]{figs/PGC1_pleiotropy_filter.png}
 \caption{\label{qq_tg}\small{\textit{We reproduced the conditional QQ plot comparing schizophrenia (SCZ) and triglycerides (TG) from Andreassen et al. \cite{andreassen2013improved} (left). 
-The major histocompatibility complex (MHC, approximately chr6, 25-35 MB) is
-a genomic region featuring SNPs with exceptionally high LD Scores and the strongest GWAS association to schizophrenia.
-Removing the MHC removes almost all signal from the conditional QQ plot (right), which is consistent with the 
-near-zero genetic correlation between schizophrenia and TG estimated via LD Score regression.}}}
+The major histocompatibility complex (MHC, chr6, 25-35 MB) is
+a genomic region containing SNPs with exceptionally high LD Scores and the strongest GWAS association for schizophrenia
+\cite{schizophrenia2014biological}.
+Removing the MHC removes all signal of enrichment from the conditional QQ plot (right).}}}
 \end{centering}
 \end{figure}
 \newpage
@@ -1353,5 +1267,5 @@ The members of the Schizophrenia Working Group of the Psychiatric Genetics Conso
 
 The members of the Genetic Consortium for Anorexia Nervosa (GCAN) areV Boraska, C S Franklin, J A B Floyd, L M Thornton, L M Huckins, L Southam, N William Rayner, I Tachmazidou, K L Klump, J Treasure, C M Lewis, U Schmidt, F Tozzi, K Kiezebrink, J Hebebrand, P Gorwood, R A H Adan, M J H Kas, A Favaro, P Santonastaso, F Fernández-Aranda, M Gratacos, F Rybakowski, M Dmitrzak-Weglarz, J Kaprio, A Keski-Rahkonen, A Raevuori, E F Van Furth, M C T Slof-Op t Landt, J I Hudson, T Reichborn-Kjennerud, G P S Knudsen, P Monteleone, A S Kaplan, A Karwautz, H Hakonarson, W H Berrettini, Y Guo, D Li, N J Schork, G Komaki, T Ando, H Inoko, T Esko, K Fischer, K Männik, A Metspalu, J H Baker, R D Cone, J Dackor, J E DeSocio, C E Hilliard, J K O'Toole, J Pantel, J P Szatkiewicz, C Taico, S Zerwas, S E Trace, O S P Davis, S Helder, K Bühren, R Burghardt, M de Zwaan, K Egberts, S Ehrlich, B Herpertz-Dahlmann, W Herzog, H Imgart, A Scherag, S Scherag, S Zipfel, C Boni, N Ramoz, A Versini, M K Brandys, U N Danner, C de Kove, J Hendriks, B P C Koeleman, R A Ophoff, E Strengman, A A van Elburg, A Bruson, M Clementi, D Degortes, M Forzan, E Tenconi, E Docampo, G Escaramís, S Jiménez-Murcia, J Lissowska, A Rajewski, N Szeszenia-Dabrowska, A Slopien, J Hauser, L Karhunen, I Meulenbelt, P E Slagboom, A Tortorella, M Maj, G Dedoussis, D Dikeos, F Gonidakis, K Tziouvas, A Tsitsika, H Papezova, L Slachtova, D Martaskova, J L Kennedy, R D Levitan, Z Yilmaz, J Huemer, D Koubek, E Merl, G Wagner, P Lichtenstein, G Breen, S Cohen-Woods, A Farmer, P McGuffin, S Cichon, I Giegling, S Herms, D Rujescu, S Schreiber, H-E Wichmann, C Dina, R Sladek, G Gambaro, N Soranzo, A Julia, S Marsal, R a Rabionet, V Gaborieau, D M Dick, A Palotie, S Ripatti, E Widén, O A Andreassen, T Espeseth, A Lundervold, I Reinvang, V M Steen, S Le Hellard, M Mattingsda, I Ntalla, V Bencko, L Foretova, V Janout, M Navratilova, S Gallinger, D Pinto, S W Scherer, H Aschauer, L Carlberg, A Schosser, L Alfredsson, B Ding, L Klareskog, L Padyukov, C Finan, G Kalsi, M Roberts, D W Logan, L Peltonen, G R S Ritchie, P Courtet, S Guillame, I Jaussent, J C Barrett, X Estivill, A Hinney, P F Sullivan, D A Collier, E Zeggini, and C M Bulik.The members of the Wellcome Trust Case Control Consortium 3 (WTCCC3) areC A Anderson, J C Barrett, J A B Floyd, C S Franklin, R McGinnis, N Soranzo, E Zeggini, J Sambrook, J Stephens, W H Ouwehand, W L McArdle, S M Ring, D P Strachan, G Alexander, C M Bulik, D A Collier, P J Conlon, A Dominiczak, A Duncanson, A Hill, C Langford, G Lord, A P Maxwell, L Morgan, L Peltonen, R N Sandford, N Sheerin, N Soranzo, F O Vannberg, J C Barrett, D N A Genotyping, H Blackburn, W-M Chen, S Edkins, M Gillman, E Gray, S E Hunt, C Langford, a Nengut-Gumuscu, S Potter, S S Rich, D Simpkin, and Pa Whittaker.
 
-The members of the Reprogen consortium are John RB Perry, Felix Day, Cathy E Elks, Patrick Sulem, Deborah J Thompson, Teresa Ferreira, Chunyan He, Daniel I Chasman, Tõnu Esko, Gudmar Thorleifsson, Eva Albrecht, Wei Q Ang, Tanguy Corre, Diana L Cousminer, Bjarke Feenstra, Nora Franceschini, Andrea Ganna, Andrew D Johnson, Sanela Kjellqvist, Kathryn L Lunetta, George McMahon, Ilja M Nolte, Lavinia Paternoster, Eleonora Porcu, Albert V Smith, Lisette Stolk, Alexander Teumer, Natalia T¨ernikova, Emmi Tikkanen, Sheila Ulivi, Erin K Wagner, Najaf Amin, Laura J Bierut, Enda M Byrne, JoukeJan Hottenga, Daniel L Koller, Massimo Mangino, Tune H Pers, Laura M YergesArmstrong, Jing Hua Zhao, Irene L Andrulis, Hoda AntonCulver, Femke Atsma, Stefania Bandinelli, Matthias W Beckmann, Javier Benitez, Carl Blomqvist, Stig E Bojesen, Manjeet K Bolla, Bernardo Bonanni, Hiltrud Brauch, Hermann Brenner, Julie E Buring, Jenny ChangClaude, Stephen Chanock, Jinhui Chen, Georgia ChenevixTrench, J. Margriet Collée, Fergus J Couch, David Couper, Andrea D Coveillo, Angela Cox, Kamila Czene, Adamo Pio D'adamo, George Davey Smith, Immaculata De Vivo, Ellen W Demerath, Joe Dennis, Peter Devilee, Aida K Dieffenbach, Alison M Dunning, Gudny Eiriksdottir, Johan G Eriksson, Peter A Fasching, Luigi Ferrucci, Dieter FleschJanys, Henrik Flyger, Tatiana Foroud, Lude Franke, Melissa E Garcia, Montserrat GarcíaClosas, Frank Geller, Eco EJ de Geus, Graham G Giles, Daniel F Gudbjartsson, Vilmundur Gudnason, Pascal Guénel, Suiqun Guo, Per Hall, Ute Hamann, Robin Haring, Catharina A Hartman, Andrew C Heath, Albert Hofman, Maartje J Hooning, John L Hopper, Frank B Hu, David J Hunter, David Karasik, Douglas P Kiel, Julia A Knight, VeliMatti Kosma, Zoltan Kutalik, Sandra Lai, Diether Lambrechts, Annika Lindblom, Reedik Mägi, Patrik K Magnusson, Arto Mannermaa, Nicholas G Martin, Gisli Masson, Patrick F McArdle, Wendy L McArdle, Mads Melbye Kyriaki Michailidou, Evelin Mihailov, Lili Milani, Roger L Milne, Heli Nevanlinna, Patrick Neven, Ellen A Nohr, Albertine J Oldehinkel, Ben A Oostra, Aarno Palotie,, Munro Peacock, Nancy L Pedersen, Paolo Peterlongo, Julian Peto, Paul DP Pharoah, Dirkje S Postma, Anneli Pouta, Katri Pylkäs, Paolo Radice, Susan Ring, Fernando Rivadeneira, Antonietta Robino, Lynda M Rose, Anja Rudolph, Veikko Salomaa, Serena Sanna, David Schlessinger, Marjanka K Schmidt, Mellissa C Southey, Ulla Sovio Meir J Stampfer, Doris Stöckl Anna M Storniolo, Nicholas J Timpson Jonathan Tyrer, Jenny A Visser, Peter Vollenweider, Henry Völzke, Gerard Waeber, Melanie Waldenberger, Henri Wallaschofski, Qin Wang, Gonneke Willemsen, Robert Winqvist, Bruce HR Wolffenbuttel, Margaret J Wright, Australian Ovarian Cancer Study The GENICA Network, kConFab, The LifeLines Cohort Study, The InterAct Consortium, Early Growth Genetics (EGG) Consortium, Dorret I Boomsma, Michael J Econs, KayTee Khaw, Ruth JF Loos, Mark I McCarthy, Grant W Montgomery, John P Rice, Elizabeth A Streeten, Unnur Thorsteinsdottir, Cornelia M van Duijn, Behrooz Z Alizadeh, Sven Bergmann, Eric Boerwinkle, Heather A Boyd, Laura Crisponi, Paolo Gasparini, Christian Gieger, Tamara B Harris, Erik Ingelsson, MarjoRiitta Järvelin, Peter Kraft, Debbie Lawlor, Andres Metspalu, Craig E Pennell, Paul M Ridker, Harold Snieder, Thorkild IA Sørensen, Tim D Spector, David P Strachan, André G Uitterlinden, Nicholas J Wareham, Elisabeth Widen, Marek Zygmunt, Anna Murray, Douglas F Easton, Kari Stefansson, Joanne M Murabito, Ken K Ong.
+The members of the ReproGen consortium are John RB Perry, Felix Day, Cathy E Elks, Patrick Sulem, Deborah J Thompson, Teresa Ferreira, Chunyan He, Daniel I Chasman, Tõnu Esko, Gudmar Thorleifsson, Eva Albrecht, Wei Q Ang, Tanguy Corre, Diana L Cousminer, Bjarke Feenstra, Nora Franceschini, Andrea Ganna, Andrew D Johnson, Sanela Kjellqvist, Kathryn L Lunetta, George McMahon, Ilja M Nolte, Lavinia Paternoster, Eleonora Porcu, Albert V Smith, Lisette Stolk, Alexander Teumer, Natalia T¨ernikova, Emmi Tikkanen, Sheila Ulivi, Erin K Wagner, Najaf Amin, Laura J Bierut, Enda M Byrne, JoukeJan Hottenga, Daniel L Koller, Massimo Mangino, Tune H Pers, Laura M YergesArmstrong, Jing Hua Zhao, Irene L Andrulis, Hoda AntonCulver, Femke Atsma, Stefania Bandinelli, Matthias W Beckmann, Javier Benitez, Carl Blomqvist, Stig E Bojesen, Manjeet K Bolla, Bernardo Bonanni, Hiltrud Brauch, Hermann Brenner, Julie E Buring, Jenny ChangClaude, Stephen Chanock, Jinhui Chen, Georgia ChenevixTrench, J. Margriet Collée, Fergus J Couch, David Couper, Andrea D Coveillo, Angela Cox, Kamila Czene, Adamo Pio D'adamo, George Davey Smith, Immaculata De Vivo, Ellen W Demerath, Joe Dennis, Peter Devilee, Aida K Dieffenbach, Alison M Dunning, Gudny Eiriksdottir, Johan G Eriksson, Peter A Fasching, Luigi Ferrucci, Dieter FleschJanys, Henrik Flyger, Tatiana Foroud, Lude Franke, Melissa E Garcia, Montserrat GarcíaClosas, Frank Geller, Eco EJ de Geus, Graham G Giles, Daniel F Gudbjartsson, Vilmundur Gudnason, Pascal Guénel, Suiqun Guo, Per Hall, Ute Hamann, Robin Haring, Catharina A Hartman, Andrew C Heath, Albert Hofman, Maartje J Hooning, John L Hopper, Frank B Hu, David J Hunter, David Karasik, Douglas P Kiel, Julia A Knight, VeliMatti Kosma, Zoltan Kutalik, Sandra Lai, Diether Lambrechts, Annika Lindblom, Reedik Mägi, Patrik K Magnusson, Arto Mannermaa, Nicholas G Martin, Gisli Masson, Patrick F McArdle, Wendy L McArdle, Mads Melbye Kyriaki Michailidou, Evelin Mihailov, Lili Milani, Roger L Milne, Heli Nevanlinna, Patrick Neven, Ellen A Nohr, Albertine J Oldehinkel, Ben A Oostra, Aarno Palotie,, Munro Peacock, Nancy L Pedersen, Paolo Peterlongo, Julian Peto, Paul DP Pharoah, Dirkje S Postma, Anneli Pouta, Katri Pylkäs, Paolo Radice, Susan Ring, Fernando Rivadeneira, Antonietta Robino, Lynda M Rose, Anja Rudolph, Veikko Salomaa, Serena Sanna, David Schlessinger, Marjanka K Schmidt, Mellissa C Southey, Ulla Sovio Meir J Stampfer, Doris Stöckl Anna M Storniolo, Nicholas J Timpson Jonathan Tyrer, Jenny A Visser, Peter Vollenweider, Henry Völzke, Gerard Waeber, Melanie Waldenberger, Henri Wallaschofski, Qin Wang, Gonneke Willemsen, Robert Winqvist, Bruce HR Wolffenbuttel, Margaret J Wright, Australian Ovarian Cancer Study The GENICA Network, kConFab, The LifeLines Cohort Study, The InterAct Consortium, Early Growth Genetics (EGG) Consortium, Dorret I Boomsma, Michael J Econs, KayTee Khaw, Ruth JF Loos, Mark I McCarthy, Grant W Montgomery, John P Rice, Elizabeth A Streeten, Unnur Thorsteinsdottir, Cornelia M van Duijn, Behrooz Z Alizadeh, Sven Bergmann, Eric Boerwinkle, Heather A Boyd, Laura Crisponi, Paolo Gasparini, Christian Gieger, Tamara B Harris, Erik Ingelsson, MarjoRiitta Järvelin, Peter Kraft, Debbie Lawlor, Andres Metspalu, Craig E Pennell, Paul M Ridker, Harold Snieder, Thorkild IA Sørensen, Tim D Spector, David P Strachan, André G Uitterlinden, Nicholas J Wareham, Elisabeth Widen, Marek Zygmunt, Anna Murray, Douglas F Easton, Kari Stefansson, Joanne M Murabito, Ken K Ong.
 \end{document}
