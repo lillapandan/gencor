@@ -952,6 +952,20 @@ where $\hat{p}_j$ denotes allele frequency in the entire sample\footnote{
 The expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$ or $j$ has zero marginal effect.},
 $\hat{p}_{cas}$ denotes sample case allele frequency
 and $\hat{p}_{con}$ denotes sample control allele frequency.
+
+We emphasize one subtlety before stating the main proposition. 
+The results in this section allow for study $i$ to select samples based on $y_j$ only if $i=j$.
+If study 1 ascertains on $y_2$, for example, if all cases in study $1$ have $y_1=y_2=1$ , then 
+$\hat{p}_{cas,1j}$ will not be an unbiased estimate of $p_{cas,1j}$.
+Indeed, in this example, $\E[\hat{p}_{cas,1j}]=\prob[G_{ij}=1\cond y_1=y_2=1]$, 
+which will not equal $p_{cas,1j}=\prob[G_{ij}=1\cond y_1=1]$ unless $\rho=1$ or $\rho=0$.
+This follows from the fact that the conditionals and marginals of a bivariate normal are equal iff $\rho=0$ or $\rho=1$.
+We do not derive formulae describing the bias, except to note that the most
+common scenario -- where cases are sampled independently but all controls are double controls -- is probably nothing to worry about.
+This is because for binary traits where cases are rare, 
+$\prob[G_{ij}=1\cond y_1=0]\approx\prob[G_{ij}=1\cond y_1=y_2=0]$.
+Conditioning on $y_2=0$ hardly changes the probability, because $y_2=0$ most of the time, anyway.
+
 \begin{prop}\label{binary_prop}
 Under a polygenic model, 
 \begin{align}
@@ -1084,7 +1098,8 @@ But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so equation \ref{cc-intercept} simplifies
 
 Finally, observe that  $\rho_{g,obs} / \sqrt{h^2_{1,obs}h^2_{2,obs}} = \rho_g/\sqrt{\hsqo\hsqt}=r_g.$ 
 Put another way, the 
-natural definition for ``observed scale genetic correlation'' turns out to be the same as regular genetic correlation. This is convenient: we can compute genetic correlations for binary traits on a sensible
+natural definition for ``observed scale genetic correlation'' turns out to be the same as regular genetic correlation, because the scale transformation factors in the numerator and denominator cancel. 
+This is convenient: we can compute genetic correlations for binary traits on a sensible
 scale without having to worry about sample and population prevalences.
 
 \subsection*{Flavors of Heritability and Genetic Correlation}
