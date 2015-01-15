@@ -128,22 +128,40 @@ Theory and simulation confirm that our method produces robust estimates of genet
 We performed a series of simulations to evaluate the robustness of the model to potential confounders such as sample overlap
 and model misspecification, and to verify the accuracy of the standard error estimates.
 Details of our simulation setup are provided in the methods.
-Table XXX shows LD Score regression estimates and standard errors from 1000 simulations of quantitative traits with complete sample overlap.
-These simulations confirm that LD Score regression is not biased by sample overlap and that the block jackknife 
-standard errors give correct inference (Methods).
-Table SN shows results from simulations with one quantitative trait and one ascertained binary trait, 
-and table SN+1 shows results from simulations with two ascertained binary traits.
+Table \ref{main_simulations} shows LD Score regression estimates and standard errors from 1000 simulations of quantitative traits with complete sample overlap.
+The LD Score regression standard errors (Methods) matched the standard deviation across simulations,
+and the LD Score regression estimates were not biased by sample overlap.
+For comparison, if we (incorrectly) estimate genetic correlation using LD Score regression with intercept constrained to zero, 
+we obtain out-of-bounds estimates around $\hat{r}_g\approx 2$.
+LD Score regression with incorrectly contained intercept is a representative example of an estimator that is not robust to sample 
+overlap, similar to polygenic scores \cite{dudbridge2013power}.
+Table \ref{qt_cc} shows results from simulations with one quantitative trait and one ascertained binary trait.
 These simulations confirm the derivations in the Supplementary Note and demonstrate that LD Score regression is not biased by oversampling of cases.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+Parameter & Truth & Estimate & SD & SE \\
+  \hline
+$h^2$ & 0.58 & 0.58 & 0.07 & 0.07 \\
+$\rho_g$ & 0.29 & 0.29 & 0.06 & 0.06 \\
+  $r_g$ & 0.50 & 0.49 & 0.08 & 0.07 \\
+   \hline
+\end{tabular}
+\caption{\label{main_simulations}\small{\textit{Simulations with complete sample overlap. Truth shows the true parameter values.
+Estimate shows the average LD Score regression estimate across 100 simulations. SD shows the standard deviation of the estimates across 100 simulations, and SE shows the mean LD Score regression SE across 100 simulations. Further details of the simulation setup are given in the Methods.}}}
+\end{table}
 
 Estimates of heritability and genetic covariance can be biased if the underlying model of genetic architecture is misspecified, \emph{e.g.,} if variance explained is correlated with LD Score or MAF \cite{speed2012improved, buliksullivan2014}.
 Because genetic correlation is estimated as a ratio, it is more robust:
 biases that affect the numerator and the denominator in the same direction tend to cancel. 
-We obtain approximately correct estimates of genetic correlation even in simulations with models of genetic architecture where our estimates of heritability and genetic covariance are biased (Tables \ref{parallel}).
+We obtain approximately correct estimates of genetic correlation even in simulations with models of genetic architecture where our estimates of heritability and genetic covariance are biased (Table \ref{parallel}).
 
 \subsection*{Replication of Pyschiatric Cross-Disorder Results}\label{PGCCDG}
 As technical validation, we replicated the estimates of genetic correlations among psychiatric disorders obtained with individual genotypes and REML in \cite{pgccdg2013}, 
 by applying LD Score regression to summary statistics from the same data \cite{cross2013identification}.
-Since these summary statistics were generated from non-overlapping samples, 
+These summary statistics were generated from 	non-overlapping samples, so
 we applied LD Score regression using both unconstrained and constrained intercepts (Methods).
 Results from these analyses are shown in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
 As expected, the results from LD Score regression were similar to the results from REML.
@@ -203,7 +221,7 @@ This multiple testing correction is conservative, since the tests are not indepe
 % Results that are consistent with top SNP results or MR analyses 
 For the majority of pairs of traits in Figure \ref{Fig:300 Gencors}, no GWAS-based genetic correlation estimate has been reported; 
 however, many associations have been described informally based on the observation of overlap among genome-wide significant loci.
-Examples of genetic correlations that are consistent with overlap among top loci include the correlations between plasma lipids and cardiovascular disease \cite{do2013common}; age at onset of menarche and obesity \cite{perry2014parent}; type 2 diabetes, obesity, fasting glucose, plasma lipids and cardiovascular disease \cite{morris2012large}; birth weight, adult height and type 2 diabetes \cite{horikoshi2013new}; birth length, adult height and infant head circumference \cite{early2012genome, taal2012common}; and childhood obesity and adult obesity \cite{early2012genome}. 
+Examples of genetic correlations that are consistent with overlap among top loci include the correlations between plasma lipids and cardiovascular disease \cite{do2013common}; age at onset of menarche and obesity \cite{perry2014parent}; type 2 diabetes, obesity, fasting glucose, plasma lipids and cardiovascular disease \cite{morris2012large}; birth weight, adult height and type 2 diabetes \cite{horikoshi2013new, freathy2009type}; birth length, adult height and infant head circumference \cite{early2012genome, taal2012common}; and childhood obesity and adult obesity \cite{early2012genome}. 
 For many of these pairs of traits, we can reject the null hypothesis of zero genetic correlation with overwhelming statistical
 significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity).
 
@@ -408,7 +426,9 @@ We estimate genetic covariance by regressing $z_{1j}z_{2j}$ against $\ell_j\sqrt
 then multiplying the resulting slope by $M$, the number of SNPs in the reference panel with MAF between 5\% and 50\% 
 (technically, this is an estimate of $\pf$, see the Supplementary Note).
 
-If we know the amount of sample overlap ahead of time, we can reduce the standard error by constraining the intercept with the \texttt{--constrain-intercept} flag in \texttt{ldsc}.
+If we know the amount of sample overlap ahead of time, 
+we can reduce the standard error by constraining the intercept with the \texttt{--constrain-intercept} flag in \texttt{ldsc}.
+This works even if there is nonzero sample overlap, in which case the intercept should be constrained to $N_s\rho/\sqrt{N_1N_2}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Regression Weights} 
@@ -451,7 +471,7 @@ but this rotation matrix is difficult to compute.
 
 Summary statistics for SNPs in LD are correlated, so the OLS standard error will be biased downwards. 
 We estimate a heteroskedasticity-and-correlation-robust standard error with a block jackknife over blocks of adjacent SNPs.
-This is the same procedure used in \cite{buliksullivan2014}, and gives accurate standard errors in simulations (Table \ref{se_sim}).
+This is the same procedure used in \cite{buliksullivan2014}, and gives accurate standard errors in simulations (Table \ref{main_simulations}).
 We obtain a standard error for the genetic correlation by using a ratio block jackknife over SNPs.
 The default setting in \texttt{ldsc} is 200 blocks per genome, which can be adjusted with the \texttt{--num-blocks} flag.
 
@@ -481,6 +501,24 @@ LD Score regression takes about 15 seconds per pair of phenotypes on a 2014 MacB
 \subsection*{Simulations}\label{simulations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+We simulated quantitative traits under an infinitesimal model in 2062 controls from a Swedish study.
+To simulate the standard scenario where many causal SNPs are not genotyped, we simulated phenotypes by drawing 
+casual SNPs from 622,146 best-guess imputed 1000 Genomes SNPs on chromosome 2, then
+retained only the 90,980 HM3 SNPs with MAF above 5\% for LD Score regression.
+We used in-sample LD Scores for LD Score regression.
+
+%The LD-prune-and-sum estimator that we used for comparison was computed by first LD pruning the summary statistics 
+%down to a set $S$ of 5197 SNPs on chromosome 2 (using the \texttt{plink 1.9} command \texttt{ --indep-pairwise 500 500 0.1}
+ %\cite{chang2014second}), then estimating genetic correlation as 
+%$$
+%\hat{r}_g := \dfrac
+%{\sum_{j\in S}\bhat_j\chat_j}
+%{\sqrt{\left(\sum_{j\in S}\bhat_j^2\right)\left(\sum_{j\in S}\chat_j^2\right)}}.
+%$$
+%This is similar to the prune-and-sum approach used for polygenic scoring in \cite{dudbridge2013power}, 
+%except polygenic scoring requires individual genotype data for at least one of the traits, and this estimator requires only summary 
+%statistics.
+%This estimator will give wrong results if there is sample overlap, and may be slightly biased by residual LD remaining after LD pruning.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1033,6 +1071,15 @@ Thus, $\rho_{g,obs}\ell_j/M$ and $N_s/N_1N_2$ will generally be at least 3 order
 We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times equation \ref{numerator} by equation \ref{denominator}.
 \end{proof}
 \begin{cor}
+If study 1 is an ascertained study of a binary trait, and study 2 is a non-ascertained quantitative study, then proposition
+\ref{binary_prop} holds, except with genetic covariance on the half-observed scale
+\[
+\rho_{g,obs} := \rho_g\left(\dfrac{\phi(\tau_1)\sqrt{P_1(1-P_1)}}{K_1(1-K_1)}\right).
+\]
+
+\end{cor}
+
+\begin{cor}
 For a single binary trait, 
 \begin{equation}
 	\E[\chi^2_j] = \dfrac{Nh^2_{obs}}{M}\ell_j + 1,
@@ -1110,6 +1157,67 @@ denominator cancel.
 \section*{Supplementary Tables}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection*{Simulations with one Binary Trait and one Quantitative Trait}
+\begin{table}[ht]
+\centering
+\begin{tabular}{llll}
+  \hline
+  Prevalence & $\hat{h}^2$ & $\hat{h}^2_{liab}$ & $\hat{r}_g$ \\
+  \hline
+  0.01 & 0.72 (0.1) & 0.59 (0.04) & 0.51 (0.4) \\
+ 0.05 & 0.72 (0.12) & 0.59 (0.07) & 0.45 (0.17) \\
+  0.2 & 0.72 (0.11) & 0.6 (0.08) & 0.46 (0.14) \\
+  0.5 & 0.73 (0.11) & 0.59 (0.08) & 0.42 (0.17) \\
+   \hline
+\end{tabular}
+\caption{\label{qt_cc}\small{\textit{Simulations with one binary trait and one quantitative trait.
+The prevalence column describes the population prevalence of the binary trait. 
+We ran 100 simulations for each prevalence.
+The $\hat{h^2}$ column shows the mean heritabi	pity estimate for the quantitative trait.
+The $\hat{h}^2_{liab}$ column shows the mean liability-scale heritability estimate for the binary trait.
+The $\hat{r}_g$ column shows the mean genetic correlation estimate.
+Standard deviations across 100 simulations in parentheses.
+The true parameter values were $r_g=0.46$, $h^2=0.7$ for the quantitative trait and $h^2_{liab}=0.6$ for the binary trait.
+For all simulations, the quantitative trait sample size was 1000, 
+the binary trait sample size was 1000 cases and 1000 controls,
+and there were  500 overlapping samples.
+There were 1000 effective independent SNPs.
+The environmental covariance was 0.2.
+We simulated case/control ascertainment using simulated LD block genotypes and a rejection sampling model of ascertainment. This is the same strategy used to simulate case/control ascertainment in \cite{buliksullivan2014}.}}}\end{table}
+
+\newpage
+\subsection*{Simulations with MAF- and LD-Dependent Genetic Architecture}
+\begin{table}[ht]
+\centering
+\begin{tabular}{llll}
+  \hline
+LD Score & $h^2(5\myhyphen50\%)$ & $\rho_g(5\myhyphen50\%)$ & $r_g(5\myhyphen50\%)$ \\ 
+  \hline
+Truth & 0.83 & 0.42 & 0.5 \\ 
+  HM3 & 0.53 (0.08) & 0.28 (0.07) & 0.52 (0.1) \\ 
+  PNG & 0.36 (0.08) & 0.18 (0.06) & 0.5 (0.13) \\ 
+  30 Bins & 0.81 (0.12) & 0.41 (0.08) & 0.51 (0.09) \\ 
+  60 Bins & 0.81 (0.12) & 0.41 (0.09) & 0.51 (0.09) \\ 
+   \hline
+\end{tabular}
+\caption{\label{parallel}\small{\textit{Simulations with MAF- and LD-dependent genetic architecture.
+Effect sizes were drawn from normal distributions such that the variance of per-allele effect sizes was uncorrelated with MAF,
+and variants with LD Score below 100 were fourfold enriched for heritability.
+Sample size was 2062 with complete overlap between studies; 
+causal SNPs were about 600,000 best-guess imputed 1kG SNPs on chr 2, 
+and the SNPs retained for the LD Score regression were the subset of about 100,000 of these SNPs that were included in HM3. 
+True parameter values are shown in the top line of the table.
+Estimates are averages across 100 simulations. 
+Standard deviations (in parentheses) are standard deviations across 100 simulations.
+LD Scores were estimated using in-sample LD and a 1cM window. 
+HM3 means LD Score with sum taken over SNPs in HM3. 
+PNG (per-normalized-genotype) means LD Score with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. 
+30 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. 
+60 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300,
+These simulations demonstrate that naive (HM3, PNG) LD Score regression gives correct genetic correlation estimates even when heritability and genetic covariance estimates are biased, so long as genetic correlation does not depend on LD.}}}
+\end{table}
+
+\newpage
 \subsection*{Sample Sizes and References}
 \begin{table}[ht]
 \centering
@@ -1143,38 +1251,6 @@ Ulcerative Colitis & Jostins, \textit{et al.,}  \textit{Nature,} 2012 \cite{jost
 Rheumatoid Arthritis & Stahl, \textit{et al.,} \textit{Nat Genet,} 2010 \cite{stahl2010genome} & 25,708\\
 \end{tabular}
 \caption{\label{N}\small{\textit{Sample sizes and references for traits analyzed in the main text.}}}
-\end{table}
-
-\newpage
-\subsection*{Simulations with MAF- and LD-Dependent Genetic Architecture}
-\begin{table}[ht]
-\centering
-\begin{tabular}{llll}
-  \hline
-LD Score & $h^2(5\myhyphen50\%)$ & $\rho_g(5\myhyphen50\%)$ & $r_g(5\myhyphen50\%)$ \\ 
-  \hline
-Truth & 0.83 & 0.42 & 0.5 \\ 
-  HM3 & 0.53 (0.08) & 0.28 (0.07) & 0.52 (0.1) \\ 
-  PNG & 0.36 (0.08) & 0.18 (0.06) & 0.5 (0.13) \\ 
-  30 Bins & 0.81 (0.12) & 0.41 (0.08) & 0.51 (0.09) \\ 
-  60 Bins & 0.81 (0.12) & 0.41 (0.09) & 0.51 (0.09) \\ 
-   \hline
-\end{tabular}
-\caption{\label{parallel}\small{\textit{Simulations with MAF- and LD-dependent genetic architecture.
-Effect sizes were drawn from normal distributions such that the variance of per-allele effect sizes was uncorrelated with MAF,
-and variants with LD Score below 100 were fourfold enriched for heritability.
-Sample size was 2062 with complete overlap between studies; 
-causal SNPs were about 600,000 best-guess imputed 1kG SNPs on chr 2, 
-and the SNPs retained for the LD Score regression were the subset of about 100,000 of these SNPs that were included in HM3. 
-True parameter values are shown in the top line of the table.
-Estimates are averages across 100 simulations. 
-Standard deviations (in parentheses) are standard deviations across 100 simulations.
-LD Scores were estimated using in-sample LD and a 1cM window. 
-HM3 means LD Score with sum taken over SNPs in HM3. 
-PNG (per-normalized-genotype) means LD Score with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. 
-30 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. 
-60 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300,
-These simulations demonstrate that naive (HM3, PNG) LD Score regression gives correct genetic correlation estimates even when heritability and genetic covariance estimates are biased, so long as genetic correlation does not depend on LD.}}}
 \end{table}
 
 \newpage
@@ -1253,7 +1329,7 @@ to the estimates from LD Score regression (and larger sample sizes). Error bars 
 \caption{\label{qq_tg}\small{\textit{We reproduced the conditional QQ plot comparing schizophrenia (SCZ) and triglycerides (TG) from Andreassen et al. \cite{andreassen2013improved} (left). 
 The major histocompatibility complex (MHC, chr6, 25-35 MB) is
 a genomic region containing SNPs with exceptionally high LD Scores and the strongest GWAS association for schizophrenia
-\cite{schizophrenia2014biological}.
+\cite{schizophrenia2014biological} as well as a GWAS association to TG \cite{teslovich2010biological}.
 Removing the MHC removes all signal of enrichment from the conditional QQ plot (right).}}}
 \end{centering}
 \end{figure}
