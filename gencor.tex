@@ -56,7 +56,12 @@
 \maketitle
 
 \begin{abstract}
-The major challenges preventing estimation of genetic correlation from GWAS data are the lack of availability of individual genotype data and widespread sample overlap.We circumvent these difficulties by introducing a technique for estimating genetic correlation that requires only GWAS summary statistics and is not biased by sample overlap.We use our method to estimate 300 genetic correlations among 25 traits, totaling more than 1.5 million unique phenotype measurements.Our results include a positive genetic correlation between anorexia nervosa and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass index, as well as a large number of replications and positive controls. These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for anorexia nervosa.  
+The major challenges preventing estimation of genetic correlation from GWAS data are the lack of availability of individual genotype data and widespread sample overlap.
+We circumvent these difficulties by introducing a technique for estimating genetic correlation that requires only GWAS summary statistics and is not biased by sample overlap.
+We use our method to estimate 300 genetic correlations among 25 traits, totaling more than 1.5 million unique phenotype measurements.
+Our results include a positive genetic correlation between anorexia nervosa and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass index, as well as a large number of replications and positive controls. 
+These results highlight the power of a polygenic modeling framework, since there currently are no genome-wide significant SNPs for anorexia nervosa. 
+ 
 \end{abstract}
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1001,7 +1006,8 @@ Our strategy for obtaining the expectation is
 \end{align}
 where $\zeta_j$ and $\xi_j$ denote the marginal per-allele effects of $j$.
 Approximation \ref{ratio} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a ratio to a ratio of expectations.
-Approximation \ref{sqrts} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a square root to a square root of expectations.
+Approximation \ref{sqrts} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a square root to a square root of expectations
+and why are you still reading this.
 Equality \ref{zz_condexp} follows from applying of the law of total expectation to the numerator and denominator.
 
 First, we compute the numerator.
@@ -1339,9 +1345,134 @@ Removing the MHC removes all signal of enrichment from the conditional QQ plot (
 \section*{Collaborators}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The members of the Schizophrenia Working Group of the Psychiatric Genetics Consortium are Stephan Ripke, Benjamin M. Neale, Aiden Corvin, James T.R. Walters, Kai-How Farh, Peter A. Holmans, Phil Lee, Brendan Bulik-Sullivan, David A. Collier, Hailiang Huang, Tune H. Pers, Ingrid Agartz, Esben Agerbo, Margot Albus, Madeline Alexander, Farooq Amin, Silviu A. Bacanu, Martin Begemann, Richard A. Belliveau, Jr., Judit Bene, Sarah E. Bergen, Elizabeth Bevilacqua, Tim B. Bigdeli, Donald W. Black, Anders D. Børglum, Richard Bruggeman, Nancy G. Buccola, Randy L. Buckner, William Byerley, Wiepke Cahn, Guiqing Cai, Dominique Campion, Rita M. Cantor, Vaughan J. Carr, Noa Carrera, Stanley V. Catts, Kimberly D. Chambert, Raymond C.K. Chan, Ronald Y.L. Chen, Eric Y.H. Chen, Wei Cheng, Eric F.C. Cheung, Siow Ann Chong, C. Robert Cloninger, David Cohen, Nadine Cohen, Paul Cormican, Nick Craddock, James J. Crowley, David Curtis, Michael Davidson, Kenneth L. Davis, Franziska Degenhardt, Jurgen Del Favero, Lynn E. DeLisi, Ditte Demontis, Dimitris Dikeos, Timothy Dinan, Srdjan Djurovic, Gary Donohoe, Elodie Drapeau, Jubao Duan, Frank Dudbridge, Naser Durmishi, Peter Eichhammer, Johan Eriksson, Valentina Escott-Price, Laurent Essioux, Ayman H. Fanous, Martilias S. Farrell, Josef Frank, Lude Franke, Robert Freedman, Nelson B. Freimer, Marion Friedl, Joseph I. Friedman, Menachem Fromer, Giulio Genovese, Lyudmila Georgieva, Elliot S. Gershon, Ina Giegling, Paola Giusti-Rodrguez, Stephanie Godard, Jacqueline I. Goldstein, Vera Golimbet, Srihari Gopal, Jacob Gratten, Jakob Grove, Lieuwe de Haan, Christian Hammer, Marian L. Hamshere, Mark Hansen, Thomas Hansen, Vahram Haroutunian, Annette M. Hartmann, Frans A. Henskens, Stefan Herms, Joel N. Hirschhorn, Per Hoffmann, Andrea Hofman, Mads V. Hollegaard, David M. Hougaard, Masashi Ikeda, Inge Joa, Antonio Julia, Rene S. Kahn, Luba Kalaydjieva, Sena Karachanak-Yankova, Juha Karjalainen, David Kavanagh, Matthew C. Keller, Brian J. Kelly, James L. Kennedy, Andrey Khrunin, Yunjung Kim, Janis Klovins, James A. Knowles, Bettina Konte, Vaidutis Kucinskas, Zita Ausrele Kucinskiene, Hana Kuzelova-Ptackova, Anna K. Kahler, Claudine Laurent, Jimmy Lee Chee Keong, S. Hong Lee, Sophie E. Legge, Bernard Lerer, Miaoxin Li, Tao Li, Kung-Yee Liang, Jeffrey Lieberman, Svetlana Limborska, Carmel M. Loughland, Jan Lubinski, Jouko Lnnqvist, Milan Macek, Jr., Patrik K.E. Magnusson, Brion S. Maher, Wolfgang Maier, Jacques Mallet, Sara Marsal, Manuel Mattheisen, Morten Mattingsdal, Robert W. McCarley, Colm McDonald, Andrew M. McIntosh, Sandra Meier, Carin J. Meijer, Bela Melegh, Ingrid Melle, Raquelle I. Mesholam-Gately, Andres Metspalu, Patricia T. Michie, Lili Milani, Vihra Milanova, Younes Mokrab, Derek W. Morris, Ole Mors, Preben B. Mortensen, Kieran C. Murphy, Robin M. Murray, Inez Myin-Germeys, Bertram Mller-Myhsok, Mari Nelis, Igor Nenadic, Deborah A. Nertney, Gerald Nestadt, Kristin K. Nicodemus, Liene Nikitina-Zake, Laura Nisenbaum, Annelie Nordin, Eadbhard O'Callaghan, Colm O'Dushlaine, F. Anthony O'Neill, Sang-Yun Oh, Ann Olincy, Line Olsen, Jim Van Os, Psychosis Endophenotypes International Consortium, Christos Pantelis, George N. Papadimitriou, Sergi Papiol, Elena Parkhomenko, Michele T. Pato, Tiina Paunio, Milica Pejovic-Milovancevic, Diana O. Perkins, Olli Pietilinen, Jonathan Pimm, Andrew J. Pocklington, John Powell, Alkes Price, Ann E. Pulver, Shaun M. Purcell, Digby Quested, Henrik B. Rasmussen, Abraham Reichenberg, Mark A. Reimers, Alexander L. Richards, Joshua L. Roffman, Panos Roussos, Douglas M. Ruderfer, Veikko Salomaa, Alan R. Sanders, Ulrich Schall, Christian R. Schubert, Thomas G. Schulze, Sibylle G. Schwab, Edward M. Scolnick, Rodney J. Scott, Larry J. Seidman, Jianxin Shi, Engilbert Sigurdsson, Teimuraz Silagadze, Jeremy M. Silverman, Kang Sim, Petr Slominsky, Jordan W. Smoller, Hon-Cheong So, Chris C.A. Spencer, Eli A. Stahl, Hreinn Stefansson, Stacy Steinberg, Elisabeth Stogmann, Richard E. Straub, Eric Strengman, Jana Strohmaier, T. Scott Stroup, Mythily Subramaniam, Jaana Suvisaari, Dragan M. Svrakic, Jin P. Szatkiewicz, Erik Sderman, Srinivas Thirumalai, Draga Toncheva, Paul A. Tooney, Sarah Tosato, Juha Veijola, John Waddington, Dermot Walsh, Dai Wang, Qiang Wang, Bradley T. Webb, Mark Weiser, Dieter B. Wildenauer, Nigel M. Williams, Stephanie Williams, Stephanie H. Witt, Aaron R. Wolen, Emily H.M. Wong, Brandon K. Wormley, Jing Qin Wu, Hualin Simon Xi, Clement C. Zai, Xuebin Zheng, Fritz Zimprich, Naomi R. Wray, Kari Stefansson, Peter M. Visscher, Wellcome Trust Case Control Consortium, Rolf Adolfsson, Ole A. Andreassen, Douglas H.R. Blackwood, Elvira Bramon, Joseph D. Buxbaum, Anders D. Brglum, Sven Cichon, Ariel Darvasi, Enrico Domenici, Hannelore Ehrenreich, Tonu Esko, Pablo V. Gejman, Michael Gill, Hugh Gurling, Christina M. Hultman, Nakao Iwata, Assen V. Jablensky, Erik G. Jonsson, Kenneth S. Kendler, George Kirov, Jo Knight, Todd Lencz, Douglas F. Levinson, Qingqin S. Li, Jianjun Liu, Anil K. Malhotra, Steven A. McCarroll, Andrew McQuillin, Jennifer L. Moran, Preben B. Mortensen, Bryan J. Mowry, Markus M. Nthen, Roel A. Ophoff, Michael J. Owen, Aarno Palotie, Carlos N. Pato, Tracey L. Petryshen, Danielle Posthuma, Marcella Rietschel, Brien P. Riley, Dan Rujescu, Pak C. Sham, Pamela Sklar, David St. Clair, Daniel R. Weinberger, Jens R. Wendland, Thomas Werge, Mark J. Daly, Patrick F. Sullivan, and Michael C. O'Donovan.
+Collaborators from the Psychiatric Genomics Consortium were, in
+alphabetical order: Devin Absher, Rolf Adolfsson, Ingrid Agartz, Esben
+Agerbo, Huda Akil, Margot Albus, Madeline Alexander, Farooq Amin, Ole A
+Andreassen, Adebayo Anjorin, Richard Anney, Dan Arking, Philip Asherson,
+Maria H Azevedo, Silviu A Bacanu, Lena Backlund, Judith A Badner, Tobias
+Banaschewski, Jack D Barchas, Michael R Barnes, Thomas B Barrett,
+Nicholas Bass, Michael Bauer, Monica Bayes, Martin Begemann, Frank
+Bellivier, Judit Bene, Sarah E Bergen, Thomas Bettecken, Elizabeth
+Bevilacqua, Joseph Biederman, Tim B Bigdeli, Elisabeth B Binder, Donald
+W Black, Douglas HR Blackwood, Cinnamon S Bloss, Michael Boehnke, Dorret
+I Boomsma, Anders D Borglum, Elvira Bramon, Gerome Breen, Rene Breuer,
+Richard Bruggeman, Nancy G Buccola, Randy L Buckner, Jan K Buitelaar,
+Brendan Bulik-Sullivan, William E Bunner, Margit Burmeister, Joseph D
+Buxbaum, William F Byerley, Sian Caesar, Wiepke Cahn, Guiqing Cai,
+Murray J Cairns, Dominique Campion, Rita M Cantor, Vaughan J Carr, Noa
+Carrera, Miquel Casas, Stanley V Catts, Aravinda Chakravarti, Kimberley
+D Chambert, Raymond CK Chan, Eric YH Chen, Ronald YL Chen, Wei Cheng,
+Eric FC Cheung, Siow Ann Chong, Khalid Choudhury, Sven Cichon, David St
+Clair, C Robert Cloninger, David Cohen, Nadine Cohen, David A Collier,
+Edwin Cook, Hilary Coon, Bru Cormand, Paul Cormican, Aiden Corvin,
+William H Coryell, Nicholas Craddock, David W Craig, Ian W Craig,
+Benedicto Crespo-Facorro, James J Crowley, David Curtis, Darina Czamara,
+Mark J Daly, Ariel Darvasi, Susmita Datta, Michael Davidson, Kenneth L
+Davis, Richard Day, Franziska Degenhardt, Lynn E DeLisi, Ditte Demontis,
+Bernie Devlin, Dimitris Dikeos, Timothy Dinan, Srdjan Djurovic, Enrico
+Domenici, Gary Donohoe, Alysa E Doyle, Elodie Drapeau, Jubao Duan, Frank
+Dudbridge, Naser Durmishi, Howard J Edenberg, Hannelore Ehrenreich,
+Peter Eichhammer, Amanda Elkin, Johan Eriksson, Valentina Escott-Price,
+Tonu Esko, Laurent Essioux, Bruno Etain, Ayman H Fanous, Stephen V
+Faraone, Kai-How Farh, Anne E Farmer, Martilias S Farrell, Jurgen Del
+Favero, Manuel A Ferreira, I Nicol Ferrier, Matthew Flickinger, Tatiana
+Foroud, Josef Frank, Barbara Franke, Lude Franke, Christine Fraser,
+Robert Freedman, Nelson B Freimer, Marion Friedl, Joseph I Friedman,
+Louise Frisen, Menachem Fromer, Pablo V Gejman, Giulio Genovese,
+Lyudmila Georgieva, Elliot S Gershon, Eco J De Geus, Ina Giegling,
+Michael Gill, Paola Giusti-Rodriguez, Stephanie Godard, Jacqueline I
+Goldstein, Vera Golimbet, Srihari Gopal, Scott D Gordon, Katherine
+Gordon-Smith, Jacob Gratten, Elaine K Green, Tiffany A Greenwood, Gerard
+Van Grootheest, Magdalena Gross, Detelina Grozeva, Weihua Guan, Hugh
+Gurling, Omar Gustafsson, Lieuwe de Haan, Hakon Hakonarson, Steven P
+Hamilton, Christian Hammer, Marian L Hamshere, Mark Hansen, Thomas F
+Hansen, Vahram Haroutunian, Annette M Hartmann, Martin Hautzinger,
+Andrew C Heath, Anjali K Henders, Frans A Henskens, Stefan Herms, Ian B
+Hickie, Maria Hipolito, Joel N Hirschhorn, Susanne Hoefels, Per
+Hoffmann, Andrea Hofman, Mads V Hollegaard, Peter A Holmans, Florian
+Holsboer, Witte J Hoogendijk, Jouke Jan Hottenga, David M Hougaard,
+Hailiang Huang, Christina M Hultman, Masashi Ikeda, Andres Ingason,
+Marcus Ising, Nakao Iwata, Assen V Jablensky, Stephane Jamain, Inge Joa,
+Edward G Jones, Ian Jones, Lisa Jones, Erik G Jonsson, Milan Macek Jr,
+Richard A Belliveau Jr, Antonio Julia, Tzeng Jung-Ying, Anna K Kahler,
+Rene S Kahn, Luba Kalaydjieva, Radhika Kandaswamy, Sena
+Karachanak-Yankova, Juha Karjalainen, David Kavanagh, Matthew C Keller,
+Brian J Kelly, John R Kelsoe, Kenneth S Kendler, James L Kennedy, Elaine
+Kenny, Lindsey Kent, Jimmy Lee Chee Keong, Andrey Khrunin, Yunjung Kim,
+George K Kirov, Janis Klovins, Jo Knight, James A Knowles, Martin A
+Kohli, Daniel L Koller, Bettina Konte, Ania Korszun, Robert Krasucki,
+Vaidutis Kucinskas, Zita Ausrele Kucinskiene, Jonna Kuntsi, Hana
+Kuzelova-Ptackova, Phoenix Kwan, Mikael Landen, Niklas Langstrom, Mark
+Lathrop, Claudine Laurent, Jacob Lawrence, William B Lawson, Marion
+Leboyer, Phil Hyoun Lee, S Hong Lee, Sophie E Legge, Todd Lencz, Bernard
+Lerer, Klaus-Peter Lesch, Douglas F Levinson, Cathryn M Lewis, Jun Li,
+Miaoxin Li, Qingqin S Li, Tao Li, Kung-Yee Liang, Paul Lichtenstein,
+Jeffrey A Lieberman, Svetlana Limborska, Danyu Lin, Chunyu Liu, Jianjun
+Liu, Falk W Lohoff, Jouko Lonnqvist, Sandra K Loo, Carmel M Loughland,
+Jan Lubinski, Susanne Lucae, Donald MacIntyre, Pamela AF Madden, Patrik
+KE Magnusson, Brion S Maher, Pamela B Mahon, Wolfgang Maier, Anil K
+Malhotra, Jacques Mallet, Sara Marsal, Nicholas G Martin, Manuel
+Mattheisen, Keith Matthews, Morten Mattingsdal, Robert W McCarley,
+Steven A McCarroll, Colm McDonald, Kevin A McGhee, James J McGough,
+Patrick J McGrath, Peter McGuffin, Melvin G McInnis, Andrew M McIntosh,
+Rebecca McKinney, Alan W McLean, Francis J McMahon, Andrew McQuillin,
+Helena Medeiros, Sarah E Medland, Sandra Meier, Carin J Meijer, Bela
+Melegh, Ingrid Melle, Fan Meng, Raquelle I Mesholam-Gately, Andres
+Metspalu, Patricia T Michie, Christel M Middeldorp, Lefkos Middleton,
+Lili Milani, Vihra Milanova, Philip B Mitchell, Younes Mokrab, Grant W
+Montgomery, Jennifer L Moran, Gunnar Morken, Derek W Morris, Ole Mors,
+Preben B Mortensen, Valentina Moskvina, Bryan J Mowry, Pierandrea
+Muglia, Thomas W Muehleisen, Walter J Muir, Bertram Mueller-Myhsok, Kieran
+C Murphy, Robin M Murray, Richard M Myers, Inez Myin-Germeys, Benjamin M
+Neale, Michael C Neale, Mari Nelis, Stan F Nelson, Igor Nenadic, Deborah
+A Nertney, Gerald Nestadt, Kristin K Nicodemus, Caroline M Nievergelt,
+Liene Nikitina-Zake, Ivan Nikolov, Vishwajit Nimgaonkar, Laura
+Nisenbaum, Willem A Nolen, Annelie Nordin, Markus M Noethen, John I
+Nurnberger, Evaristus A Nwulia, Dale R Nyholt, Eadbhard O'Callaghan,
+Michael C O'Donovan, Colm O'Dushlaine, F Anthony O'Neill, Robert D
+Oades, Sang-Yun Oh, Ann Olincy, Line Olsen, Edwin JCG van den Oord, Roel
+A Ophoff, Jim Van Os, Urban Osby, Hogni Oskarsson, Michael J Owen, Aarno
+Palotie, Christos Pantelis, George N Papadimitriou, Sergi Papiol, Elena
+Parkhomenko, Carlos N Pato, Michele T Pato, Tiina Paunio, Milica
+Pejovic-Milovancevic, Brenda P Penninx, Michele L Pergadia, Diana O
+Perkins, Roy H Perlis, Tune H Pers, Tracey L Petryshen, Hannes
+Petursson, Benjamin S Pickard, Olli Pietilainen, Jonathan Pimm, Joseph
+Piven, Andrew J Pocklington, Porgeir Porgeirsson, Danielle Posthuma,
+James B Potash, John Powell, Alkes Price, Peter Propping, Ann E Pulver,
+Shaun M Purcell, Vinay Puri, Digby Quested, Emma M Quinn, Josep Antoni
+Ramos-Quiroga, Henrik B Rasmussen, Soumya Raychaudhuri, Karola
+Rehnstrom, Abraham Reichenberg, Andreas Reif, Mark A Reimers, Marta
+Ribases, John Rice, Alexander L Richards, Marcella Rietschel, Brien P
+Riley, Stephan Ripke, Joshua L Roffman, Lizzy Rossin, Aribert
+Rothenberger, Guy Rouleau, Panos Roussos, Douglas M Ruderfer, Dan
+Rujescu, Veikko Salomaa, Alan R Sanders, Susan Santangelo, Russell
+Schachar, Ulrich Schall, Martin Schalling, Alan F Schatzberg, William A
+Scheftner, Gerard Schellenberg, Peter R Schofield, Nicholas J Schork,
+Christian R Schubert, Thomas G Schulze, Johannes Schumacher, Sibylle G
+Schwab, Markus M Schwarz, Edward M Scolnick, Laura J Scott, Rodney J
+Scott, Larry J Seidman, Pak C Sham, Jianxin Shi, Paul D Shilling,
+Stanley I Shyn, Engilbert Sigurdsson, Teimuraz Silagadze, Jeremy M
+Silverman, Kang Sim, Pamela Sklar, Susan L Slager, Petr Slominsky, Susan
+L Smalley, Johannes H Smit, Erin N Smith, Jordan W Smoller, Hon-Cheong
+So, Erik Soderman, Edmund Sonuga-Barke, Chris C A Spencer, Eli A Stahl,
+Matthew State, Hreinn Stefansson, Kari Stefansson, Michael Steffens,
+Stacy Steinberg, Hans-Christoph Steinhausen, Elisabeth Stogmann, Richard
+E Straub, John Strauss, Eric Strengman, Jana Strohmaier, T Scott Stroup,
+Mythily Subramaniam, Patrick F Sullivan, James Sutcliffe, Jaana
+Suvisaari, Dragan M Svrakic, Jin P Szatkiewicz, Peter Szatmari, Szabocls
+Szelinger, Anita Thapar, Srinivasa Thirumalai, Robert C Thompson, Draga
+Toncheva, Paul A Tooney, Sarah Tosato, Federica Tozzi, Jens Treutlein,
+Manfred Uhr, Juha Veijola, Veronica Vieland, John B Vincent, Peter M
+Visscher, John Waddington, Dermot Walsh, James TR Walters, Dai Wang,
+Qiang Wang, Stanley J Watson, Bradley T Webb, Daniel R Weinberger, Mark
+Weiser, Myrna M Weissman, Jens R Wendland, Thomas Werge, Thomas F
+Wienker, Dieter B Wildenauer, Gonneke Willemsen, Nigel M Williams,
+Stephanie Williams, Richard Williamson, Stephanie H Witt, Aaron R Wolen,
+Emily HM Wong, Brandon K Wormley, Naomi R Wray, Adam Wright, Jing Qin
+Wu, Hualin Simon Xi, Wei Xu, Allan H Young, Clement C Zai, Stan Zammit,
+Peter P Zandi, Peng Zhang, Xuebin Zheng, Fritz Zimprich, Frans G Zitman,
+and Sebastian Zoellner. 
 
-The members of the Genetic Consortium for Anorexia Nervosa (GCAN) areV Boraska, C S Franklin, J A B Floyd, L M Thornton, L M Huckins, L Southam, N William Rayner, I Tachmazidou, K L Klump, J Treasure, C M Lewis, U Schmidt, F Tozzi, K Kiezebrink, J Hebebrand, P Gorwood, R A H Adan, M J H Kas, A Favaro, P Santonastaso, F Fernández-Aranda, M Gratacos, F Rybakowski, M Dmitrzak-Weglarz, J Kaprio, A Keski-Rahkonen, A Raevuori, E F Van Furth, M C T Slof-Op t Landt, J I Hudson, T Reichborn-Kjennerud, G P S Knudsen, P Monteleone, A S Kaplan, A Karwautz, H Hakonarson, W H Berrettini, Y Guo, D Li, N J Schork, G Komaki, T Ando, H Inoko, T Esko, K Fischer, K Männik, A Metspalu, J H Baker, R D Cone, J Dackor, J E DeSocio, C E Hilliard, J K O'Toole, J Pantel, J P Szatkiewicz, C Taico, S Zerwas, S E Trace, O S P Davis, S Helder, K Bühren, R Burghardt, M de Zwaan, K Egberts, S Ehrlich, B Herpertz-Dahlmann, W Herzog, H Imgart, A Scherag, S Scherag, S Zipfel, C Boni, N Ramoz, A Versini, M K Brandys, U N Danner, C de Kove, J Hendriks, B P C Koeleman, R A Ophoff, E Strengman, A A van Elburg, A Bruson, M Clementi, D Degortes, M Forzan, E Tenconi, E Docampo, G Escaramís, S Jiménez-Murcia, J Lissowska, A Rajewski, N Szeszenia-Dabrowska, A Slopien, J Hauser, L Karhunen, I Meulenbelt, P E Slagboom, A Tortorella, M Maj, G Dedoussis, D Dikeos, F Gonidakis, K Tziouvas, A Tsitsika, H Papezova, L Slachtova, D Martaskova, J L Kennedy, R D Levitan, Z Yilmaz, J Huemer, D Koubek, E Merl, G Wagner, P Lichtenstein, G Breen, S Cohen-Woods, A Farmer, P McGuffin, S Cichon, I Giegling, S Herms, D Rujescu, S Schreiber, H-E Wichmann, C Dina, R Sladek, G Gambaro, N Soranzo, A Julia, S Marsal, R a Rabionet, V Gaborieau, D M Dick, A Palotie, S Ripatti, E Widén, O A Andreassen, T Espeseth, A Lundervold, I Reinvang, V M Steen, S Le Hellard, M Mattingsda, I Ntalla, V Bencko, L Foretova, V Janout, M Navratilova, S Gallinger, D Pinto, S W Scherer, H Aschauer, L Carlberg, A Schosser, L Alfredsson, B Ding, L Klareskog, L Padyukov, C Finan, G Kalsi, M Roberts, D W Logan, L Peltonen, G R S Ritchie, P Courtet, S Guillame, I Jaussent, J C Barrett, X Estivill, A Hinney, P F Sullivan, D A Collier, E Zeggini, and C M Bulik.The members of the Wellcome Trust Case Control Consortium 3 (WTCCC3) areC A Anderson, J C Barrett, J A B Floyd, C S Franklin, R McGinnis, N Soranzo, E Zeggini, J Sambrook, J Stephens, W H Ouwehand, W L McArdle, S M Ring, D P Strachan, G Alexander, C M Bulik, D A Collier, P J Conlon, A Dominiczak, A Duncanson, A Hill, C Langford, G Lord, A P Maxwell, L Morgan, L Peltonen, R N Sandford, N Sheerin, N Soranzo, F O Vannberg, J C Barrett, D N A Genotyping, H Blackburn, W-M Chen, S Edkins, M Gillman, E Gray, S E Hunt, C Langford, a Nengut-Gumuscu, S Potter, S S Rich, D Simpkin, and Pa Whittaker.
-
+Genetic Consortium for Anorexia Nervosa (GCAN):Vesna Boraska Perica, Christopher S Franklin, James A B Floyd, Laura M Thornton, Laura M Huckins, Lorraine Southam, N William Rayner, Ioanna Tachmazidou, Kelly L Klump, Janet Treasure, Cathryn M Lewis, Ulrike Schmidt, Federica Tozzi, Kirsty Kiezebrink, Johannes Hebebrand, Philip Gorwood, Roger A H Adan, Martien J H Kas, Angela Favaro, Paolo Santonastaso, Fernando Fern\'{a}ndez-Aranda, Monica Gratacos, Filip Rybakowski, Monika Dmitrzak-Weglarz, Jaakko Kaprio, Anna Keski-Rahkonen, Anu Raevuori-Helkamaa, Eric F Van Furth, Margarita C T Slof-Op't Landt, James I Hudson, Ted Reichborn-Kjennerud, Gun Peggy S Knudsen, Palmiero Monteleone, Allan S Kaplan, Andreas Karwautz, Hakon Hakonarson, Wade H Berrettini, Yiran Guo, Dong Li, Nicholas J Schork, Gen Komaki, Tetsuya Ando, Hidetoshi Inoko, T\~{o}nu Esko, Krista Fischer, Katrin M\"{a}nnik, Andres Metspalu, Jessica H Baker, Roger D Cone, Jennifer Dackor, Janiece E DeSocio, Christopher E Hilliard, Julie K O'Toole, Jacques Pantel, Jin P Szatkiewicz, Chrysecolla Taico, Stephanie Zerwas, Sara E Trace, Oliver S P Davis, Sietske Helder, Katharina B\"{u}hren, Roland Burghardt, Martina de Zwaan, Karin Egberts, Stefan Ehrlich, Beate Herpertz-Dahlmann, Wolfgang Herzog, Hartmut Imgart, Andr\'{e} Scherag, Susann Scherag, Stephan Zipfel, Claudette Boni, Nicolas Ramoz, Audrey Versini, Marek K Brandys, Unna N Danner, Carolien de Kove, Judith Hendriks, Bobby P C Koeleman, Roel A Ophoff, Eric Strengman, Annemarie A van Elburg, Alice Bruson, Maurizio Clementi, Daniela Degortes, Monica Forzan, Elena Tenconi, Elisa Docampo, Ge\`{o}rgia Escaram\'{i}, Susana Jim\'{e}nez-Murcia, Jolanta Lissowska, Andrzej Rajewski, Neonila Szeszenia-Dabrowska, Agnieszka Slopien, Joanna Hauser, Leila Karhunen, Ingrid Meulenbelt, P Eline Slagboom, Alfonso Tortorella, Mario Maj, George Dedoussis, Dimitris Dikeos, Fragiskos Gonidakis, Konstantinos Tziouvas, Artemis Tsitsika, Hana Papezova, Lenka Slachtova, Debora Martaskova, James L Kennedy, Robert D Levitan, Zeynep Yilmaz, Julia Huemer, Doris Koubek, Elisabeth Merl, Gudrun Wagner, Paul Lichtenstein, Gerome Breen, Sarah Cohen-Woods, Anne Farmer, Peter McGuffin, Sven Cichon, Ina Giegling, Stefan Herms, Dan Rujescu, Stefan Schreiber, H-Erich Wichmann, Christian Dina, Rob Sladek, Giovanni Gambaro, Nicole Soranzo, Antonio Julia, Sara Marsal, Raquel Rabionet, Valerie Gaborieau, Danielle M Dick, Aarno Palotie, Samuli Ripatti, Elisabeth Wid\'{e}n, Ole A Andreassen, Thomas Espeseth, Astri Lundervold, Ivar Reinvang, Vidar M Steen, Stephanie Le Hellard, Morten Mattingsdal, Ioanna Ntalla, Vladimir Bencko, Lenka Foretova, Vladimir Janout, Marie Navratilova, Steven Gallinger, Dalila Pinto, Stephen W Scherer, Harald Aschauer, Laura Carlberg, Alexandra Schosser, Lars Alfredsson, Bo Ding, Lars Klareskog, Leonid Padyukov, Chris Finan, Gursharan Kalsi, Marion Roberts, Darren W Logan, Leena Peltonen, Graham R S Ritchie, Jeff C Barrett, Xavier Estivill, Anke Hinney, Patrick F Sullivan, David A Collier, Eleftheria Zeggini, and Cynthia M BulikWellcome Trust Case Control Consortium 3 (WTCCC3):Carl A Anderson, Jeffrey C Barrett, James A B Floyd, Christopher S Franklin, Ralph McGinnis, Nicole Soranzo, Eleftheria Zeggini, Jennifer Sambrook, Jonathan Stephens, Willem H Ouwehand, Wendy L McArdle, Susan M Ring, David P Strachan, Graeme Alexander, Cynthia M Bulik, David A Collier, Peter J Conlon, Anna Dominiczak, Audrey Duncanson, Adrian Hill, Cordelia Langford, Graham Lord, Alexander P Maxwell, Linda Morgan, Leena Peltonen, Richard N Sandford, Neil Sheerin, Frederik O Vannberg, Hannah Blackburn, Wei-Min Chen, Sarah Edkins, Mathew Gillman, Emma Gray, Sarah E Hunt, Suna Nengut-Gumuscu, Simon Potter, Stephen S Rich, Douglas Simpkin, and Pamela Whittaker
 The members of the ReproGen consortium are John RB Perry, Felix Day, Cathy E Elks, Patrick Sulem, Deborah J Thompson, Teresa Ferreira, Chunyan He, Daniel I Chasman, Tõnu Esko, Gudmar Thorleifsson, Eva Albrecht, Wei Q Ang, Tanguy Corre, Diana L Cousminer, Bjarke Feenstra, Nora Franceschini, Andrea Ganna, Andrew D Johnson, Sanela Kjellqvist, Kathryn L Lunetta, George McMahon, Ilja M Nolte, Lavinia Paternoster, Eleonora Porcu, Albert V Smith, Lisette Stolk, Alexander Teumer, Natalia T¨ernikova, Emmi Tikkanen, Sheila Ulivi, Erin K Wagner, Najaf Amin, Laura J Bierut, Enda M Byrne, JoukeJan Hottenga, Daniel L Koller, Massimo Mangino, Tune H Pers, Laura M YergesArmstrong, Jing Hua Zhao, Irene L Andrulis, Hoda AntonCulver, Femke Atsma, Stefania Bandinelli, Matthias W Beckmann, Javier Benitez, Carl Blomqvist, Stig E Bojesen, Manjeet K Bolla, Bernardo Bonanni, Hiltrud Brauch, Hermann Brenner, Julie E Buring, Jenny ChangClaude, Stephen Chanock, Jinhui Chen, Georgia ChenevixTrench, J. Margriet Collée, Fergus J Couch, David Couper, Andrea D Coveillo, Angela Cox, Kamila Czene, Adamo Pio D'adamo, George Davey Smith, Immaculata De Vivo, Ellen W Demerath, Joe Dennis, Peter Devilee, Aida K Dieffenbach, Alison M Dunning, Gudny Eiriksdottir, Johan G Eriksson, Peter A Fasching, Luigi Ferrucci, Dieter FleschJanys, Henrik Flyger, Tatiana Foroud, Lude Franke, Melissa E Garcia, Montserrat GarcíaClosas, Frank Geller, Eco EJ de Geus, Graham G Giles, Daniel F Gudbjartsson, Vilmundur Gudnason, Pascal Guénel, Suiqun Guo, Per Hall, Ute Hamann, Robin Haring, Catharina A Hartman, Andrew C Heath, Albert Hofman, Maartje J Hooning, John L Hopper, Frank B Hu, David J Hunter, David Karasik, Douglas P Kiel, Julia A Knight, VeliMatti Kosma, Zoltan Kutalik, Sandra Lai, Diether Lambrechts, Annika Lindblom, Reedik Mägi, Patrik K Magnusson, Arto Mannermaa, Nicholas G Martin, Gisli Masson, Patrick F McArdle, Wendy L McArdle, Mads Melbye Kyriaki Michailidou, Evelin Mihailov, Lili Milani, Roger L Milne, Heli Nevanlinna, Patrick Neven, Ellen A Nohr, Albertine J Oldehinkel, Ben A Oostra, Aarno Palotie,, Munro Peacock, Nancy L Pedersen, Paolo Peterlongo, Julian Peto, Paul DP Pharoah, Dirkje S Postma, Anneli Pouta, Katri Pylkäs, Paolo Radice, Susan Ring, Fernando Rivadeneira, Antonietta Robino, Lynda M Rose, Anja Rudolph, Veikko Salomaa, Serena Sanna, David Schlessinger, Marjanka K Schmidt, Mellissa C Southey, Ulla Sovio Meir J Stampfer, Doris Stöckl Anna M Storniolo, Nicholas J Timpson Jonathan Tyrer, Jenny A Visser, Peter Vollenweider, Henry Völzke, Gerard Waeber, Melanie Waldenberger, Henri Wallaschofski, Qin Wang, Gonneke Willemsen, Robert Winqvist, Bruce HR Wolffenbuttel, Margaret J Wright, Australian Ovarian Cancer Study The GENICA Network, kConFab, The LifeLines Cohort Study, The InterAct Consortium, Early Growth Genetics (EGG) Consortium, Dorret I Boomsma, Michael J Econs, KayTee Khaw, Ruth JF Loos, Mark I McCarthy, Grant W Montgomery, John P Rice, Elizabeth A Streeten, Unnur Thorsteinsdottir, Cornelia M van Duijn, Behrooz Z Alizadeh, Sven Bergmann, Eric Boerwinkle, Heather A Boyd, Laura Crisponi, Paolo Gasparini, Christian Gieger, Tamara B Harris, Erik Ingelsson, MarjoRiitta Järvelin, Peter Kraft, Debbie Lawlor, Andres Metspalu, Craig E Pennell, Paul M Ridker, Harold Snieder, Thorkild IA Sørensen, Tim D Spector, David P Strachan, André G Uitterlinden, Nicholas J Wareham, Elisabeth Widen, Marek Zygmunt, Anna Murray, Douglas F Easton, Kari Stefansson, Joanne M Murabito, Ken K Ong.
 \end{document}
