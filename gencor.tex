@@ -9,6 +9,7 @@
 \usepackage{caption}
 \usepackage{cite}
 \usepackage{subcaption}
+\usepackage{mathtools}
 \usepackage{multirow}
 \usepackage[nottoc,notlof,notlot,numbib]{tocbibind}
 \usepackage{xr-hyper}
@@ -39,9 +40,9 @@
 \author[7]{John R.B. Perry}
 \author[1]{Nick Patterson}
 \author[1,2,3]{Elise Robinson}
-\author[1,2,3]{Mark J Daly}
-\author[1,5,6]{Alkes L Price\thanks{Co-last authors}$^,$}
-\author[**,1,2,3]{Benjamin M Neale\thanks{Address correspondence to BBS (\texttt{bulik@broadinstitute.org}) or BMN (\texttt{bneale@broadinstitute.org}).}}
+\author[1,2,3]{Mark J. Daly}
+\author[1,5,6]{Alkes L. Price\thanks{Co-last authors}$^,$}
+\author[**,1,2,3]{Benjamin M. Neale\thanks{Address correspondence to BBS (\texttt{bulik@broadinstitute.org}) or BMN (\texttt{bneale@broadinstitute.org}).}}
 
 \affil[1]{\small{Program in Medical and Population Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}}
 \affil[2]{Stanley Center for Psychiatric Genetics, Broad Institute of MIT and Harvard, Cambridge, MA, USA}
@@ -56,7 +57,7 @@
 \maketitle
 
 \begin{abstract}
-The major challenges preventing estimation of genetic correlation from GWAS data are the lack of availability of individual genotype data and widespread sample overlap.
+The major challenges preventing estimation of genetic correlation from genome-wide association study (GWAS) data are the lack of availability of individual genotype data and widespread sample overlap among meta-analyses.
 We circumvent these difficulties by introducing a technique for estimating genetic correlation that requires only GWAS summary statistics and is not biased by sample overlap.
 We use our method to estimate 300 genetic correlations among 25 traits, totaling more than 1.5 million unique phenotype measurements.
 Our results include a positive genetic correlation between anorexia nervosa and schizophrenia and a negative genetic correlation between anorexia nervosa and body mass index, as well as a large number of replications and positive controls. 
@@ -126,7 +127,7 @@ A similar result holds if one or both studies is a case/control study, in which 
 is on the observed scale.
 As a consequence of equation 1, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score, which is computationally very fast (Methods). 
 Normalizing genetic covariance to lie in $[-1,1]$ yields genetic correlation: 
-$r_g := \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$. 
+$r_g \coloneqq  \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$. 
 Theory and simulation confirm that our method produces robust estimates of genetic correlation, even when summary statistics are affected by population stratification \cite{buliksullivan2014} or sample overlap.
 
 \subsection*{Simulations}\label{Simulations}
@@ -307,7 +308,7 @@ The third section of table \ref{table:results} lists interesting examples where 
 The lack of genetic correlation between schizophrenia and rheumatoid arthritis is interesting because schizophrenia has been observed to be protective for rheumatoid arthritis \cite{silman2002epidemiology}.
 The absence of genetic correlation between schizophrenia and smoking is notable because of the high prevalence of smoking among individuals with schizophrenia \cite{de2005meta}. 
 The absence of genetic correlation between schizophrenia and plasma lipid levels contrasts with a previous report of extensive pleiotropy between schizophrenia and triglycerides \cite{andreassen2013improved2}. 
-However, this observation from Andreassen, \emph{et al.} \cite{andreassen2013improved2} could be explained the sensitivity of the method used to the properties of a few regions with strong LD, rather than trait biology (Table \ref{qq_tg}).
+However, this observation from Andreassen, \emph{et al.} \cite{andreassen2013improved2} could be explained by the sensitivity of the method used to the properties of a few regions with strong LD, rather than trait biology (Table \ref{qq_tg}).
 We estimate near-zero genetic correlation between Alzheimer's disease and schizophrenia. 
 The genetic correlations between Alzheimers disease and the other psychiatric traits (anorexia nervosa, bipolar, major depression, ASD) are also
 close to zero, but with larger standard errors, due to smaller sample sizes.
@@ -389,13 +390,13 @@ need for measuring multiple traits on the same individuals or genome-wide signif
 All definitions refer to narrow-sense heritabilities and genetic covariances.
 Let $S$ denote a set of $M$ SNPs, 
 let $X$ denote a vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
-and let $y_1$ and $y_2$ denote phenotypes. Define $\beta := \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]^2$,
+and let $y_1$ and $y_2$ denote phenotypes. Define $\beta \coloneqq  \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]^2$,
 where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit). 
 Let $\gamma$ denote the corresponding vector for $y_2$.
 This is a projection, so $\beta$ is unique modulo SNPs in perfect LD. 
-Define $h^2_S$, the heritability explained by SNPs in $S$, as $h^2_S(y_1) := \sum_j \beta_j^2$ and $\rho_S(y_1,y_2)$, the genetic covariance among SNPs in $S$, as
-$\rho_S(y_1,y_2) := \sum_{j\in S} \beta_j\gamma_j$.
-The genetic correlation among SNPs in $S$ is $r_S(y_1,y_2) := \rho_S(y_1,y_2)/\sqrt{h^2_S(y_1)h^2_S(y_2)}$, 
+Define $h^2_S$, the heritability explained by SNPs in $S$, as $h^2_S(y_1) \coloneqq  \sum_j \beta_j^2$ and $\rho_S(y_1,y_2)$, the genetic covariance among SNPs in $S$, as
+$\rho_S(y_1,y_2) \coloneqq  \sum_{j\in S} \beta_j\gamma_j$.
+The genetic correlation among SNPs in $S$ is $r_S(y_1,y_2) \coloneqq  \rho_S(y_1,y_2)/\sqrt{h^2_S(y_1)h^2_S(y_2)}$, 
 which lies in [-1,1]. 
 Following \cite{yang2010}, we use subscript $g$ (as in $h^2_g,\rho_g,r_g$) when the set of SNPs is 
 genotyped and imputed SNPs in GWAS.
@@ -410,8 +411,8 @@ no similar relationship holds between SNP genetic correlation and total genetic 
 If $\beta$ and $\gamma$ are more strongly correlated among common variants than rare variants, then the total genetic correlation will be less than the SNP genetic correlation.
 
 Genetic correlation is (asymptotically) proportional to Mendelian randomization estimates.
-If we use a genetic instrument $g_i := \sum_{j\in S} X_{ij}\beta_j$ to estimate the effect $b_{12}$ of $y_1$ on $y_2$,
-the 2SLS estimate is $\hat{b}_{2SLS}:=\T{g}y_2/\T{g}y_1$ \cite{angrist2008mostly}.
+If we use a genetic instrument $g_i \coloneqq  \sum_{j\in S} X_{ij}\beta_j$ to estimate the effect $b_{12}$ of $y_1$ on $y_2$,
+the 2SLS estimate is $\hat{b}_{2SLS}\coloneqq \T{g}y_2/\T{g}y_1$ \cite{angrist2008mostly}.
 The expectations of the numerator and denominator are 
 $\E[\T{g}y_2]=\rho_S(y_1,y_2)$ and $\E[\T{g}y_1]=h^2_S(y_1)$.
 Thus, $\mathrm{plim}_{N\to\infty} \hat{b}_{2SLS} = r_S(y_2,y_1)\sqrt{h^2_S(y_1) / h^2_S(y_2)}$.
@@ -460,7 +461,7 @@ which are not known a priori, so it is necessary to estimate them from the data.
 We compute the weights in two steps:
 \begin{enumerate}
 \item The first regression is weighted using heritabilities from the single-trait LD Score regressions,
-$\rho N_s=0$, and $\rho_g$ estimated as $\hat{\rho}_g := (\lbar\sqrt{N_1N_2})^{-1}\sum_j z_{1j}z_{2j}$.
+$\rho N_s=0$, and $\rho_g$ estimated as $\hat{\rho}_g \coloneqq  (\lbar\sqrt{N_1N_2})^{-1}\sum_j z_{1j}z_{2j}$.
 \item The second regression is weighted using the estimates of $\rho N_s$ and $\rho_g$ from step 1. 
 The genetic covariance estimate that we report is the estimate from the second regression.
 \end{enumerate}
@@ -516,7 +517,7 @@ We used in-sample LD Scores for LD Score regression.
 %down to a set $S$ of 5197 SNPs on chromosome 2 (using the \texttt{plink 1.9} command \texttt{ --indep-pairwise 500 500 0.1}
  %\cite{chang2014second}), then estimating genetic correlation as 
 %$$
-%\hat{r}_g := \dfrac
+%\hat{r}_g \coloneqq  \dfrac
 %{\sum_{j\in S}\bhat_j\chat_j}
 %{\sqrt{\left(\sum_{j\in S}\bhat_j^2\right)\left(\sum_{j\in S}\chat_j^2\right)}}.
 %$$
@@ -710,7 +711,7 @@ and $(\delta, \epsilon)$ has mean zero and covariance matrix
 		\envcov I& (1-\hsqt) I
 	\end{array} \right).
 \end{equation*}
-Let $\rho := \gencov + \envcov$.
+Let $\rho \coloneqq  \gencov + \envcov$.
 Genotypes are \emph{i.i.d.} draw from a distribution with covariance matrix $R$
 (\emph{i.e.,} $r$ is an LD matrix with $r_{jk} = \E[Y_{ij}Y_{ik}]$).
 There are $N_s$ individuals included in both studies.
@@ -731,7 +732,7 @@ Thus, the genetic covariance between $y_1$ and $y_2$ is
 \end{align*}
 \end{proof}
 
-We compute linear regression $z$-scores $z_{1j}:= \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}:= \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$.
+We compute linear regression $z$-scores $z_{1j}\coloneqq  \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}\coloneqq  \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$.
 \begin{prop}\label{supp_condexp_qt}
 Let $j$ denote a genotyped SNP. Under the model described above, 
 \begin{equation}
@@ -813,8 +814,8 @@ In cases where the normality assumption does not hold, LD Score regression will 
 
 In the liability threshold (probit) model \cite{pearson1901inheritance}, 
 binary traits are determined by an unobserved continuous liability $\psi$.
-The observed trait is $y := \ind[\psi > \tau]$, where $\tau$ is the liability threshold.
-If $\psi$ is normally distributed, then setting $\tau:=\Phi^{-1}(1-K)$ (where $\Phi$ is the standard normal cdf) yields a population prevalence of $K$.
+The observed trait is $y \coloneqq  \ind[\psi > \tau]$, where $\tau$ is the liability threshold.
+If $\psi$ is normally distributed, then setting $\tau\coloneqq \Phi^{-1}(1-K)$ (where $\Phi$ is the standard normal cdf) yields a population prevalence of $K$.
 
 The liability threshold construction is surprisingly general. 
 If $y$ is an arbitrary binary phenotype, then we can define a normally distributed liability for $y$ by setting
@@ -833,7 +834,7 @@ we lose no generality and simplify notation considerably by stating the proofs i
 
 We state this lemma in terms of marginal per-allele effect sizes, instead of the per-normalized-genotype effect sizes considered in the earlier results on quantitative traits.
 Here marginal means that these are the effect sizes obtained by univariate regression of phenotype against genotype in the infinite data limit. 
-Haploid normalized genotypes are defined $X_j := (G_j - p_j)/\sqrt{p_j(1-p_j)}$.
+Haploid normalized genotypes are defined $X_j \coloneqq  (G_j - p_j)/\sqrt{p_j(1-p_j)}$.
 If $\beta_j$ is the marginal per-normalized-genotype effect and $\zeta_j$ is the marginal per-allele effect, 
 we have $X_j\beta_j = G_j\zeta_j$. 
 Thus, setting $G_{ij}=1$ yields $\zeta_j = \beta_j\sqrt{(1-p_j)/p_j}$.
@@ -856,7 +857,7 @@ and
 		\envcov I& (1-\hsqt) I
 	\end{array} \right).
 \end{equation*}
-Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of $j$ on $\psi$ and $\varphi$, and let $p_{cas,kj}:=\prob[G_{ij}=1\cond y_{ik}=1]$ for $k=1,2$. Then
+Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of $j$ on $\psi$ and $\varphi$, and let $p_{cas,kj}\coloneqq \prob[G_{ij}=1\cond y_{ik}=1]$ for $k=1,2$. Then
 \begin{align*}
 	\E[p_{cas,1j}-p_{con,1j}] &= 0,\\
 	\E[p_{cas,2j}-p_{con,2j}] &= 0, \\
@@ -948,7 +949,7 @@ In the next proposition, we derive an LD Score regression equation for ascertain
 
 Let $P_i$ denote the sample prevalence of $y_i$ in study $i$ for $i=1,2$.
 We compute $z$-scores
-$$z_j :=\frac {\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} {\sqrt{\hat{p}_j(1-\hat{p}_j)}},$$
+$$z_j \coloneqq \frac {\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} {\sqrt{\hat{p}_j(1-\hat{p}_j)}},$$
 where $\hat{p}_j$ denotes allele frequency in the entire sample\footnote{
 The expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$ or $j$ has zero marginal effect.},
 $\hat{p}_{cas}$ denotes sample case allele frequency
@@ -978,7 +979,7 @@ Under the polygenic liability threshold model from lemma \ref{probit_model},
 \end{align}
 where 
 \[
-\rho_{g,obs} := \rho_g\left(\dfrac{\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
+\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
 \]
 denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2), $N_i$ denotes total sample size in study $i$ and 
 $N_{a,i}$ for $a\in\{cas,con\}$ and $i=1,2$ denotes the number of individuals with phenotype $a$ in study $i$.
@@ -990,7 +991,7 @@ The full form of $z_{1j}z_{2j}$ is
 	{\sqrt{cN_1N_2}(\hat{p}_{cas,1j} - \hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})}}
 	{\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}},
 \end{equation*}
-where $c:=P_1(1-P_1)P_2(1-P_2)$.
+where $c\coloneqq  P_1(1-P_1)P_2(1-P_2)$.
 Our strategy for obtaining the expectation is
 \begin{align}
 	\E[z_{1j}z_{2j}]
@@ -1006,8 +1007,8 @@ Our strategy for obtaining the expectation is
 \end{align}
 where $\zeta_j$ and $\xi_j$ denote the marginal per-allele effects of $j$.
 Approximation \ref{ratio} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a ratio to a ratio of expectations.
-Approximation \ref{sqrts} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a square root to a square root of expectations
-and why are you still reading this.
+Approximation \ref{sqrts} hides $\mathscr{O}(1/N)$ error from moving from the expectation of a square root to a square root of expectations,
+and dear reader we admire your perseverance in making it this far.
 Equality \ref{zz_condexp} follows from applying of the law of total expectation to the numerator and denominator.
 
 First, we compute the numerator.
@@ -1058,7 +1059,7 @@ p_j(1-p_j)\left(
 +
 \sum_{a,b\in\{cas,con\}}\dfrac{N_{a,b}(-1)^{1+\bf{1}[a=b]}}{N_{a,1}N_{b,2}}\right),
 \end{align}
-where $c':=K_1(1-K_1)K_2(1-K_2)$.
+where $c'\coloneqq K_1(1-K_1)K_2(1-K_2)$.
 
 Next, we derive the expectation of the denominator.
 Conditional on $\zeta_j$ and $\xi_j$, $\hat{p}_{1j}(1-\hat{p}_{1j})$ is $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ plus $\mathscr{O}(1/N)$ sampling 
@@ -1080,7 +1081,7 @@ We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times equation \ref{nu
 If study 1 is an ascertained study of a binary trait, and study 2 is a non-ascertained quantitative study, then proposition
 \ref{binary_prop} holds, except with genetic covariance on the half-observed scale
 \[
-\rho_{g,obs} := \rho_g\left(\dfrac{\phi(\tau_1)\sqrt{P_1(1-P_1)}}{K_1(1-K_1)}\right).
+\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\phi(\tau_1)\sqrt{P_1(1-P_1)}}{K_1(1-K_1)}\right).
 \]
 
 \end{cor}
@@ -1119,18 +1120,18 @@ scale without having to worry about sample and population prevalences.
 The heritability parameter estimated by \texttt{ldsc} is subtly different than the heritability parameter $h^2_g$
 estimated by \texttt{GCTA}. 
 If $g$ denotes the set of all genotyped SNPs in some GWAS, define 
-$\beta_{GCTA} := \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]^2$,
+$\beta_{GCTA} \coloneqq  \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]^2$,
 where $X_g$ is a random vector of genotypes for SNPs in $g$.
 Then the heritability parameter estimated by \texttt{GCTA} is defined 
-$$h^2_{g}:=\sum_{j\in g} \beta_{GCTA,j}^2.$$
+$$h^2_{g}\coloneqq \sum_{j\in g} \beta_{GCTA,j}^2.$$
 Let $S$ denote the set of SNPs used to compute LD Scores (\emph{i.e.,} $\ell_j = \sum_{k\in S} r^2_{jk}$),
-and let $\beta_{S} := \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
+and let $\beta_{S} \coloneqq  \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
 Generally $\beta_{S,j}\neq\beta_{GCTA,j}$ unless all SNPs in $S\setminus g$ are not in LD with SNPs in $g$.
 Define
-$$h^2_{S}:=\sum_{j\in S} \beta_{S,j}^2.$$
+$$h^2_{S}\coloneqq \sum_{j\in S} \beta_{S,j}^2.$$
 Let $S'$ denote the set of SNPs in $S$ with MAF above 5\%. Define
 \begin{equation}
-	h^2_{5\myhyphen50\%} := \sum_{j\in S'} \beta_{S,j}^2.
+	h^2_{5\myhyphen50\%} \coloneqq  \sum_{j\in S'} \beta_{S,j}^2.
 \end{equation}
 The default setting in \texttt{ldsc} is to report $h^2_{5\myhyphen50\%}$, estimated as the slope 
 from LD Score regression times $M_{5\myhyphen50\%}$, the number of SNPs with MAF above 5\%.
@@ -1323,7 +1324,7 @@ Genetic correlations that are significantly different from zero at significance 
 \begin{centering}
 \includegraphics[scale=0.8]{figs/vattikuti.pdf}
 \caption{\label{vattikuti}\small{\textit{This figure compares estimates of genetic correlations among metabolic traits from table 3 of Vattikuti et al. \cite{vattikuti2012heritability}
-to the estimates from LD Score regression (and larger sample sizes). Error bars are standard errors.}}}
+to estimates from LD Score regression. The LD Score regression estimates used much larger sample sizes. Error bars are standard errors.}}}
 \end{centering}
 \end{figure}
 \newpage
@@ -1335,7 +1336,7 @@ to the estimates from LD Score regression (and larger sample sizes). Error bars 
 \caption{\label{qq_tg}\small{\textit{We reproduced the conditional QQ plot comparing schizophrenia (SCZ) and triglycerides (TG) from Andreassen et al. \cite{andreassen2013improved} (left). 
 The major histocompatibility complex (MHC, chr6, 25-35 MB) is
 a genomic region containing SNPs with exceptionally high LD Scores and the strongest GWAS association for schizophrenia
-\cite{schizophrenia2014biological} as well as a GWAS association to TG \cite{teslovich2010biological}.
+\cite{schizophrenia2014biological}, as well as an association to TG \cite{teslovich2010biological}.
 Removing the MHC removes all signal of enrichment from the conditional QQ plot (right).}}}
 \end{centering}
 \end{figure}
@@ -1473,6 +1474,11 @@ Wu, Hualin Simon Xi, Wei Xu, Allan H Young, Clement C Zai, Stan Zammit,
 Peter P Zandi, Peng Zhang, Xuebin Zheng, Fritz Zimprich, Frans G Zitman,
 and Sebastian Zoellner. 
 
-Genetic Consortium for Anorexia Nervosa (GCAN):Vesna Boraska Perica, Christopher S Franklin, James A B Floyd, Laura M Thornton, Laura M Huckins, Lorraine Southam, N William Rayner, Ioanna Tachmazidou, Kelly L Klump, Janet Treasure, Cathryn M Lewis, Ulrike Schmidt, Federica Tozzi, Kirsty Kiezebrink, Johannes Hebebrand, Philip Gorwood, Roger A H Adan, Martien J H Kas, Angela Favaro, Paolo Santonastaso, Fernando Fern\'{a}ndez-Aranda, Monica Gratacos, Filip Rybakowski, Monika Dmitrzak-Weglarz, Jaakko Kaprio, Anna Keski-Rahkonen, Anu Raevuori-Helkamaa, Eric F Van Furth, Margarita C T Slof-Op't Landt, James I Hudson, Ted Reichborn-Kjennerud, Gun Peggy S Knudsen, Palmiero Monteleone, Allan S Kaplan, Andreas Karwautz, Hakon Hakonarson, Wade H Berrettini, Yiran Guo, Dong Li, Nicholas J Schork, Gen Komaki, Tetsuya Ando, Hidetoshi Inoko, T\~{o}nu Esko, Krista Fischer, Katrin M\"{a}nnik, Andres Metspalu, Jessica H Baker, Roger D Cone, Jennifer Dackor, Janiece E DeSocio, Christopher E Hilliard, Julie K O'Toole, Jacques Pantel, Jin P Szatkiewicz, Chrysecolla Taico, Stephanie Zerwas, Sara E Trace, Oliver S P Davis, Sietske Helder, Katharina B\"{u}hren, Roland Burghardt, Martina de Zwaan, Karin Egberts, Stefan Ehrlich, Beate Herpertz-Dahlmann, Wolfgang Herzog, Hartmut Imgart, Andr\'{e} Scherag, Susann Scherag, Stephan Zipfel, Claudette Boni, Nicolas Ramoz, Audrey Versini, Marek K Brandys, Unna N Danner, Carolien de Kove, Judith Hendriks, Bobby P C Koeleman, Roel A Ophoff, Eric Strengman, Annemarie A van Elburg, Alice Bruson, Maurizio Clementi, Daniela Degortes, Monica Forzan, Elena Tenconi, Elisa Docampo, Ge\`{o}rgia Escaram\'{i}, Susana Jim\'{e}nez-Murcia, Jolanta Lissowska, Andrzej Rajewski, Neonila Szeszenia-Dabrowska, Agnieszka Slopien, Joanna Hauser, Leila Karhunen, Ingrid Meulenbelt, P Eline Slagboom, Alfonso Tortorella, Mario Maj, George Dedoussis, Dimitris Dikeos, Fragiskos Gonidakis, Konstantinos Tziouvas, Artemis Tsitsika, Hana Papezova, Lenka Slachtova, Debora Martaskova, James L Kennedy, Robert D Levitan, Zeynep Yilmaz, Julia Huemer, Doris Koubek, Elisabeth Merl, Gudrun Wagner, Paul Lichtenstein, Gerome Breen, Sarah Cohen-Woods, Anne Farmer, Peter McGuffin, Sven Cichon, Ina Giegling, Stefan Herms, Dan Rujescu, Stefan Schreiber, H-Erich Wichmann, Christian Dina, Rob Sladek, Giovanni Gambaro, Nicole Soranzo, Antonio Julia, Sara Marsal, Raquel Rabionet, Valerie Gaborieau, Danielle M Dick, Aarno Palotie, Samuli Ripatti, Elisabeth Wid\'{e}n, Ole A Andreassen, Thomas Espeseth, Astri Lundervold, Ivar Reinvang, Vidar M Steen, Stephanie Le Hellard, Morten Mattingsdal, Ioanna Ntalla, Vladimir Bencko, Lenka Foretova, Vladimir Janout, Marie Navratilova, Steven Gallinger, Dalila Pinto, Stephen W Scherer, Harald Aschauer, Laura Carlberg, Alexandra Schosser, Lars Alfredsson, Bo Ding, Lars Klareskog, Leonid Padyukov, Chris Finan, Gursharan Kalsi, Marion Roberts, Darren W Logan, Leena Peltonen, Graham R S Ritchie, Jeff C Barrett, Xavier Estivill, Anke Hinney, Patrick F Sullivan, David A Collier, Eleftheria Zeggini, and Cynthia M BulikWellcome Trust Case Control Consortium 3 (WTCCC3):Carl A Anderson, Jeffrey C Barrett, James A B Floyd, Christopher S Franklin, Ralph McGinnis, Nicole Soranzo, Eleftheria Zeggini, Jennifer Sambrook, Jonathan Stephens, Willem H Ouwehand, Wendy L McArdle, Susan M Ring, David P Strachan, Graeme Alexander, Cynthia M Bulik, David A Collier, Peter J Conlon, Anna Dominiczak, Audrey Duncanson, Adrian Hill, Cordelia Langford, Graham Lord, Alexander P Maxwell, Linda Morgan, Leena Peltonen, Richard N Sandford, Neil Sheerin, Frederik O Vannberg, Hannah Blackburn, Wei-Min Chen, Sarah Edkins, Mathew Gillman, Emma Gray, Sarah E Hunt, Suna Nengut-Gumuscu, Simon Potter, Stephen S Rich, Douglas Simpkin, and Pamela Whittaker
+Genetic Consortium for Anorexia Nervosa (GCAN):
+Vesna Boraska Perica, Christopher S Franklin, James A B Floyd, Laura M Thornton, Laura M Huckins, Lorraine Southam, N William Rayner, Ioanna Tachmazidou, Kelly L Klump, Janet Treasure, Cathryn M Lewis, Ulrike Schmidt, Federica Tozzi, Kirsty Kiezebrink, Johannes Hebebrand, Philip Gorwood, Roger A H Adan, Martien J H Kas, Angela Favaro, Paolo Santonastaso, Fernando Fern\'{a}ndez-Aranda, Monica Gratacos, Filip Rybakowski, Monika Dmitrzak-Weglarz, Jaakko Kaprio, Anna Keski-Rahkonen, Anu Raevuori-Helkamaa, Eric F Van Furth, Margarita C T Slof-Op't Landt, James I Hudson, Ted Reichborn-Kjennerud, Gun Peggy S Knudsen, Palmiero Monteleone, Allan S Kaplan, Andreas Karwautz, Hakon Hakonarson, Wade H Berrettini, Yiran Guo, Dong Li, Nicholas J Schork, Gen Komaki, Tetsuya Ando, Hidetoshi Inoko, T\~{o}nu Esko, Krista Fischer, Katrin M\"{a}nnik, Andres Metspalu, Jessica H Baker, Roger D Cone, Jennifer Dackor, Janiece E DeSocio, Christopher E Hilliard, Julie K O'Toole, Jacques Pantel, Jin P Szatkiewicz, Chrysecolla Taico, Stephanie Zerwas, Sara E Trace, Oliver S P Davis, Sietske Helder, Katharina B\"{u}hren, Roland Burghardt, Martina de Zwaan, Karin Egberts, Stefan Ehrlich, Beate Herpertz-Dahlmann, Wolfgang Herzog, Hartmut Imgart, Andr\'{e} Scherag, Susann Scherag, Stephan Zipfel, Claudette Boni, Nicolas Ramoz, Audrey Versini, Marek K Brandys, Unna N Danner, Carolien de Kove, Judith Hendriks, Bobby P C Koeleman, Roel A Ophoff, Eric Strengman, Annemarie A van Elburg, Alice Bruson, Maurizio Clementi, Daniela Degortes, Monica Forzan, Elena Tenconi, Elisa Docampo, Ge\`{o}rgia Escaram\'{i}, Susana Jim\'{e}nez-Murcia, Jolanta Lissowska, Andrzej Rajewski, Neonila Szeszenia-Dabrowska, Agnieszka Slopien, Joanna Hauser, Leila Karhunen, Ingrid Meulenbelt, P Eline Slagboom, Alfonso Tortorella, Mario Maj, George Dedoussis, Dimitris Dikeos, Fragiskos Gonidakis, Konstantinos Tziouvas, Artemis Tsitsika, Hana Papezova, Lenka Slachtova, Debora Martaskova, James L Kennedy, Robert D Levitan, Zeynep Yilmaz, Julia Huemer, Doris Koubek, Elisabeth Merl, Gudrun Wagner, Paul Lichtenstein, Gerome Breen, Sarah Cohen-Woods, Anne Farmer, Peter McGuffin, Sven Cichon, Ina Giegling, Stefan Herms, Dan Rujescu, Stefan Schreiber, H-Erich Wichmann, Christian Dina, Rob Sladek, Giovanni Gambaro, Nicole Soranzo, Antonio Julia, Sara Marsal, Raquel Rabionet, Valerie Gaborieau, Danielle M Dick, Aarno Palotie, Samuli Ripatti, Elisabeth Wid\'{e}n, Ole A Andreassen, Thomas Espeseth, Astri Lundervold, Ivar Reinvang, Vidar M Steen, Stephanie Le Hellard, Morten Mattingsdal, Ioanna Ntalla, Vladimir Bencko, Lenka Foretova, Vladimir Janout, Marie Navratilova, Steven Gallinger, Dalila Pinto, Stephen W Scherer, Harald Aschauer, Laura Carlberg, Alexandra Schosser, Lars Alfredsson, Bo Ding, Lars Klareskog, Leonid Padyukov, Chris Finan, Gursharan Kalsi, Marion Roberts, Darren W Logan, Leena Peltonen, Graham R S Ritchie, Jeff C Barrett, Xavier Estivill, Anke Hinney, Patrick F Sullivan, David A Collier, Eleftheria Zeggini, and Cynthia M Bulik.
+
+Wellcome Trust Case Control Consortium 3 (WTCCC3):
+Carl A Anderson, Jeffrey C Barrett, James A B Floyd, Christopher S Franklin, Ralph McGinnis, Nicole Soranzo, Eleftheria Zeggini, Jennifer Sambrook, Jonathan Stephens, Willem H Ouwehand, Wendy L McArdle, Susan M Ring, David P Strachan, Graeme Alexander, Cynthia M Bulik, David A Collier, Peter J Conlon, Anna Dominiczak, Audrey Duncanson, Adrian Hill, Cordelia Langford, Graham Lord, Alexander P Maxwell, Linda Morgan, Leena Peltonen, Richard N Sandford, Neil Sheerin, Frederik O Vannberg, Hannah Blackburn, Wei-Min Chen, Sarah Edkins, Mathew Gillman, Emma Gray, Sarah E Hunt, Suna Nengut-Gumuscu, Simon Potter, Stephen S Rich, Douglas Simpkin, and Pamela Whittaker.
+
 The members of the ReproGen consortium are John RB Perry, Felix Day, Cathy E Elks, Patrick Sulem, Deborah J Thompson, Teresa Ferreira, Chunyan He, Daniel I Chasman, Tõnu Esko, Gudmar Thorleifsson, Eva Albrecht, Wei Q Ang, Tanguy Corre, Diana L Cousminer, Bjarke Feenstra, Nora Franceschini, Andrea Ganna, Andrew D Johnson, Sanela Kjellqvist, Kathryn L Lunetta, George McMahon, Ilja M Nolte, Lavinia Paternoster, Eleonora Porcu, Albert V Smith, Lisette Stolk, Alexander Teumer, Natalia T¨ernikova, Emmi Tikkanen, Sheila Ulivi, Erin K Wagner, Najaf Amin, Laura J Bierut, Enda M Byrne, JoukeJan Hottenga, Daniel L Koller, Massimo Mangino, Tune H Pers, Laura M YergesArmstrong, Jing Hua Zhao, Irene L Andrulis, Hoda AntonCulver, Femke Atsma, Stefania Bandinelli, Matthias W Beckmann, Javier Benitez, Carl Blomqvist, Stig E Bojesen, Manjeet K Bolla, Bernardo Bonanni, Hiltrud Brauch, Hermann Brenner, Julie E Buring, Jenny ChangClaude, Stephen Chanock, Jinhui Chen, Georgia ChenevixTrench, J. Margriet Collée, Fergus J Couch, David Couper, Andrea D Coveillo, Angela Cox, Kamila Czene, Adamo Pio D'adamo, George Davey Smith, Immaculata De Vivo, Ellen W Demerath, Joe Dennis, Peter Devilee, Aida K Dieffenbach, Alison M Dunning, Gudny Eiriksdottir, Johan G Eriksson, Peter A Fasching, Luigi Ferrucci, Dieter FleschJanys, Henrik Flyger, Tatiana Foroud, Lude Franke, Melissa E Garcia, Montserrat GarcíaClosas, Frank Geller, Eco EJ de Geus, Graham G Giles, Daniel F Gudbjartsson, Vilmundur Gudnason, Pascal Guénel, Suiqun Guo, Per Hall, Ute Hamann, Robin Haring, Catharina A Hartman, Andrew C Heath, Albert Hofman, Maartje J Hooning, John L Hopper, Frank B Hu, David J Hunter, David Karasik, Douglas P Kiel, Julia A Knight, VeliMatti Kosma, Zoltan Kutalik, Sandra Lai, Diether Lambrechts, Annika Lindblom, Reedik Mägi, Patrik K Magnusson, Arto Mannermaa, Nicholas G Martin, Gisli Masson, Patrick F McArdle, Wendy L McArdle, Mads Melbye Kyriaki Michailidou, Evelin Mihailov, Lili Milani, Roger L Milne, Heli Nevanlinna, Patrick Neven, Ellen A Nohr, Albertine J Oldehinkel, Ben A Oostra, Aarno Palotie,, Munro Peacock, Nancy L Pedersen, Paolo Peterlongo, Julian Peto, Paul DP Pharoah, Dirkje S Postma, Anneli Pouta, Katri Pylkäs, Paolo Radice, Susan Ring, Fernando Rivadeneira, Antonietta Robino, Lynda M Rose, Anja Rudolph, Veikko Salomaa, Serena Sanna, David Schlessinger, Marjanka K Schmidt, Mellissa C Southey, Ulla Sovio Meir J Stampfer, Doris Stöckl Anna M Storniolo, Nicholas J Timpson Jonathan Tyrer, Jenny A Visser, Peter Vollenweider, Henry Völzke, Gerard Waeber, Melanie Waldenberger, Henri Wallaschofski, Qin Wang, Gonneke Willemsen, Robert Winqvist, Bruce HR Wolffenbuttel, Margaret J Wright, Australian Ovarian Cancer Study The GENICA Network, kConFab, The LifeLines Cohort Study, The InterAct Consortium, Early Growth Genetics (EGG) Consortium, Dorret I Boomsma, Michael J Econs, KayTee Khaw, Ruth JF Loos, Mark I McCarthy, Grant W Montgomery, John P Rice, Elizabeth A Streeten, Unnur Thorsteinsdottir, Cornelia M van Duijn, Behrooz Z Alizadeh, Sven Bergmann, Eric Boerwinkle, Heather A Boyd, Laura Crisponi, Paolo Gasparini, Christian Gieger, Tamara B Harris, Erik Ingelsson, MarjoRiitta Järvelin, Peter Kraft, Debbie Lawlor, Andres Metspalu, Craig E Pennell, Paul M Ridker, Harold Snieder, Thorkild IA Sørensen, Tim D Spector, David P Strachan, André G Uitterlinden, Nicholas J Wareham, Elisabeth Widen, Marek Zygmunt, Anna Murray, Douglas F Easton, Kari Stefansson, Joanne M Murabito, Ken K Ong.
 \end{document}
