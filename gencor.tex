@@ -90,14 +90,13 @@ which does not require measuring multiple traits per individual.
 
 A widely-used technique for testing for relationships between phenotypes using GWAS data is Mendelian randomization (MR)
 \cite{smith2003mendelian, smith2014mendelian}, which is the specialization to genetics of instrumental variables \cite{angrist2008mostly}.
-MR is effective for traits that are influenced by large-effect common variants \cite{voight2012plasma,do2013common};
-however, for many complex traits, heritability is distributed over thousands of variants with small effects \cite{visscher2012five}.
-For these traits, MR suffers from low power and weak instrument bias \cite{angrist2008mostly,burgess2011avoiding}.
+MR is effective for traits where significant associations account for a substantial fraction of heritability \cite{voight2012plasma,do2013common}.
+For many complex traits, heritability is distributed over thousands of variants with small effects, 
+and the proportion of heritability accounted for by significantly associated variants is small at current sample sizes \cite{visscher2012five}.
+For such traits, MR suffers from low power and weak instrument bias \cite{angrist2008mostly,burgess2011avoiding}.
 
 In this paper, our goal is to estimate genetic correlation, a quantity that includes the effects of all SNPs,
 including those that do not reach genome-wide significance (Methods).
-In cases where two phenotypes have a cause-effect relationship,
-genetic correlation can be interpreted as a re-scaling of the MR estimate from a hypothetical instrument built using all SNPs (Methods).
 Genetic correlation is also meaningful for pairs of diseases, in which case it can be interpreted as the genetic analogue of comorbidity.
 The two main existing techniques for estimating genetic correlation from GWAS data are restricted maximum likelihood (REML) \cite{yang2010, yang2011gcta, lee2012estimation, pgccdg2013, vattikuti2012heritability, chen2014estimation}
 and polygenic scores \cite{purcell2009common, dudbridge2013power}.
@@ -114,35 +113,44 @@ We apply this method to data from 25 GWAS and report genetic correlations for 30
 
 \subsection*{Overview of Methods}
 
-Our method for estimating genetic correlation from summary statistics relies on the fact that the GWAS effect-size estimate for a given SNP incorporates the effects of all SNPs in linkage disequilibrium (LD) with that SNP \cite{yang2011genomic,buliksullivan2014}. 
-For a polygenic trait, SNPs with high LD will have higher $\chi^2$-statistics on average than SNPs with low LD \cite{buliksullivan2014}. 
-A similar relationship holds if we replace $\chi^2$-statistics for a single study with the product of $z$-scores from two studies. Precisely, under a polygenic model \cite{yang2010,lee2012estimation}, the expected value of $z_{1j}z_{2j}$ is 
+The method presented here for estimating genetic correlation from summary statistics relies on the fact that the GWAS effect-size estimate for a given SNP incorporates the effects of all SNPs in linkage disequilibrium (LD) with that SNP \cite{yang2011genomic,buliksullivan2014}. 
+For a polygenic trait, SNPs with high LD will have higher $\chi^2$ statistics on average than SNPs with low LD \cite{buliksullivan2014}. 
+A similar relationship holds if we replace $\chi^2$ statistics for a single study with the product of $z$-scores from two studies of traits with non-zero genetic correlation. 
+Precisely, under a polygenic model \cite{yang2010,lee2012estimation}, the expected value of $z_{1j}z_{2j}$ is 
 \begin{equation}\label{reg_eqn}
 	\E[z_{1j}z_{2j}] = \dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}},
 \end{equation}
 where $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance (defined in Methods), $\ell_j$ is LD Score \cite{buliksullivan2014}, $N_s$ is the number of individuals included in both studies, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples.
 We derive this equation in the Supplementary Note.
-If study 1 and study 2 are the same study, then equation \ref{reg_eqn} reduces to the single-trait result from \cite{buliksullivan2014}, because genetic covariance between a trait and itself is heritability, and $\chi^2 = z^2$.
-A similar result holds if one or both studies is a case/control study, in which case genetic covariance
-is on the observed scale.
+If study 1 and study 2 are the same study, then Equation \ref{reg_eqn} reduces to the single-trait result from \cite{buliksullivan2014}, because genetic covariance between a trait and itself is heritability, and $\chi^2 = z^2$.
+A similar result holds if one or both studies is a case/control study, in which case genetic covariance is on the observed scale (Supplementary Note).
 As a consequence of equation 1, we can estimate genetic covariance using the slope from the regression of $z_{1j}z_{2j}$ on LD Score, which is computationally very fast (Methods). 
-Normalizing genetic covariance to lie in $[-1,1]$ yields genetic correlation: 
-$r_g \coloneqq  \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$. 
-Theory and simulation confirm that our method produces robust estimates of genetic correlation, even when summary statistics are affected by population stratification \cite{buliksullivan2014} or sample overlap.
+If there is sample overlap, it will only affect the intercept from this regression (the term $\rho N_s/\sqrt{N_1N_2}$) and not the slope,
+so the estimates of genetic correlation will not be biased by sample overlap.
+Similarly, population stratification will alter the intercept but have minimal impact on the slope, for the same reasons that population stratification has minimal impact on the slope
+from single-trait LD Score regression \cite{buliksullivan2014}.
+If we know the amount of sample overlap and phenotypic correlation in advance (\emph{i.e.,} the true value of $\rho N_s/\sqrt{N_1N_2}$), 
+we can constrain the intercept to this value, which reduces the standard error. We refer to this estimator as constrained intercept LD Score regression.
+Normalizing genetic covariance by the heritabilities yields genetic correlation: 
+$r_g \coloneqq  \rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$.
+Genetic correlation ranges between $-1$ and $1$.
 
 \subsection*{Simulations}\label{Simulations}
 We performed a series of simulations to evaluate the robustness of the model to potential confounders such as sample overlap
 and model misspecification, and to verify the accuracy of the standard error estimates.
 Details of our simulation setup are provided in the methods.
-Table \ref{main_simulations} shows LD Score regression estimates and standard errors from 1000 simulations of quantitative traits with complete sample overlap.
-The LD Score regression standard errors (Methods) matched the standard deviation across simulations,
-and the LD Score regression estimates were not biased by sample overlap.
-For comparison, if we (incorrectly) estimate genetic correlation using LD Score regression with intercept constrained to zero, 
-we obtain out-of-bounds estimates around $\hat{r}_g\approx 2$.
-LD Score regression with incorrectly contained intercept is a representative example of an estimator that is not robust to sample 
-overlap, similar to polygenic scores \cite{dudbridge2013power}.
-Table \ref{qt_cc} shows results from simulations with one quantitative trait and one ascertained binary trait.
-These simulations confirm the derivations in the Supplementary Note and demonstrate that LD Score regression is not biased by oversampling of cases.
+Table \ref{main_simulations} shows LD Score regression estimates and standard errors from 1,000 simulations of quantitative traits.
+For each simulation replicate, 
+we generated two phenotypes for each of 2,062 individuals in our sample by drawing effect sizes approximately 600,000 SNPs on chromosome 2 from a bivariate normal distribution.
+We then computed summary statistics for both phenotypes and estimated heritability and genetic correlation with LD Score regression.
+The summary statistics were generated from completely overlapping samples.
+Results are shown in Table \ref{main_simulations}.
+These simulations confirm that LD Score regression yields accurate estimates of the true genetic correlation
+and that the standard errors match the standard deviation across simulations. 
+Thus, LD Score regression is not biased by sample overlap, 
+in contrast to estimation of genetic correlation via polygenic risk scores, which is biased in the presence of sample overlap \cite{dudbridge2013power}. 
+We also evaluated simulations with one quantitative trait and one case/control study and show that LD Score regression can be applied to binary traits 
+and is not biased by oversampling of cases (Table  \ref{qt_cc}).
 
 \begin{table}[ht]
 \centering
@@ -167,7 +175,7 @@ We obtain approximately correct estimates of genetic correlation even in simulat
 \subsection*{Replication of Pyschiatric Cross-Disorder Results}\label{PGCCDG}
 As technical validation, we replicated the estimates of genetic correlations among psychiatric disorders obtained with individual genotypes and REML in \cite{pgccdg2013}, 
 by applying LD Score regression to summary statistics from the same data \cite{cross2013identification}.
-These summary statistics were generated from 	non-overlapping samples, so
+These summary statistics were generated from non-overlapping samples, so
 we applied LD Score regression using both unconstrained and constrained intercepts (Methods).
 Results from these analyses are shown in Figure \ref{Fig:Replication of PGC Cross-Disorder Results}.
 As expected, the results from LD Score regression were similar to the results from REML.
@@ -257,7 +265,7 @@ significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity
 & Ulcerative Colitis & Childhood Obesity & -0.33 (0.08) & $3.9\times10^{-5\ **}$\\
 & Anorexia Nervosa & Schizophrenia & 0.19 (0.04)  & $1.5\times10^{-5\ **}$ \\
 \hline
-\multirow{8}{*}{New/Zero} 
+\multirow{8}{*}{New/Null} 
 & Schizophrenia &Alzheimer's &  0.05 (0.05) & 0.58 \\
 & Schizophrenia & Ever/Never Smoker & 0.03 (0.06) & 0.26 \\
 & Schizophrenia & Triglycerides & -0.05 (0.04) & 0.21 \\
@@ -269,26 +277,26 @@ significance (\emph{e.g.,} $p<10^{-20}$ for age at onset of menarche and obesity
 \end{tabular}
 \caption{
 \small{\textit{\label{table:results}Genetic correlation estimates, standard errors and $p$-values for selected pairs of traits. Results are grouped into
- genetic correlations that are new genetic results, but are consistent with established epidemiological associations (``Epidemiological''), genetic correlations that are new both to genetics and epidemiology (``New/Nonzero'') and interesting null results (``New/Zero''). 
+ genetic correlations that are new genetic results, but are consistent with established epidemiological associations (``Epidemiological''), genetic correlations that are new both to genetics and epidemiology (``New/Nonzero'') and interesting null results (``New/Null''). 
 The $p$-values are uncorrected $p$-values.
 Results that pass multiple testing correction for the 300 tests in Figure \ref{Fig:300 Gencors} at 1\% FDR have a single asterisk; results that pass Bonferroni correction have two asterisks.
-We present some genetic correlations that agree with epidemiological associations but that do not pass multiple testing correction in our data. }}}
+We present some genetic correlations that agree with epidemiological associations but that do not pass multiple testing correction in these data. }}}
 \end{table}
 
 % Novel genetic results that are not novel epidemiological results
 The first section of table \ref{table:results} lists genetic correlation results that are consistent with epidemiological associations, 
 but, as far as we are aware, have not previously been reported using genetic data.
-Our estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
-Our estimate of a negative genetic correlation between anorexia nervosa and obesity (and a similar genetic correlation with BMI) suggests that the same genetic factors influence normal variation in BMI as well as dysregulated BMI in psychiatric illness.
-This result is consistent with our observation that BMI GWAS findings implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
-\cite{finucane2014partitioning}.
+The estimates of the genetic correlation between age at onset of menarche and adult height \cite{onland2005age}, cardiovascular disease \cite{day2014} and type 2 diabetes \cite{day2014, elks2013age} are consistent with the epidemiological associations. 
+The estimate of a negative genetic correlation between anorexia nervosa and obesity (and a similar genetic correlation with BMI) suggests that the same genetic factors influence normal variation in BMI as well as dysregulated BMI in psychiatric illness.
+This result is consistent with the observation that BMI GWAS findings implicate neuronal, rather than metabolic, cell-types and epigenetic marks 
+\cite{finucane2014partitioning, farooqi2014defining}.
 The negative genetic correlation between adult height and coronary artery disease agrees with a replicated epidemiological association  \cite{wang2011associations,hebert1993height,rich1995height}.
 We observe several significant associations with the educational attainment phenotypes from
 Rietveld \emph{et al.} \cite{rietveld2013gwas}:
 we estimate a statistically significant negative genetic correlation between college and Alzheimer's disease, 
 which agrees with epidemiological results \cite{barnes2011projected, norton2014potential}. 
-The positive genetic correlation between college and bipolar disorder is consistent with the psychiatric literature\cite{maccabe2010excellent, tiihonen2005premorbid}.
-Our estimate of a negative genetic correlation between smoking and college is consistent with the fact that smoking is more prevalent among less-educated groups \cite{pierce1989trends}.
+The positive genetic correlation between college and bipolar disorder is consistent with previous epidemiological reports \cite{maccabe2010excellent, tiihonen2005premorbid}.
+The estimate of a negative genetic correlation between smoking and college is consistent with the observed differences in smoking rates as a function of educational attainment  \cite{pierce1989trends}.
 
 % Novel results
 The second section of table \ref{table:results} lists three results that are, to the best of our knowledge, new both to genetics and epidemiology.
@@ -301,7 +309,6 @@ which itself has very high genetic correlation with IQ \cite{deary2007intelligen
 The ASD summary statistics were generated using a case-pseudocontrol study design, so this result cannot be explained by the tendency for the parents of children who receive a diagnosis of ASD to be better educated than the general population \cite{durkin2010socioeconomic}. 
 The distribution of IQ among individuals with ASD has lower mean than the general population, but with heavy tails \cite{robinson2014autism} (\emph{i.e.,} an excess of individuals with low and high IQ).
 There is evidence that the genetic architectures of high IQ and low IQ ASD are dissimilar \cite{samocha2014framework}.
-We are unable to offer an explanation for this result, but propose that further exploration of this genetic correlation may be an important direction for future research.
 
 % Interesting null results
 The third section of table \ref{table:results} lists interesting examples where the genetic correlation is close to zero with small standard error.
@@ -319,11 +326,11 @@ there appears to be no directional trend.
 Some RA risk alleles are also risk alleles for UC and CD, 
 but many RA risk alleles are protective for UC and CD \cite{cotsapas2011pervasive}, 
 yielding near-zero genetic correlation.
-This is an example of pleiotropy without genetic correlation (Methods).
+This example highlights the distinction between pleiotropy and genetic correlation (Methods).
 
-Finally, our estimates of genetic correlations among metabolic traits are consistent with the estimates obtained using REML in Vattikuti \emph{et al.}
+Finally, the estimates of genetic correlations among metabolic traits are consistent with the estimates obtained using REML in Vattikuti \emph{et al.}
 \cite{vattikuti2012heritability} (Supplementary Table \ref{vattikuti}), and are directionally consistent with the recent Mendelian randomization results from Wuertz \emph{et al.} \cite{wuertz2014metabolic}.
-Our estimate of 0.57 (0.074) for the genetic correlation between CD and UC is consistent with the estimate of 0.62 (0.042) from Chen \emph{et al.} \cite{chen2014estimation}.
+The estimate of 0.57 (0.074) for the genetic correlation between CD and UC is consistent with the estimate of 0.62 (0.042) from Chen \emph{et al.} \cite{chen2014estimation}.
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -335,8 +342,7 @@ Our estimate of 0.57 (0.074) for the genetic correlation between CD and UC is co
 We have described a new method for estimating genetic correlation from GWAS summary statistics, which
 we applied to a dataset of GWAS summary statistics consisting of 25 traits and more than 1.5 million unique phenotype measurements.
 We reported several new findings that would have been difficult or impossible to obtain with existing methods, 
-including a positive genetic correlation between educational attainment and autism spectrum disorder
-and a positive genetic correlation between anorexia nervosa and schizophrenia.
+including a positive genetic correlation between anorexia nervosa and schizophrenia.
 Our method replicated many previously-reported GWAS-based genetic correlations, 
 and confirmed observations of overlap among genome-wide significant SNPs, 
 MR results and epidemiological associations.
@@ -366,9 +372,9 @@ Second, although genetic correlation estimates are not biased by oversampling of
 they are affected by other forms of selection bias, such as misclassification \cite{pgccdg2013}.
 
 % Limitations of the Method
-We note several limitations of LD Score regression as an estimator estimator of genetic correlation.
+We note several limitations of LD Score regression as an estimator of genetic correlation.
 First, LD Score regression requires larger sample sizes than methods that use individual genotypes
-in order to achieve acceptable standard error.
+in order to achieve equivalent standard error.
 Second, LD Score regression is not currently applicable to samples from recently-admixed populations.
 Third, methods built from polygenic models, such as LD Score regression and REML,
 are most effective when applied to traits with polygenic genetic architectures. 
@@ -390,7 +396,7 @@ need for measuring multiple traits on the same individuals or genome-wide signif
 All definitions refer to narrow-sense heritabilities and genetic covariances.
 Let $S$ denote a set of $M$ SNPs, 
 let $X$ denote a vector of additively (0-1-2) coded genotypes for the SNPs in $S$, 
-and let $y_1$ and $y_2$ denote phenotypes. Define $\beta \coloneqq  \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]^2$,
+and let $y_1$ and $y_2$ denote phenotypes. Define $\beta \coloneqq  \mathrm{argmax}_{\alpha\in\R^M} \corr\left[y_1, X\alpha\right]$,
 where the maximization is performed in the population (\emph{i.e.,} in the infinite data limit). 
 Let $\gamma$ denote the corresponding vector for $y_2$.
 This is a projection, so $\beta$ is unique modulo SNPs in perfect LD. 
@@ -452,7 +458,7 @@ the optimal regression weights for genetic covariance estimation are
 		\frac{N_2\hsqt\ell_j}{M} + 1
 	\right) 
 	+ 					
-	2\left( 
+	\left( 
 		\dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}}
 	\right)^2
 \end{equation}
@@ -674,21 +680,21 @@ Unfortunately, we have no financial conflicts of interest to declare.
 \section*{Supplementary Note}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection*{Quantitative Traits}
-Suppose we sample two cohorts for two phenotypes,
-$y_1$ and $y_2$,
-with sample sizes $N_1$ and $N_2$.
-We model phenotypes as $y_1 = Y\beta + \delta$,
+\subsection{Quantitative Traits}\label{qt_subsection}
+Suppose we sample two cohorts with sample sizes $N_1$ and $N_2$.
+We measure phenotype 1 in cohort 1 and phenotype 2 in cohort 2.
+We model phenotype vectors for each cohort as $y_1 = Y\beta + \delta$,
 and $y_2 = Z\gamma + \epsilon$,
-where $Y$ and $Z$ are matrices of genotypes normalized to mean zero and variance one\footnote{
+where $Y$ and $Z$ are matrices of genotypes with columns standardized to mean zero and variance one\footnote{
 We ignore the distinction between normalizing and centering in the population and in the sample, 
 since this introduces only $\mathscr{O}(1/N)$ error.},
 with dimensions $N_1\times M$ and $N_2\times M$, respectively; 
-$\beta$ and $\gamma$ are vectors of per-normalized genotype effect sizes,
+$\beta$ and $\gamma$ are vectors of per-standardized genotype effect sizes,
 and $\delta$ and $\epsilon$ are vectors of residuals, representing environmental effects and non-additive genetic effects.
 In this model, $Y$ and $Z$ are unobserved matrices of all SNPs, including SNPs that are not genotyped.
 
 We treat all of $Y, Z, \beta, \gamma, \delta $ and $\epsilon$ as random.
+We model all of these as independent, except for $\beta,\gamma$, $\delta,\epsilon$.
 Suppose that $(\beta, \gamma)$ has mean zero and covariance matrix\footnote{The assumption that all $\beta$ is drawn with equal variance for all SNPs hides an implicit assumption that 
 rare SNPs have larger per-allele effect sizes than common SNPs. 
 As discussed in the simulations section of the main text and in our earlier work \cite{buliksullivan2014}, LD Score regression is robust to moderate violations of this assumption, though it may break down in extreme
@@ -712,16 +718,16 @@ and $(\delta, \epsilon)$ has mean zero and covariance matrix
 	\end{array} \right).
 \end{equation*}
 Let $\rho \coloneqq  \gencov + \envcov$.
-Genotypes are \emph{i.i.d.} draw from a distribution with covariance matrix $R$
+Vectors of genotypes for each individual are drawn \emph{i.i.d.} from a distribution with covariance matrix $r$
 (\emph{i.e.,} $r$ is an LD matrix with $r_{jk} = \E[Y_{ij}Y_{ik}]$).
-There are $N_s$ individuals included in both studies.
+There are $N_s$ individuals who are included in both studies.
 
-\begin{lemma} Under this model, the expected genetic covariance between phenotypes is $\gencov$, justifying our use of the notation $\gencov$.
+\begin{lemma} Under this model, the expected genetic covariance (as defined in methods) between phenotypes is $\gencov$, justifying our use of the notation $\gencov$.
 \end{lemma}
-\begin{proof} Let $X$ denote an $1\times M$ vector of normalized, centered genotypes for an arbitrary individual. 
-Under the model, the additive genetic component of $y_1$ for this individual is $\sum_jX_{j}\beta_j$,
-and the additive genetic component of $y_2$ for this individual is $\sum_jX_{j}\gamma_j$.
-Thus, the genetic covariance between $y_1$ and $y_2$ is 
+\begin{proof} Let $X$ denote an $1\times M$ vector of standardized genotypes for an arbitrary individual. 
+Under the model, the additive genetic component of phenotype1 1 for this individual is $\sum_jX_{j}\beta_j$,
+and the additive genetic component of phenotype 1 for this individual is $\sum_jX_{j}\gamma_j$.
+Thus, the genetic covariance between phenotype 1 and phenotype 2 is 
 \begin{align*}
 	\cov\left[\sum_j X_j\beta_j,\sum_j X_j\gamma_j\right] &= 
 		\E\left[\left(\sum_j X_j\beta_j\right)\left(\sum_j X_j\gamma_j\right)\right]\\
@@ -732,7 +738,11 @@ Thus, the genetic covariance between $y_1$ and $y_2$ is
 \end{align*}
 \end{proof}
 
-We compute linear regression $z$-scores $z_{1j}\coloneqq  \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}\coloneqq  \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$.
+We compute linear regression $z$-scores $z_{1j}\coloneqq  \T{Y}_jy_1/\sqrt{N_1}$ and $z_{2j}\coloneqq  \T{Y}_jy_2/\sqrt{N_2}$ for genotyped SNPs $j$ (where $Y_j$ and $Z_j$ denote the $j^{th}$ columns of $Y$ and $Z$).
+\begin{definition}
+The LD Score of a variant $j$ is $\ell_j \coloneqq \sum_k r^2_{jk}$, where the sum is taken over all other
+variants $k$.
+\end{definition}
 \begin{prop}\label{supp_condexp_qt}
 Let $j$ denote a genotyped SNP. Under the model described above, 
 \begin{equation}
@@ -745,7 +755,8 @@ Let $j$ denote a genotyped SNP. Under the model described above,
 \E[z_{1j}z_{2j}] = \E[ \E[z_{1j}z_{2j} \,|\, Y, Z ] ]
 \end{equation}
 \noindent
-First we compute the inner expectation from equation \ref{totalexp}, with $Z$ and $Y$ fixed.
+First we compute the inner expectation from Equation \ref{totalexp}, with $Z$ and $Y$ fixed.
+%%% TODO fix
 \begin{align}
 	\E[z_{1j}z_{2j}\,|\,Y,Z] &= \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jy_1\T{y_2}Z_j]  \nonumber \\
        		&= \frac{1}{\sqrt{N_1N_2}}\T{Y}_j\E[{(Y\beta+\delta)}\T{(Z\gamma+\epsilon)}]Z_j\nonumber\\
@@ -762,7 +773,7 @@ and
 \begin{equation}\label{inner_second}
 \frac{1}{\sqrt{N_1N_2}}\E[\T{Y}_jY\T{Z}_jZ] = \ell_j + \frac{MN_s}{\sqrt{N_1N_2}}.
 \end{equation}
-Substituting equations \ref{inner_first} and \ref{inner_second} into equation \ref{inner},
+Substituting equations \ref{inner_first} and \ref{inner_second} into Equation \ref{inner},
 \begin{align}
 	\E[z_{1j}z_{2j}] 
 &= 
@@ -770,32 +781,29 @@ Substituting equations \ref{inner_first} and \ref{inner_second} into equation \r
 &=
 	\frac{\sqrt{N_1N_2}\gencov}{M}\ell_j  + \frac{N_s\rho}{\sqrt{N_1N_2}}.\label{qt_ldscore}
 \end{align}
-If study 1 and study 2 are the same study, then $N_1=N_2=N_s$, $\rho_g=h^2_g$ and $\rho=1$, so equation \ref{qt_ldscore}
-reduces to the LD Score regression equation for a single trait from \cite{buliksullivan2014}.
 \end{proof}
+If study 1 and study 2 are the same study, then $N_1=N_2=N_s$, $\rho_g=h^2_g$ and $\rho=1$, so Equation \ref{qt_ldscore}
+reduces to the LD Score regression equation for a single trait from \cite{buliksullivan2014}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Regression Weights}
+\subsection{Regression Weights}\label{w_subsection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We can improve the efficiency of LD Score regression weighting by the reciprocal of the conditional variance function (CVF),
+We can improve the efficiency of LD Score regression by weighting by the reciprocal of the conditional variance function (CVF),
 $\var[z_{1j}z_{2j} \,|\, \ell_j ]$.
-The CVF is not uniquely determined by the assumptions about the first and second moments of $\beta$ and $\gamma$ used to derive proposition \ref{supp_condexp_qt}.
+The CVF is not uniquely determined by the assumptions about the first and second moments of $\beta$ and $\gamma$ used to derive Proposition \ref{supp_condexp_qt}.
 Therefore we derive the CVF for the case where 
  $z_{1j}$ and $z_{2j}$ are jointly distributed as bivariate normal\footnote{
 For instance, it is sufficient but not necessary to assume that $\beta$, $\gamma$, $\delta$ and $\epsilon$ are multivariate normal.
 More generally, the $z$-scores will be approximately normal if $\beta$ and $\gamma$ are reasonably polygenic.
 If the distribution of effect sizes is heavy-tailed, \emph{e.g.,} if there are few casual SNPs, then the CVF may be larger.}.
-
-Fom a standard formula for double second moments of the bivariate normal, the CVF is
+From a standard formula for double second moments of the bivariate normal, the CVF is
 \begin{align}
 	\var[z_{1j}z_{2j} \,|\, \ell_j ] 
-&= 
-	\E[z_{1j}^2z_{2j}^2]\nonumber\\
 &=  
 	\var[z_{1j}]\var[z_{2j}]
 	+
-	2\E[z_{1j}z_{2j}]^2\nonumber\\
+	\E[z_{1j}z_{2j}]^2\nonumber\\
 &= 
 	\left( 
 		\frac{N_1\hsqo\ell_j}{M} + 1
@@ -804,43 +812,42 @@ Fom a standard formula for double second moments of the bivariate normal, the CV
 		\frac{N_2\hsqt\ell_j}{M} + 1
 	\right) 
 	+ 					
-	2\left( 
+	\left( 
 		\dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}}
 	\right)^2
 \end{align}
-In cases where the normality assumption does not hold, LD Score regression will remain unbiased, but may be inefficient, because the regression weights will be suboptimal.
+The terms on the left follow from the fact that $\var[z_{ij}]=\chi^2_{ij}$ and $\E[\chi^2] = Nh^2\ell_j/M + 1$.
+The term on the right follows from Proposition \ref{supp_condexp_qt}.
+Note that if $z_1=z_2$, this reduces to the expression for the CVF of $\chi^2$ statistics from \cite{buliksullivan2014}.
 
-\subsection*{Liability Threshold Model}
+In cases where the normality assumption does not hold, LD Score regression will remain unbiased, but may be inefficient, because the regression weights will be suboptimal.
+We also apply a heuristic weighting scheme to avoid overcounting SNPs in high-LD regions, described in the methods.
+
+\subsection{Liability Threshold Model}\label{lt_subsection}
 
 In the liability threshold (probit) model \cite{pearson1901inheritance}, 
 binary traits are determined by an unobserved continuous liability $\psi$.
 The observed trait is $y \coloneqq  \ind[\psi > \tau]$, where $\tau$ is the liability threshold.
 If $\psi$ is normally distributed, then setting $\tau\coloneqq \Phi^{-1}(1-K)$ (where $\Phi$ is the standard normal cdf) yields a population prevalence of $K$.
 
-The liability threshold construction is surprisingly general. 
-If $y$ is an arbitrary binary phenotype, then we can define a normally distributed liability for $y$ by setting
-$\psi_i$ to be a random draw from a normal distribution truncated at the left by $\tau$ if $y_i=1$ and 
-truncated at the right by $\tau$ if $y_i=0$.
-We prefer to think of liability scale heritability as a useful way to compare the heritabilities of binary phenotypes with different prevalences, rather than a quantity that is only meaningful if one is willing to make strong assumptions about the data generating process.
-
 For phenotypes generated according to the liability threshold model, 
 we can estimate not only the heritability and genetic covariance of the observed phenotype, 
 but also the heritability and genetic covariance of the unobserved liability.
 
 In the next lemma, we derive population case and control allele frequencies 
-in terms of the heritability of liability when liability is generated by a polygenic model.
+in terms of the heritability of liability when liability is generated following the model for quantitative traits from section \ref{qt_subsection}.
 Since we are only modeling additive effects and are willing to assume Hardy-Weinberg equilibrium,
 we lose no generality and simplify notation considerably by stating the proofs in terms of haploid genotypes.
 
-We state this lemma in terms of marginal per-allele effect sizes, instead of the per-normalized-genotype effect sizes considered in the earlier results on quantitative traits.
+We state this lemma in terms of marginal per-allele effect sizes, instead of the per-standardized-genotype effect sizes considered in section \ref{qt_subsection}.
 Here marginal means that these are the effect sizes obtained by univariate regression of phenotype against genotype in the infinite data limit. 
-Haploid normalized genotypes are defined $X_j \coloneqq  (G_j - p_j)/\sqrt{p_j(1-p_j)}$.
-If $\beta_j$ is the marginal per-normalized-genotype effect and $\zeta_j$ is the marginal per-allele effect, 
+Haploid standardized genotypes are defined $X_{ij} \coloneqq  (G_{ij} - p_j)/\sqrt{p_j(1-p_j)}$, where $G_{ij}$ is the 0-1 coded genotype.
+If $\beta_j$ is the marginal per-standardized-genotype effect and $\zeta_j$ is the marginal per-allele effect, 
 we have $X_j\beta_j = G_j\zeta_j$. 
 Thus, setting $G_{ij}=1$ yields $\zeta_j = \beta_j\sqrt{(1-p_j)/p_j}$.
-
+%%% TODO this is funky
 \begin{lemma}\label{probit_model}
-Suppose unobserved liabilities $\psi, \varphi$ for traits $y_1,y_2$ with thresholds $\tau_1,\tau_2$ corresponding to prevalences $K_1,K_2$ are generated according to the usual polygenic model for quantitative traits, i.e.,
+Suppose unobserved liabilities $\psi, \varphi$ for traits $y_1,y_2$ with thresholds $\tau_1,\tau_2$ corresponding to prevalences $K_1,K_2$ are generated according to the mode for quantitative traits from section \ref{qt_subsection}, i.e.,
 $\psi_i=\sum_j X_{ij}\beta_j+\delta$, $\varphi_i=\sum_j X_{ij}\gamma_j+\epsilon$, with
 \begin{equation*} 
 	\var[(\beta, \gamma)] = \frac{1}{M}
@@ -857,14 +864,21 @@ and
 		\envcov I& (1-\hsqt) I
 	\end{array} \right).
 \end{equation*}
-Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of $j$ on $\psi$ and $\varphi$, and let $p_{cas,kj}\coloneqq \prob[G_{ij}=1\cond y_{ik}=1]$ for $k=1,2$. Then
+Let $\zeta_j$ and $\xi_j$ denote the marginal per-allele effect sizes of SNP $j$ on $\psi$ and $\varphi$.  
+Let
+\begin{align*}
+p_{cas,kj}&\coloneqq \prob[G_{ij}=1\cond y_{ik}=1] \\
+p_{con,kj}&\coloneqq \prob[G_{ij}=1\cond y_{ik}=0] 
+\end{align*}
+denote the allele frequencies of SNP $j$ in cases and controls for phenotype $k$, where $y_{ik}$ denotes the value of phenotype $k$ for individual $i$ and $k=1,2$. Then
 \begin{align*}
 	\E[p_{cas,1j}-p_{con,1j}] &= 0,\\
 	\E[p_{cas,2j}-p_{con,2j}] &= 0, \\
-	\var[p_{cas,1j}-p_{con,1j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2)}\ell_j, \\
+	\var[p_{cas,1j}-p_{con,1j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2}\ell_j, \\
 	\var[p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_2)^2h^2_2}{MK_2^2(1-K_2)^2}\ell_j,\\
 	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}] &= \dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j,
 \end{align*}
+where the expectation is taken over 
 where $\phi$ is the standard normal density.
 These results apply to population allele frequencies, not allele frequencies in a finite sample. 
 We deal with ascertained finite samples in the next section.
@@ -889,8 +903,8 @@ By Bayes' rule,
 	\dfrac{p_j}{K_1}\prob[\psi_i>\tau_1\cond G_{ij}=1,\zeta_j].\label{bayesrule}
 \end{align}
 
-The distribution of $\psi$ is
-$\psi\cond G_{ij}=1,\zeta_j = N(\zeta_j, 1)$ (where the approximation that the variance equals one holds when the marginal heritability explained by $j$ is small, which is the typical case in GWAS).
+The distribution of $\psi$ given $G_{ij}$ and $\zeta_j$ is
+$\psi\cond (G_{ij}=1,\zeta_j) \sim N(\zeta_j, 1-\zeta_j^2)\approx N(\zeta_j, 1)$ (where the approximation that the variance equals one holds when the marginal heritability explained by $j$ is small, which is the typical case in GWAS).
 Thus $\prob[\psi_i>\tau_1\cond G_{ij}=1]$ is simply a Gaussian integral.
 We approximate this probability with a first-order Taylor expansion around $\tau_1$.
 \begin{align}
@@ -900,19 +914,19 @@ We approximate this probability with a first-order Taylor expansion around $\tau
 &\approx
 	K_1 + \phi(\tau_1)\zeta_j\label{taylorexp},
 \end{align}
-Substituting equation \ref{taylorexp} into equation \ref{bayesrule},
+Substituting Equation \ref{taylorexp} into Equation \ref{bayesrule},
 \begin{align}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]
 &=
-	\dfrac{p_j}{K}\left(K+\phi(\tau_1)\zeta_j\right)\label{case}.
+	\dfrac{p_j}{K}\left(K_1+\phi(\tau_1)\zeta_j\right)\label{case}.
 \end{align}
 A similar argument shows that 
 \begin{align}
 	\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
 &=
-	\dfrac{p_j}{1-K_1}\left(1-K-\phi(\tau_1)\zeta_j\right)\label{control}.
+	\dfrac{p_j}{1-K_1}\left(1-K_1-\phi(\tau_1)\zeta_j\right)\label{control}.
 \end{align}
-Subtracting equation \ref{case} from equation \ref{control},
+Subtracting Equation \ref{control} from Equation \ref{case},
 \begin{align}\label{condprob}
 	\prob[G_{ij}=1\cond y_{i1}=1,\zeta_j]-\prob[G_{ij}=1\cond y_{i1}=0,\zeta_j]
 &=
@@ -922,17 +936,20 @@ Similar results hold for trait 2, replacing $\zeta$ with $\xi$ and subscript 1 w
 
 We have written the probabilities in question in terms of constants and marginal effects on liability.
 Since liability is simply a quantitative trait, the means, variances, and covariances of the marginal effects on liability
-are described by the LD Score regression equation for quantitative traits.
-Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_kM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$.
-If we combine these results with equation \ref{condprob}, we find that $\E[p_{cas,1j}-p_{con,1j}]=0$;
+are described by the LD Score regression equation for quantitative traits from Proposition \ref{supp_condexp_qt}.
+Precisely, $\E[\xi_j]=\E[\zeta_j] = 0$, $\var[\xi_j]=(1-p_j)\hsqo\ell_j/p_jM$, $\var[\zeta_j]=(1-p_j)\hsqt\ell_j/p_jM$ and $\cov[\zeta_j,\xi_j]=(1-p_j)\rho_g\ell_j/p_jM$.
+If we combine these results with Equation \ref{condprob}, we find that 
+\begin{equation}
+\E[p_{cas,1j}-p_{con,1j}]=0;
+\end{equation}
 \begin{align}
 	\var[p_{cas,1j}-p_{con,1j}]
 &=
 	\var\left[\dfrac{p_j\phi(\tau_1)\zeta_j}{K_1(1-K_1)}\right]\nonumber\\
 &=
-	\dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2}\ell_j,
+	\dfrac{p_j(1-p_j)\phi(\tau_1)^2h^2_1}{MK_1^2(1-K_1)^2}\ell_j
 \end{align}
-(similarly for trait two) and 
+(similarly for trait two), and 
 \begin{align}
 	\cov[p_{cas,1j}-p_{con,1j},p_{cas,2j}-p_{con,2j}]
 &=
@@ -943,7 +960,7 @@ If we combine these results with equation \ref{condprob}, we find that $\E[p_{ca
 \end{proof}
 
 
-\subsection*{Ascertained Studies of Liability Threshold Traits}
+\subsection{Ascertained Studies of Liability Threshold Traits}\label{asc_subsection}
 
 In the next proposition, we derive an LD Score regression equation for ascertained case/control studies.
 
@@ -951,25 +968,26 @@ Let $P_i$ denote the sample prevalence of $y_i$ in study $i$ for $i=1,2$.
 We compute $z$-scores
 $$z_j \coloneqq \frac {\sqrt{NP(1-P)}(\hat{p}_{cas} - \hat{p}_{con})} {\sqrt{\hat{p}_j(1-\hat{p}_j)}},$$
 where $\hat{p}_j$ denotes allele frequency in the entire sample\footnote{
-The expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$ or $j$ has zero marginal effect.},
+Conditional on the marginal effect of $j$, the expected value of $\hat{p}_j$ is not equal to $p_j$ unless $P=K$ or the marginal effect of $j$ is zero.},
 $\hat{p}_{cas}$ denotes sample case allele frequency
 and $\hat{p}_{con}$ denotes sample control allele frequency.
 
 We emphasize one subtlety before stating the main proposition. 
-The results in this section allow for study $i$ to select samples based on $y_j$ only if $i=j$.
-If study 1 ascertains on $y_2$ -- for example, if all cases in study $1$ have $y_1=y_2=1$ -- then 
+The results in this section allow for study $k$ to select samples based on phenotype $l$ only if $k=l$.
+If study 1 ascertains on phenotype 2 -- for example, if all cases $i$ in study $1$ have $y_{i1}=y_{i2}=1$ --- then 
 $\hat{p}_{cas,1j}$ will not be an unbiased estimate of $p_{cas,1j}$.
 Indeed, in this example, $\E[\hat{p}_{cas,1j}]=\prob[G_{ij}=1\cond y_1=y_2=1]$, 
 which will not equal $p_{cas,1j}=\prob[G_{ij}=1\cond y_1=1]$ unless $\rho=1$ or $\rho=0$.
 This follows from the fact that the conditionals and marginals of a bivariate normal are equal iff $\rho=0$ or $\rho=1$.
 We do not derive formulae describing the bias, except to note that the most
-common scenario, the ``healthy controls'' model -- cases are sampled independently but all controls are controls for both traits -- is probably nothing to worry about.
-If cases are rare, 
-$\prob[G_{ij}=1\cond y_1=0]\approx\prob[G_{ij}=1\cond y_1=y_2=0]$.
-Conditioning on $y_2=0$ hardly changes the distribution, because $y_2=0$ most of the time, anyway.
+common scenario, the ``healthy controls'' model --- cases are sampled independently but all controls are controls for both traits --- 
+is probably nothing to worry about, so long as cases for both traits are uncommon.
+In this scenario, 
+$\prob[G_{ij}=1\cond y_{i1}=0]\approx\prob[G_{ij}=1\cond y_{i1}=y_{i2}=0]$.
+Conditioning on $y_{i2}=0$ hardly changes the distribution, because $y_{i2}=0$ most of the time, anyway.
 
 \begin{prop}\label{binary_prop}
-Under the polygenic liability threshold model from lemma \ref{probit_model},
+Under the liability threshold model from lemma \ref{lt_subsection},
 \begin{align}
 	\E[z_{1j}z_{2j}]
 &\approx
@@ -984,6 +1002,12 @@ where
 denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2), $N_i$ denotes total sample size in study $i$ and 
 $N_{a,i}$ for $a\in\{cas,con\}$ and $i=1,2$ denotes the number of individuals with phenotype $a$ in study $i$.
 \end{prop}
+Observe that  $\rho_{g,obs} / \sqrt{h^2_{1,obs}h^2_{2,obs}} = \rho_g/\sqrt{\hsqo\hsqt}=r_g.$ 
+Put another way, the 
+natural definition for ``observed scale genetic correlation'' turns out to be the same as regular genetic correlation, because the scale transformation factors in the numerator and denominator cancel. 
+This is convenient: we can compute genetic correlations for binary traits on a sensible
+scale without having to worry about sample and population prevalences.
+
 \begin{proof}
 The full form of $z_{1j}z_{2j}$ is 
 \begin{equation*}
@@ -1016,13 +1040,13 @@ By linearity of expectation,
 \begin{align}
 	\E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]\cond \zeta_j,\xi_j]
 &=
-	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}] 
+	\E[\hat{p}_{cas,1j}\hat{p}_{cas,2j}\cond \zeta_j,\xi_j] 
 	- 
-	\E[\hat{p}_{cas,1j}\hat{p}_{con,2j}]\nonumber\\
+	\E[\hat{p}_{cas,1j}\hat{p}_{con,2j}\cond \zeta_j,\xi_j]\nonumber\\
 	&-
-	\E[\hat{p}_{con,1j}\hat{p}_{cas,2j}]
+	\E[\hat{p}_{con,1j}\hat{p}_{cas,2j}\cond \zeta_j,\xi_j]
 	+
-	\E[\hat{p}_{con,1j}\hat{p}_{con,2j}]\label{fourmoreterms}
+	\E[\hat{p}_{con,1j}\hat{p}_{con,2j}\cond \zeta_j,\xi_j]\label{fourmoreterms}
 \end{align}
 After conditioning on the marginal effects $\zeta_j$ and $\xi_j$,
 the only source of variance in the sample allele frequencies $\hat{p}_{cas,1},\hat{p}_{con,1},\hat{p}_{cas,2},\hat{p}_{con,2}$ is sampling error. 
@@ -1039,18 +1063,14 @@ $\nu$ and $\eta$ will be correlated:
 &\approx
 	p_{cas,1j}p_{cas,2j}\left(1+ \dfrac{N_{cas,cas}}{N_{cas,1}N_{cas,2}}\right)\label{ignore},
 \end{align}
+% TODO write down why cor(eta nu) = Ncascas / sqrt{Ncas Ncas}
+% TODO where did the sqrt{p(1-p))} go? Possibly a type
 where approximation \ref{biv_clt} is the (bivariate) central limit theorem, 
 and approximation \ref{ignore} comes from ignoring the difference between $\sqrt{p_{cas,1j}(1-p_{cas,1j})p_{cas,2j}(1-p_{cas,2j})}$ and $p_j(1-p_j)$. 
 This step is justified in the derivation of the denominator.
-Similar relationships hold for the other terms in equation \ref{fourmoreterms}.
+Similar relationships hold for the other terms in Equation \ref{fourmoreterms}.
 
-We can remove the conditioning on $\zeta_j$ and $\xi_j$ using equation \ref{cov}. 
-\begin{align}
-	\E[(p_{cas,1j} -p_{con,1j})(p_{cas,2j} - p_{con,2j})]
-&=
-	\dfrac{p_j(1-p_j)\phi(\tau_1)\phi(\tau_2)\rho_g}{MK_1(1-K_1)K_2(1-K_2)}\ell_j\label{remove_cond}.
-\end{align}
-If we combine equations \ref{ignore} and \ref{remove_cond}, we obtain
+If we combine equations \ref{ignore} and \ref{cov}, we obtain
 \begin{align}\label{numerator}
 \E[(\hat{p}_{cas,1j} -\hat{p}_{con,1j})(\hat{p}_{cas,2j} - \hat{p}_{con,2j})]
 \approx
@@ -1064,8 +1084,9 @@ where $c'\coloneqq K_1(1-K_1)K_2(1-K_2)$.
 Next, we derive the expectation of the denominator.
 Conditional on $\zeta_j$ and $\xi_j$, $\hat{p}_{1j}(1-\hat{p}_{1j})$ is $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ plus $\mathscr{O}(1/N)$ sampling 
 variance. If studies 1 and 2 share samples, the $\mathscr{O}(1/N)$ sampling variance in $\hat{p}_{1j}(1-\hat{p}_{1j})$ and 
-$\hat{p}_{2j}(1-\hat{p}_{2j})$ will be correlated, but this still only amounts to $\mathscr{O}(N_s/N_1N_s)$ error.
+$\hat{p}_{2j}(1-\hat{p}_{2j})$ will be correlated, but this still only amounts to $\mathscr{O}(N_s/N_1N_2)$ error.
 If we remove the conditioning on $\zeta_j$ and $\xi_j$, then $P_1p_{cas,1j}+ (1-P_1)p_{con,1j}$ is equal to $p_j(1-p_j)$ plus $\mathscr{O}(h^2_{1,obs}\ell_j/M)$ error from uncertainty in $\zeta_j$.
+% TODO say a couple more words here
 The covariance between uncertainty in $\zeta_j$ and uncertainty in $\xi_j$ is driven by $\rho_{g,obs}$, so the expectation of the denominator is $\E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] = p_j(1-p_j)\left(1
 + \mathscr{O}(N_s/N_1N_2) + \mathscr{O}(\rho_{g,obs}\ell_j/M)\right)$.
 We make the approximation\footnote{
@@ -1075,7 +1096,7 @@ Thus, $\rho_{g,obs}\ell_j/M$ and $N_s/N_1N_2$ will generally be at least 3 order
 \begin{equation}\label{denominator}
 \E\left[\sqrt{\hat{p}_{1j}(1-\hat{p}_{1j})\hat{p}_{2j}(1-\hat{p}_{2j})}\right] \approx p_j(1-p_j).
 \end{equation}
-We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times equation \ref{numerator} by equation \ref{denominator}.
+We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times Equation \ref{numerator} by Equation \ref{denominator}.
 \end{proof}
 \begin{cor}
 If study 1 is an ascertained study of a binary trait, and study 2 is a non-ascertained quantitative study, then proposition
@@ -1085,7 +1106,7 @@ If study 1 is an ascertained study of a binary trait, and study 2 is a non-ascer
 \]
 
 \end{cor}
-
+% TODO add proof
 \begin{cor}
 For a single binary trait, 
 \begin{equation}
@@ -1106,26 +1127,20 @@ To show that the intercept is one, observe that if study 1 and study 2 are the s
 &=
 	\dfrac{N^2P(1-P)}{N_{cas}N_{con}}.\label{cc-intercept}
 \end{align}
-But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so equation \ref{cc-intercept} simplifies to 1.
+But $NP=N_{cas}$ and $N(1-P)=N_{con}$, so Equation \ref{cc-intercept} simplifies to 1.
 \end{proof}
 
-Finally, observe that  $\rho_{g,obs} / \sqrt{h^2_{1,obs}h^2_{2,obs}} = \rho_g/\sqrt{\hsqo\hsqt}=r_g.$ 
-Put another way, the 
-natural definition for ``observed scale genetic correlation'' turns out to be the same as regular genetic correlation, because the scale transformation factors in the numerator and denominator cancel. 
-This is convenient: we can compute genetic correlations for binary traits on a sensible
-scale without having to worry about sample and population prevalences.
-
-\subsection*{Flavors of Heritability and Genetic Correlation}
+\subsection{Flavors of Heritability and Genetic Correlation}\label{flavors_subsection}
 
 The heritability parameter estimated by \texttt{ldsc} is subtly different than the heritability parameter $h^2_g$
 estimated by \texttt{GCTA}. 
 If $g$ denotes the set of all genotyped SNPs in some GWAS, define 
-$\beta_{GCTA} \coloneqq  \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]^2$,
-where $X_g$ is a random vector of genotypes for SNPs in $g$.
+$\beta_{GCTA} \coloneqq  \mathrm{argmax}_{\alpha\in\R^|g|} \corr\left[y_1, X_g\alpha\right]$,
+where $X_g$ is a random vector of standardized genotypes for SNPs in $g$.
 Then the heritability parameter estimated by \texttt{GCTA} is defined 
 $$h^2_{g}\coloneqq \sum_{j\in g} \beta_{GCTA,j}^2.$$
 Let $S$ denote the set of SNPs used to compute LD Scores (\emph{i.e.,} $\ell_j = \sum_{k\in S} r^2_{jk}$),
-and let $\beta_{S} \coloneqq  \mathrm{argmax}_{\alpha\in\R^|S|} \corr\left[y_1, X_g\alpha\right]^2$. 
+and let $\beta_{S} \coloneqq  \mathrm{argmax}_{\alpha\in\R^{|S|}} \corr\left[y_1, X_S\alpha\right]$. 
 Generally $\beta_{S,j}\neq\beta_{GCTA,j}$ unless all SNPs in $S\setminus g$ are not in LD with SNPs in $g$.
 Define
 $$h^2_{S}\coloneqq \sum_{j\in S} \beta_{S,j}^2.$$
@@ -1202,7 +1217,7 @@ LD Score & $h^2(5\myhyphen50\%)$ & $\rho_g(5\myhyphen50\%)$ & $r_g(5\myhyphen50\
   \hline
 Truth & 0.83 & 0.42 & 0.5 \\ 
   HM3 & 0.53 (0.08) & 0.28 (0.07) & 0.52 (0.1) \\ 
-  PNG & 0.36 (0.08) & 0.18 (0.06) & 0.5 (0.13) \\ 
+  PSG & 0.36 (0.08) & 0.18 (0.06) & 0.5 (0.13) \\ 
   30 Bins & 0.81 (0.12) & 0.41 (0.08) & 0.51 (0.09) \\ 
   60 Bins & 0.81 (0.12) & 0.41 (0.09) & 0.51 (0.09) \\ 
    \hline
@@ -1218,10 +1233,10 @@ Estimates are averages across 100 simulations.
 Standard deviations (in parentheses) are standard deviations across 100 simulations.
 LD Scores were estimated using in-sample LD and a 1cM window. 
 HM3 means LD Score with sum taken over SNPs in HM3. 
-PNG (per-normalized-genotype) means LD Score with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. 
+PSG (per-standardized-genotype) means LD Score with the sum taken over all SNPs in 1kG as in \cite{buliksullivan2014}. 
 30 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.2, 0.3 and 0.4 and LD Score breaks at 35, 75, 150 and 400. 
 60 bins means per-allele LD Score binned on a MAF by LD Score grid with MAF breaks at 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4 and 0.45 and LD Score breaks at 30, 60, 120, 200 and 300,
-These simulations demonstrate that naive (HM3, PNG) LD Score regression gives correct genetic correlation estimates even when heritability and genetic covariance estimates are biased, so long as genetic correlation does not depend on LD.}}}
+These simulations demonstrate that naive (HM3, PSG) LD Score regression gives correct genetic correlation estimates even when heritability and genetic covariance estimates are biased, so long as genetic correlation does not depend on LD.}}}
 \end{table}
 
 \newpage
