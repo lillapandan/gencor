@@ -450,6 +450,7 @@ If we know the amount of sample overlap ahead of time,
 we can reduce the standard error by constraining the intercept with the \texttt{--constrain-intercept} flag in \texttt{ldsc}.
 This works even if there is nonzero sample overlap, in which case the intercept should be constrained to $N_s\rho/\sqrt{N_1N_2}$.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Regression Weights} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -671,7 +672,7 @@ All authors revised and approved the final manuscript.
 \section*{Competing Financial Interests}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Unfortunately, we have no financial conflicts of interest to declare.
+We have no financial conflicts of interest to declare.
 
 \newpage
 \bibliographystyle{unsrt}
@@ -1000,7 +1001,7 @@ Under the liability threshold model from lemma \ref{lt_subsection},
 \end{align}
 where 
 \[
-\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\phi(\tau_1)\phi(\tau_2)\sqrt{P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
+\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\sqrt{\phi(\tau_1)\phi(\tau_2)P_1(1-P_1)P_2(1-P_2)}}{K_1(1-K_1)K_2(1-K_2)}\right)
 \]
 denotes observed scale genetic covariance, $N_{a,b}$ denotes the number of individuals with phenotype $a$ in study 1 and $b$ in study two for $a,b\in\{cas,con\}$ (e.g., $N_{cas,con}$ is the number of individuals who are a case in study 1 but a control in study 2), $N_i$ denotes total sample size in study $i$ and 
 $N_{a,i}$ for $a\in\{cas,con\}$ and $i=1,2$ denotes the number of individuals with phenotype $a$ in study $i$.
@@ -1105,7 +1106,7 @@ We obtain the desired result by dividing $\sqrt{cN_1N_2}$ times Equation \ref{nu
 If study 1 is an ascertained study of a binary trait, and study 2 is a non-ascertained quantitative study, then proposition
 \ref{binary_prop} holds, except with genetic covariance on the half-observed scale
 \[
-\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\phi(\tau_1)\sqrt{P_1(1-P_1)}}{K_1(1-K_1)}\right).
+\rho_{g,obs} \coloneqq  \rho_g\left(\dfrac{\sqrt{\phi(\tau_1)P_1(1-P_1)}}{K_1(1-K_1)}\right).
 \]
 
 \end{cor}
