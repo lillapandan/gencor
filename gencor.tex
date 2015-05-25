@@ -142,14 +142,14 @@ If we are willing to assume no shared population stratification, and
 we know the amount of sample overlap and phenotypic correlation in advance (\emph{i.e.,} the true value of $\rho N_s/\sqrt{N_1N_2}$), 
 we can constrain the intercept to this value.
 We refer to this approach as constrained intercept LD Score regression.
-Constrained intercept LD Score regression has lower standard error -- often by as much as 30\% -- than LD Score regression with unconstrained intercept, but will yield biased and misleading estimates if the intercept is misspecified, \emph{e.g.,} if we miscount the overlapping samples or do not control for population stratification.
+Constrained intercept LD Score regression has lower standard error -- often by as much as 30\% -- than LD Score regression with unconstrained intercept, but will yield biased and misleading estimates if the intercept is misspecified, \emph{e.g.,} if we specify the wrong value of $N_s\rho$ or do not completely control for population stratification.
 
 Normalizing genetic covariance by the SNP-heritabilities yields genetic correlation: 
 $r_g \coloneqq\rho_g/\sqrt{h^2_1h^2_2},$ where $h^2_i$ denotes the SNP-heritability \cite{yang2010} from study $i$.
 Genetic correlation ranges between $-1$ and $1$.
 Results similar to Equation \ref{reg_eqn} hold if one or both studies is a case/control study, in which case genetic covariance is on the observed scale.
 Details are provided in the Supplementary Note.
-There is no distinction between observed and liability scale genetic correlation for case/control traits, so we can talk about 
+There is no distinction between observed and liability scale genetic correlation for case/control traits, so we can define and estimate
 genetic correlation between a case/control trait and a quantitative trait and genetic correlation between pairs of case/control traits without the need to specify a scale (Supplementary Note).
 
 
@@ -461,7 +461,7 @@ to exhibit genetic correlation, the directions of effect must also be consistent
 
 Recall from the Overview of Methods that the cross-trait LD Score regression equation is 
 
-\begin{equation}\label{reg_eqn}
+\begin{equation}\label{reg_eqn2}
 	\E[z_{1j}z_{2j}] = \dfrac{\sqrt{N_1N_2}\rho_g}{M}\ell_j + \dfrac{\rho N_s}{\sqrt{N_1N_2}},
 \end{equation}
 where $z_{ij}$ denotes the $z$-score for study $i$ and SNP$j$, $N_i$ is the sample size for study $i$, $\rho_g$ is genetic covariance, $\ell_j$ is LD Score \cite{buliksullivan2014}, $N_s$ is the number of individuals included in both studies, and $\rho$ is the phenotypic correlation among the $N_s$ overlapping samples.
